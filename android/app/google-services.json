@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "436682820754",
+    "firebase_url": "https://meally2-b6f48.firebaseio.com",
+    "project_id": "meally2-b6f48",
+    "storage_bucket": "meally2-b6f48.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:436682820754:android:7a7804259f1b6ce810ea4b",
+        "android_client_info": {
+          "package_name": "com.naufal.meally2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "436682820754-pi4h93fjpe4t5obo609n0vordvbbnh42.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.naufal.meally2",
+            "certificate_hash": "5effc61a339f81b9403bca56bcd49aa317eeb004"
+          }
+        },
+        {
+          "client_id": "436682820754-qcvssq5e38l6lv63fkero6444d932jrs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCK07fz2voh9pDkeEcC70nBejVFyzwaq9g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "436682820754-qcvssq5e38l6lv63fkero6444d932jrs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

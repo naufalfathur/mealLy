@@ -51,6 +51,9 @@ dev_dependencies:
   bubble_bottom_bar: ^1.2.0
   google_fonts: ^1.1.0
   curved_navigation_bar: ^0.3.4
+  sk_onboarding_screen: ^1.0.1
+  animated_walkthrough: ^0.0.1+1
+  smooth_star_rating: ^1.1.1
   flutter_svg:
 
 
@@ -74,6 +77,11 @@ flutter:
     - assets/images/eating.png
     - assets/images/background.png
     - assets/images/train.png
+    - assets/images/Schedule.png
+    - assets/images/google.png
+    - assets/images/rest.png
+    - assets/images/restaurant.jpg
+    - assets/images/healthy.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

@@ -26,7 +26,6 @@ class _ProfilePageState extends State<ProfilePage> {
   //int countPost = 0;
   //List<Post> postlist = [];
   //String postOrientation = "list";
-
   /*void initState(){
     getAllProfilePost();
   }
@@ -54,7 +53,7 @@ class _ProfilePageState extends State<ProfilePage> {
       future: userReference.document(widget.userProfileId).get(),
       builder: (context, dataSnapshot){
         if(!dataSnapshot.hasData){
-          return circularProgress();
+          return circularProgress(Colors.orangeAccent);
         }
         User user = User.fromDocument(dataSnapshot.data);
         return Stack(
@@ -171,20 +170,20 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       child: Column(
         children: <Widget>[
-          createList("Update Weight","a"),
-          createList("Edit Plans","a"),
-          createList("Edit Profile","a"),
-          createList("Log Out","a"),
+          createList("Update Weight",editUserProfile),
+          createList("Edit Plans",editUserProfile),
+          createList("Edit Profile",editUserProfile),
+          createList("Log Out",logoutUser),
         ],
       ),
     );
   }
 
-  ListTile createList(String title, String function){
+  ListTile createList(String title, Function function){
     return ListTile(
       leading: Icon(Icons.account_circle),
       title: GestureDetector(
-        onTap: ()=>  print(function),
+        onTap: function,
         child: Text(
           title,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w300
@@ -194,9 +193,19 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  logoutUser() async {
+    await gSignIn.signOut();
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage()));
+  }
+
+
+  editUserProfile(){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage(currentOnlineUserId: currentOnlineUserId)));
+  }
+
+
   Row createRows(String title, Function function){
     return Row (
-
     );
   }
 
@@ -237,9 +246,6 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
-  }
-  editUserProfile(){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage(currentOnlineUserId: currentOnlineUserId)));
   }
   uploadPict(){
     Navigator.push(context, MaterialPageRoute(builder: (context) => TrackerPage(gCurrentUser: currentUser, currentOnlineUserId: currentOnlineUserId)));

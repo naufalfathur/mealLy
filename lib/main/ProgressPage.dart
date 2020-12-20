@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meally2/main/TrackerPage.dart';
 import 'package:meally2/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meally2/HomePage.dart';
@@ -33,11 +34,14 @@ class _ProgressPageState extends State<ProgressPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: header(context, strTitle: "Progress Page",),
       body: Container(
         //color: Hexcolor("#FF9900"),
         child: ListView(
           children: <Widget>[
+            TopBar(),
+            Divider(),
+            ProgressData(),
+            UploadProgress(),
             Divider(),
             displayProfilePost(),
           ],
@@ -46,10 +50,111 @@ class _ProgressPageState extends State<ProgressPage> {
     );
   }
 
+  TopBar(){
+    return Container(
+      alignment: Alignment.center,
+      height: 120,
+      color: Hexcolor("#FF9900"),
+      child: Text("Weight Tracker", style: GoogleFonts.poppins(textStyle:
+      TextStyle(fontSize: 18.0, color: Colors.white, fontWeight: FontWeight.w600),),),
+    );
+  }
+
+  ProgressData(){
+    return FutureBuilder(
+      future: userReference.document(widget.userProfileId).get(),
+      builder: (context, dataSnapshot){
+        if(!dataSnapshot.hasData){
+          return circularProgress(Colors.orangeAccent);
+        }
+        User user = User.fromDocument(dataSnapshot.data);
+        return Column(
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(top: 5,bottom: 10,left: 15,right: 15),
+                    padding: EdgeInsets.only(top: 15, bottom: 15),
+                    /*
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          offset: Offset(0.0,3.0),
+                          blurRadius: 37,
+                          spreadRadius: -8,
+                        ),
+                      ],
+                    ),
+                     */
+                    child:Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Container(
+                          child: createColumns("Start", user.initialWeight.round().toString() + "Kg"),
+                        ),
+                        Container(
+                          child: createColumns("Current", user.weight.round().toString()+ "Kg"),
+                        ),
+                        Container(
+                          child: createColumns("Change", (user.weight - user.initialWeight).round().toString()+"↑"),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+        );
+      },
+    );
+  }
+
+  Column createColumns(String title, String Value  ){
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(Value.toString(), style: GoogleFonts.poppins(textStyle:
+        TextStyle(fontSize: 18.0, color: title != "Change" ? Colors.orangeAccent : Colors.blueAccent, fontWeight: FontWeight.bold),),),
+        Container(
+          margin: EdgeInsets.only(top: 5.0),
+          child: Text(
+              title,
+              style: GoogleFonts.poppins(textStyle:
+              TextStyle(fontSize: 15.0, color: Colors.black, fontWeight: FontWeight.w600),)
+          ),
+        )
+      ],
+    );
+  }
+
+  UploadProgress(){
+      return Container(
+        //padding: EdgeInsets.only(top: 1.0),
+        child: FlatButton(
+          onPressed: uploadPict,
+          child: Container(
+            width: double.infinity,
+            height: 50.0,
+            child: Text("Update Weight", style: GoogleFonts.poppins(textStyle: TextStyle(color:Colors.white , fontWeight: FontWeight.w600),)),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.orangeAccent,
+              border: Border.all(color: Colors.orangeAccent),
+              //borderRadius: BorderRadius.circular(6.0),
+            ),
+          ),
+        ),
+      );
+    }
+
+uploadPict(){
+  Navigator.push(context, MaterialPageRoute(builder: (context) => TrackerPage(gCurrentUser: currentUser, currentOnlineUserId: currentOnlineUserId)));
+}
 
   displayProfilePost(){
     if(loading){
-      return circularProgress();
+      return circularProgress(Colors.orangeAccent);
     }else if(postlist.isEmpty){
       return Container(
         color: Colors.white,
@@ -57,12 +162,12 @@ class _ProgressPageState extends State<ProgressPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.all(30),
-              child: Icon(Icons.photo_library, color: Colors.grey, size: 200,),
+              padding: EdgeInsets.only(top: 100),
+              child: Icon(Icons.photo_library, color: Colors.grey, size: 100,),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 20),
-              child: Text("No Post", style: TextStyle(color: Colors.redAccent, fontSize: 40, fontWeight: FontWeight.bold),),
+              padding: EdgeInsets.only(top: 10),
+              child: Text("no data", style: TextStyle(color: Colors.grey, fontSize: 30, fontWeight: FontWeight.bold),),
             )
           ],
         ),

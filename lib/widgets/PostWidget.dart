@@ -82,7 +82,7 @@ class _PostState extends State<Post> {
       future: userReference.document(ownerId).get(),
       builder: (context, dataSnapshot){
         if(!dataSnapshot.hasData){
-          return circularProgress();
+          return circularProgress(Colors.orangeAccent);
         }
         User user = User.fromDocument(dataSnapshot.data);
         bool isPostOwner = currentOnlineUserId == ownerId;

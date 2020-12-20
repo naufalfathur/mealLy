@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
+import 'package:meally2/main/WelcomeScreen.dart';
 import 'HomePage.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
   runApp(MyApp());
 }
 
@@ -11,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'BuddiesGram',
+      title: 'MealLy',
       debugShowCheckedModeBanner: false,
       theme: ThemeData
         (
@@ -21,7 +23,10 @@ class MyApp extends StatelessWidget {
         cardColor: Colors.white70,
         accentColor: Colors.white,
       ),
-      home: HomePage(),
+      home: WelcomeScreen(),
     );
   }
+
+
+
 }

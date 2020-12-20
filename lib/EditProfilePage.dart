@@ -97,7 +97,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           IconButton(icon: Icon(Icons.done, color: Colors.white, size: 30.0,), onPressed:()=>Navigator.pop(context),),
         ],
       ),
-      body: loading ? circularProgress() : ListView(
+      body: loading ? circularProgress(Colors.orangeAccent) : ListView(
         children: <Widget>[
           Container(
             child: Column(

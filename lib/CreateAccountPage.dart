@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:async';
-
-import 'package:meally2/widgets/HeaderPage.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:meally2/HomePage.dart';
 
 class Item {
   const Item(this.name,this.icon, this.value);
   final String name;
   final Icon icon;
-  final double value;
+  final String value;
 }
 
 class CreateAccountPage extends StatefulWidget {
@@ -19,7 +19,7 @@ class CreateAccountPage extends StatefulWidget {
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
   final _scaffoldkey =  GlobalKey<ScaffoldState>();
-  final _formkey = GlobalKey<FormState>();
+  //final _formkey = GlobalKey<FormState>();
   final _formkey2 = GlobalKey<FormState>();
   final _formkey3 = GlobalKey<FormState>();
   final _formkey4 = GlobalKey<FormState>();
@@ -28,319 +28,649 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   int age;
   double weight;
   double height;
-  double bodyfat;
+  double bodyfat = 0.0;
   double lbm;
   int tdee;
+  String program = "maintain";
   Item item;
   double activity = 1.2;
+  int page = 0;
+  int pageChanged = 0;
+  Color _color = Colors.white;
+  double rating = 0;
+  int error = 0;
 
-  submitUsername(){
-    final form = _formkey.currentState;
+  List<bool> isSelected = [true, false, false,false, false];
+  List<bool> isSelected2 = [true, false, false];
+
+  submitForm(){
     final form2 = _formkey2.currentState;
     final form3 = _formkey3.currentState;
     final form4 = _formkey4.currentState;
     final form5 = _formkey5.currentState;
-    if(form.validate()){
-      form.save();
+    if(form2.validate()&&form3.validate()&&form4.validate()){
       form2.save();
       form3.save();
       form4.save();
       form5.save();
-      lbm = weight - (weight * (bodyfat/100));
+      if(bodyfat == 0.0){
+        lbm = weight;
+        print(bodyfat);
+      }else{
+        lbm = weight - (weight * (bodyfat/100));
+        print(bodyfat);
+      }
       tdee = ((370 + (21.6 * lbm))*activity).round();
-      SnackBar snackBar = SnackBar(content: Text("Welcome"));
-      _scaffoldkey.currentState.showSnackBar(snackBar);
+      print(tdee);
+      pageController.animateToPage(++pageChanged, duration: Duration(milliseconds: 250), curve: Curves.bounceInOut);
+
+    //final form = _formkey.currentState;
+
+      /*
       Timer(Duration(seconds: 2), (){
         Navigator.pop(context, [gender, age, weight, height, bodyfat, lbm, tdee]);
       });
+       */
+      //_successModal(context);
+      //Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
     }
   }
 
   List<Item> items = <Item>[
-    const Item('sedentary (little or no exercise)',Icon(Icons.android,color:  const Color(0xFF167F67),),1.2),
-    const Item('light activity (1-2 days/week)',Icon(Icons.flag,color:  const Color(0xFF167F67),),1.375),
-    const Item('moderate activity (3-5 days/week)',Icon(Icons.format_indent_decrease,color:  const Color(0xFF167F67),),1.55),
-    const Item('very active (6-7 days/week)',Icon(Icons.mobile_screen_share,color:  const Color(0xFF167F67),),1.725),
-    const Item('extra active (2x/day)',Icon(Icons.mobile_screen_share,color:  const Color(0xFF167F67),),1.9),
+    const Item('Male',Icon(Icons.android,color:  const Color(0xFF167F67),),"male"),
+    const Item('Female',Icon(Icons.flag,color:  const Color(0xFF167F67),),"female"),
   ];
+
+
 
   @override
   Widget build(BuildContext parentContext) {
+    return CreateAccount();
+  }
+  PageController pageController = PageController();
+  Scaffold CreateAccount(){
     return Scaffold(
       key: _scaffoldkey,
-      appBar: header(context, strTitle: "Settings", disappearedBackButton: true),
       body: ListView(
-        children: <Widget>[
+        children: [
           Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.only(top: 50),
+            color: Colors.white,
             child: Column(
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: 26.0),
-                  child: Center(
-                    child: Text("Set up your details", style: TextStyle(fontSize: 26.0),),
+                Text("Set up your account",textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                      textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20)
+                  ),),
+                Container(
+                  margin: EdgeInsets.only(left: 90),
+                  height: 5,
+                  color: Hexcolor("#FF9900"),
+                  width: MediaQuery.of(context).size.width/4,
+                ),
+                SizedBox(height: 30,),
+                Text("Hi Jane Doe, ",textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                      textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20)
+                  ),),
+                Container(
+                  padding: EdgeInsets.only(left: 40, right: 40, top: 10, bottom: 20),
+                  child:  Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 10)
+                    ),),
+                ),
+                Container(
+                  width: 200,
+                  height: 5,
+                  child:  LinearProgressIndicator(
+                    value: ((pageChanged+1)*33)/100,
+                    backgroundColor: Colors.black12,
+                    valueColor: AlwaysStoppedAnimation(Colors.orangeAccent,),
                   ),
                 ),
-                Padding(//gender
-                  padding: EdgeInsets.all(17.0),
-                  child: Container(
-                    child: Form(
-                      key: _formkey,
-                      autovalidate: true,
-                      child: TextFormField(
-                        style: TextStyle(color: Colors.black54),
-                        validator: (val){
-                          if(val.isEmpty){
-                            return "gender should be male or female";
-                          }else{
-                            return null;
-                          }
-                        },
-                        onSaved: (val) => gender = val,
-                        decoration: InputDecoration(
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black54),
-                            ),
-                            border: OutlineInputBorder(),
-                            labelText: "Gender (male/female)",
-                            labelStyle: TextStyle(fontSize: 16.0),
-                            hintText: "must be male/female",
-                            hintStyle: TextStyle(color: Colors.grey)
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(//age
-                  padding: EdgeInsets.all(17.0),
-                  child: Container(
-                    child: Form(
-                      key: _formkey2,
-                      autovalidate: true,
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        style: TextStyle(color: Colors.black54),
-                        validator: (val){
-                          if(val.isEmpty){
-                            return "pls put age";
-                          }else{
-                            return null;
-                          }
-                        },
-                        onSaved: (val) => age = int.tryParse(val),
-                        decoration: InputDecoration(
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black54),
-                            ),
-                            border: OutlineInputBorder(),
-                            labelText: "age",
-                            labelStyle: TextStyle(fontSize: 16.0),
-                            hintText: "age",
-                            hintStyle: TextStyle(color: Colors.grey)
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(//weight
-                  padding: EdgeInsets.all(17.0),
-                  child: Container(
-                    child: Form(
-                      key: _formkey3,
-                      autovalidate: true,
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        style: TextStyle(color: Colors.black54),
-                        validator: (val){
-                          if(val.isEmpty) {
-                            return "weight";
-                          }else{
-                            return null;
-                          }
-                        },
-                        onSaved: (val) => weight = double.tryParse(val),
-                        decoration: InputDecoration(
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black54),
-                            ),
-                            border: OutlineInputBorder(),
-                            labelText: "weight",
-                            labelStyle: TextStyle(fontSize: 16.0),
-                            hintText: "in Kg",
-                            hintStyle: TextStyle(color: Colors.grey)
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(//height
-                  padding: EdgeInsets.all(17.0),
-                  child: Container(
-                    child: Form(
-                      key: _formkey4,
-                      autovalidate: true,
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        style: TextStyle(color: Colors.black54),
-                        validator: (val){
-                          if(val.isEmpty) {
-                            return "height";
-                          }else{
-                            return null;
-                          }
-                        },
-                        onSaved: (val) => height = double.tryParse(val),
-                        decoration: InputDecoration(
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black54),
-                            ),
-                            border: OutlineInputBorder(),
-                            labelText: "height",
-                            labelStyle: TextStyle(fontSize: 16.0),
-                            hintText: "in cm",
-                            hintStyle: TextStyle(color: Colors.grey)
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(//bodyfat
-                  padding: EdgeInsets.all(17.0),
-                  child: Container(
-                    child: Form(
-                      key: _formkey5,
-                      autovalidate: true,
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        style: TextStyle(color: Colors.black54),
-                        validator: (val){
-                          if(val.isEmpty){
-                            return "body fat";
-                          }else{
-                            return null;
-                          }
-                        },
-                        onSaved: (val) => bodyfat = double.tryParse(val),
-                        decoration: InputDecoration(
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black54),
-                            ),
-                            border: OutlineInputBorder(),
-                            labelText: "bodyfat",
-                            labelStyle: TextStyle(fontSize: 16.0),
-                            hintText: "percentage",
-                            hintStyle: TextStyle(color: Colors.grey)
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(17.0),
-                  child: DropdownButton<Item>(
-                    hint:  Text("Select item"),
-                    value: item,
-                    onChanged: (Item Value) {
+                SizedBox(height: 10,),
+                Container(
+                  margin: EdgeInsets.only(top: 10),
+                  height: (MediaQuery.of(context).size.height/3)+80,
+                  //color: Hexcolor("#FF9900"),
+                  //padding: EdgeInsets.only(top: 10),
+                  width: MediaQuery.of(context).size.width,
+                  child: PageView(
+                    physics:new NeverScrollableScrollPhysics(),
+                    pageSnapping: true,
+                    controller: pageController,
+                    onPageChanged: (index) {
                       setState(() {
-                        item = Value;
-                        activity = item.value;
-                        print(activity);
+                        pageChanged = index;
+                      });
+                      print(pageChanged);
+                    },
+                    children: [
+                      page1(),
+                      page2(),
+                      page3(),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10,),
+                FlatButton(
+                  onPressed: (){
+                    if(pageChanged == 0){
+                      submitForm();
+                    }else if (pageChanged == 1){
+                      pageController.animateToPage(++pageChanged, duration: Duration(milliseconds: 250), curve: Curves.bounceInOut);
+                    }else if (pageChanged == 2){
+                      print("a");
+                      _successModal(context);
+                    }
+                  },
+                  color: Hexcolor("#FF9900"),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width/2,
+                    height: 40.0,
+                    child: Text("Continue",textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                          textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13)
+                      ),),
+                    alignment: Alignment.center,
+                  ),
+                ),
+                SizedBox(height: 5,),
+                Text((pageChanged+1).toString() + "/3",textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                      textStyle: TextStyle(color: Colors.black54, fontWeight: FontWeight.w700, fontSize: 12)
+                  ),),
+                SizedBox(height: 5,),
+
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  page1(){
+    return Container(
+      padding: EdgeInsets.only(left: 40, right: 40),
+      child: ListView(
+        children: <Widget>[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(height: 20,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text("Weight (Kg)", textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(
+                              textStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: Colors.black)
+                          )),
+                      Container(
+                        height: 60,
+                        width: 120,
+                        //padding: EdgeInsets.only(left: 10, right: 10),
+                        margin: EdgeInsets.only(top: 10),
+                        child: Form(
+                          key: _formkey3,
+                          autovalidate: true,
+                          child: TextFormField(
+                            //initialValue: '60',
+                            maxLength: 3,
+                            keyboardType: TextInputType.number,
+                            style: TextStyle(color: Colors.black),
+                            validator: (val){
+                              if(val.isEmpty) {
+                                return "weight";
+                              }else{
+                                return null;
+                              }
+                            },
+                            onSaved: (val) => weight = double.tryParse(val),
+                            decoration: InputDecoration(
+                              contentPadding: new EdgeInsets.symmetric(vertical: 1.0, horizontal: 10.0),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(7.0)),
+                              hintText: '...',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text("Height (Cm)", textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(
+                              textStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: Colors.black)
+                          )),
+                      Container(
+                        height: 60,
+                        width: 120,
+                        //padding: EdgeInsets.only(left: 10, right: 10),
+                        margin: EdgeInsets.only(top: 10),
+                        child: Form(
+                          key: _formkey4,
+                          autovalidate: true,
+                          child: TextFormField(
+                            //initialValue: '160',
+                            maxLength: 3,
+                            keyboardType: TextInputType.number,
+                            style: TextStyle(color: Colors.black),
+                            validator: (val){
+                              if(val.isEmpty) {
+                                return "height";
+                              }else{
+                                return null;
+                              }
+                            },
+                            onSaved: (val) => height = double.tryParse(val),
+                            decoration: InputDecoration(
+                              contentPadding: new EdgeInsets.symmetric(vertical: 1.0, horizontal: 10.0),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(7.0)),
+                              hintText: '...',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 10,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Column(
+                    children: [
+                      Text("Body Fat % (Optional)", textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(
+                              textStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: Colors.black)
+                          )),
+                      Container(
+                        height: 60,
+                        width: 120,
+                        //padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                        margin: EdgeInsets.only(top: 10),
+                        child: Form(
+                          key: _formkey5,
+                          autovalidate: true,
+                          child: TextFormField(
+                            initialValue: '0.0',
+                            maxLength: 3,
+                            keyboardType: TextInputType.number,
+                            style: TextStyle(color: Colors.black),
+                            validator: (val){
+                              if(val.isEmpty){
+                                return "body fat";
+                              }else{
+                                return null;
+                              }
+                            },
+                            onSaved: (val) => bodyfat = double.tryParse(val),
+                            decoration: InputDecoration(
+                              contentPadding: new EdgeInsets.symmetric(vertical: 1.0, horizontal: 10.0),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(7.0)),
+                              hintText: '...',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text("Age", textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(
+                              textStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: Colors.black)
+                          )),
+                      Container(
+                        height: 60,
+                        width: 120,
+                        //padding: EdgeInsets.only(left: 10, right: 10),
+                        margin: EdgeInsets.only(top: 10),
+                        child: Form(
+                          key: _formkey2,
+                          autovalidate: true,
+                          child: TextFormField(
+                            //initialValue: '21',
+                            maxLength: 3,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            style: TextStyle(color: Colors.black),
+                            validator: (val){
+                              if(val.isEmpty){
+                                return "pls put age";
+                              }else{
+                                return null;
+                              }
+                            },
+                            onSaved: (val) => age = int.tryParse(val),
+                            decoration: InputDecoration(
+                              contentPadding: new EdgeInsets.symmetric(vertical: 1.0, horizontal: 10.0),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(7.0)),
+                              hintText: '...',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text("Gender", textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                          textStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: Colors.black)
+                      )),
+                  Container(
+                    height: 40,
+                    padding: EdgeInsets.only(left: 10, right: 10),
+                    margin: EdgeInsets.only(top: 10),
+                    //width: 270,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.black26),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: DropdownButton<Item>(
+                      hint:  Text("Select gender", style: TextStyle( fontSize: 12),),
+                      value: item,
+                      onChanged: (Item Value) {
+                        setState(() {
+                          item = Value;
+                          gender = item.value;
+                          print(gender);
+                        });
+                      },
+                      items: items.map((Item items) {
+                        return  DropdownMenuItem<Item>(
+                          value: items,
+                          child: Row(
+                            children: <Widget>[
+                              items.icon,
+                              SizedBox(width: 15),
+                              Text(
+                                items.name,
+                                style:  TextStyle(color: Colors.black, fontSize: 12),
+                              ),
+                              SizedBox(width: MediaQuery.of(context).size.width/2-25),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      )
+    );
+  }
+  page2(){
+    return Container(
+      padding: EdgeInsets.only(left: 15, right: 15),
+      child: ListView(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              Container(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: (){
+                          pageController.animateToPage(--pageChanged, duration: Duration(milliseconds: 250), curve: Curves.bounceInOut);
+                        },
+                        child: Icon(Icons.arrow_back_ios, size: 20, color: Hexcolor("#FF9900"),)
+                      ),
+                      Container(
+                        //padding: EdgeInsets.only(bottom: 20),
+                        child: Text("Exercising?",textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(
+                              textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 12)
+                          ),),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          pageController.animateToPage(++pageChanged, duration: Duration(milliseconds: 250), curve: Curves.bounceInOut);
+                        },
+                          child: Icon(Icons.arrow_forward_ios, size: 20, color: Hexcolor("#FF9900"),)
+                      ),
+                    ],
+                  ),
+              ),
+              SizedBox(height: 20,),
+              RotatedBox(
+                quarterTurns: 1,
+                child:
+                  ToggleButtons(
+                    children: <Widget>[
+                      RotatedBox(quarterTurns: 3, child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text("Sedentary\n(little or no exercise)", textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                                textStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: Colors.black)
+                            )),
+                      ),),
+                      RotatedBox(quarterTurns: 3, child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text("Light activity\n(1-2 days/week)", textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                                textStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: Colors.black)
+                            )),
+                      ),),
+                      RotatedBox(quarterTurns: 3, child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text("Moderate activity\n(3-5 days/week)", textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                                textStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: Colors.black)
+                            )),
+                      ),),
+                      RotatedBox(quarterTurns: 3, child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text("very active (6-7 days/week)", textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                                textStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: Colors.black)
+                            )),
+                      ),),
+                      RotatedBox(quarterTurns: 3, child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text("extra active (2x/day)", textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                                textStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: Colors.black)
+                            )),
+                      ),),
+                    ],
+                    isSelected: isSelected,
+                    onPressed: (int index) {
+                      setState(() {
+                        for (int buttonIndex = 0; buttonIndex < isSelected.length; buttonIndex++) {
+                          if (buttonIndex == index) {
+                            isSelected[buttonIndex] = true;
+                          } else {
+                            isSelected[buttonIndex] = false;
+                          }
+                        }
+                        if(index == 0){
+                          activity = 1.2;
+                          print(activity);
+                        }else if(index == 1){
+                          activity = 1.375;
+                          print(activity);
+                        }else if(index == 2){
+                          activity = 1.55;
+                          print(activity);
+                        }else if(index == 3){
+                          activity = 1.725;
+                          print(activity);
+                        }else if(index == 4){
+                          activity = 1.9;
+                          print(activity);
+                        }
                       });
                     },
-                    items: items.map((Item items) {
-                      return  DropdownMenuItem<Item>(
-                        value: items,
-                        child: Row(
-                          children: <Widget>[
-                            items.icon,
-                            SizedBox(width: 17,),
-                            Text(
-                              items.name,
-                              style:  TextStyle(color: Colors.black),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
                   ),
-                ),
-                /*Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: DropdownButton(
-                      value: activity,
-                      items: [
-                        DropdownMenuItem(
-                          child: Text("sedentary (little or no exercise)"),
-                          value: 1.2,
-                        ),
-                        DropdownMenuItem(
-                          child: Text("light activity (1-2 days/week)"),
-                          value: 1.375,
-                        ),
-                        DropdownMenuItem(
-                          child: Text("moderate activity (3-5 days/week)"),
-                          value: 1.55,
-                        ),
-                        DropdownMenuItem(
-                            child: Text("very active (6-7 days/week)"),
-                            value: 1.725,
-                        ),
-                        DropdownMenuItem(
-                            child: Text("extra active (2x/day)"),
-                            value: 1.9,
-                        ),
-                      ],
-                      onChanged: (value) {
-                        setState(() {
-                          activity = double.tryParse(value);
-                        });
-                      }),
-                ),
-                 */
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+  page3(){
+    return Container(
+      padding: EdgeInsets.only(left: 20, right: 20),
+      child: Column(
+        children: <Widget>[
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
                 GestureDetector(
-                  onTap: submitUsername,
-                  child: Container(
-                    height: 55.0,
-                    width: 320.0,
-                    decoration: BoxDecoration(
-                      color: Colors.blueAccent,
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Proceed",
-                        style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
+                    onTap: (){
+                      pageController.animateToPage(--pageChanged, duration: Duration(milliseconds: 250), curve: Curves.bounceInOut);
+                    },
+                    child: Icon(Icons.arrow_back_ios, size: 20, color: Hexcolor("#FF9900"),)
+                ),
+                Container(
+                  //padding: EdgeInsets.only(bottom: 20),
+                  child: Text("Set Target",textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 12)
+                    ),),
+                ),
+                GestureDetector(
+                    onTap: (){
+                      pageController.animateToPage(++pageChanged, duration: Duration(milliseconds: 250), curve: Curves.bounceInOut);
+                    },
+                    child: Icon(Icons.check_circle, size: 20, color: Hexcolor("#FF9900"),)
                 ),
               ],
             ),
-          )
+          ),
+          SizedBox(height: 20,),
+          RotatedBox(
+            quarterTurns: 1,
+            child:
+            ToggleButtons(
+              children: <Widget>[
+                RotatedBox(quarterTurns: 3, child: Padding(
+                  padding: const EdgeInsets.only(left: 60, right: 60),
+                  child: Text("Maintain", textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                          textStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: Colors.black)
+                      )),
+                ),),
+                RotatedBox(quarterTurns: 3, child: Padding(
+                  padding: const EdgeInsets.only(left: 60, right: 60),
+                  child: Text("Cutting\n(Decrease Weight)", textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                          textStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: Colors.black)
+                      )),
+                ),),
+                RotatedBox(quarterTurns: 3, child: Padding(
+                  padding: const EdgeInsets.only(left: 60, right: 60),
+                  child: Text("Bulking\n(Increase Weight)", textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                          textStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: Colors.black)
+                      )),
+                ),),
+              ],
+              isSelected: isSelected2,
+              onPressed: (int index) {
+                setState(() {
+                  for (int buttonIndex = 0; buttonIndex < isSelected2.length; buttonIndex++) {
+                    if (buttonIndex == index) {
+                      isSelected2[buttonIndex] = true;
+                    } else {
+                      isSelected2[buttonIndex] = false;
+                    }
+                  }
+                  if(index == 0){
+                    program = "maintain";
+                    print(program);
+                  }else if(index == 1){
+                    program = "Cutting";
+                    print(program);
+                  }else if(index == 2){
+                    program = "Bulking";
+                    print(program);
+                  }
+                });
+              },
+            ),
+          ),
+          SizedBox(height: 20,),
         ],
       ),
-
     );
   }
+
+  void  _successModal(context){
+    showModalBottomSheet(context: context, builder: (BuildContext bc){
+      return Container(
+        height: MediaQuery.of(context).size.height/2+100,
+        alignment: Alignment.center,
+        padding: EdgeInsets.all(40),
+        color: Hexcolor("#FF9900"),
+        child: Column(
+          children: <Widget>[
+            Text("Congrats!", textAlign: TextAlign.center,
+                style: GoogleFonts.poppins(
+                    textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 30, color: Colors.white)
+                )),
+            SizedBox(height: 5,),
+            Text("Your account has been successfully created", textAlign: TextAlign.center,
+                style: GoogleFonts.poppins(
+                    textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: Colors.white)
+                )),
+            SizedBox(height: 10,),
+            Icon(Icons.check_circle_outline, color: Colors.white,size: 80,),
+            SizedBox(height: 10,),
+            Text(program + " program", textAlign: TextAlign.center,
+                style: GoogleFonts.poppins(
+                    textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 12, color: Colors.white)
+                )),
+            Text("Using Katch-McArdle Formula, the calories is for your " + program + " program is " + tdee.toString() + " calories per day", textAlign: TextAlign.center,
+                style: GoogleFonts.poppins(
+                    textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 10, color: Colors.white)
+                )),
+            SizedBox(height: 10,),
+            FlatButton(
+              onPressed: (){
+                Navigator.pop(context, [gender, age, weight, height, bodyfat, lbm, tdee]);
+                Navigator.pop(context, [gender, age, weight, height, bodyfat, lbm, tdee]);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+              },
+              color: Colors.white,
+              child: Container(
+                width: MediaQuery.of(context).size.width/2,
+                height: 40.0,
+                child: Text("Great! Thank you",textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                      textStyle: TextStyle(color: Hexcolor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 13)
+                  ),),
+                alignment: Alignment.center,
+              ),
+            ),
+
+          ],
+        ),
+      );
+    });
+  }
+
 }

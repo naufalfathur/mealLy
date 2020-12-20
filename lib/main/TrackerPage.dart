@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'dart:io';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,10 +8,7 @@ import 'package:image/image.dart' as ImD;
 import 'package:meally2/HomePage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:meally2/main/ProfilePage.dart';
 import 'package:meally2/models/user.dart';
-import 'package:meally2/widgets/HeaderPage.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:meally2/widgets/ProgressWidget.dart';
 import 'package:uuid/uuid.dart';
 import 'package:path_provider/path_provider.dart';
@@ -36,7 +32,7 @@ class _TrackerPageState extends State<TrackerPage> with AutomaticKeepAliveClient
   bool uploading = false;
   String postId = Uuid().v4();
   TextEditingController descriptionTextEditingController = TextEditingController();
-  final snackBar = SnackBar(content: Text('Yay! A SnackBar!'));
+  //final snackBar = SnackBar(content: Text('Yay! A SnackBar!'));
 
   captureImageWithCamera() async {
     Navigator.pop(context);
@@ -49,7 +45,6 @@ class _TrackerPageState extends State<TrackerPage> with AutomaticKeepAliveClient
       this.file =  imageFile;
     });
   }
-
   pickImageFromGallery() async {
     Navigator.pop(context);
     File imageFile = await ImagePicker.pickImage(
@@ -59,14 +54,12 @@ class _TrackerPageState extends State<TrackerPage> with AutomaticKeepAliveClient
       this.file =  imageFile;
     });
   }
-
   defaultImage() async {
     File imageFile = await urlToFile("https://i.ibb.co/NFfysyq/No-Image-Available.png");
     setState(() {
       this.file =  imageFile;
     });
   }
-
   Future<File> urlToFile(String imageUrl) async {
     // generate random number.
     var rng = new Random();
@@ -84,8 +77,6 @@ class _TrackerPageState extends State<TrackerPage> with AutomaticKeepAliveClient
     // temporary directory and image bytes from response is written to // that file.
     return file;
   }
-
-
 
   takeImage(mContext){
     return showDialog(
@@ -147,12 +138,9 @@ class _TrackerPageState extends State<TrackerPage> with AutomaticKeepAliveClient
               ),
             ),
           ),
-
-
         ],
       ),
     );
-
   }
 
   clearPostInfo(){
@@ -161,7 +149,6 @@ class _TrackerPageState extends State<TrackerPage> with AutomaticKeepAliveClient
       file = null;
     });
   }
-
   compressingPhoto() async{
     final tDirectory = await getTemporaryDirectory();
     final path = tDirectory.path;
@@ -179,12 +166,10 @@ class _TrackerPageState extends State<TrackerPage> with AutomaticKeepAliveClient
     return downloadUrl;
 
   }
-
   controlUploadAndSave() async{
     setState(() {
       uploading = true;
     });
-
     await compressingPhoto();
 
     String downloadUrl = await uploadPhoto(file);
@@ -197,7 +182,6 @@ class _TrackerPageState extends State<TrackerPage> with AutomaticKeepAliveClient
     });
     Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
   }
-
   savePostInfoToFirestore({String url, String location, String description}){
     TrackerReference.document(widget.gCurrentUser.id).collection("userTrack").document(postId).setData({
       "postId": postId,
@@ -212,7 +196,6 @@ class _TrackerPageState extends State<TrackerPage> with AutomaticKeepAliveClient
     });
 
   }
-
   displayUploadFormScreen(){
     return Scaffold(
       backgroundColor: Colors.white,
@@ -236,8 +219,12 @@ class _TrackerPageState extends State<TrackerPage> with AutomaticKeepAliveClient
               child: AspectRatio(
                 aspectRatio: 16/9,
                 child: Container(
-                  decoration: BoxDecoration(image: DecorationImage(image: FileImage(file), fit: BoxFit.cover,)),
-
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: FileImage(file),
+                        fit: BoxFit.cover,
+                      )
+                  ),
                 ),
               ),
             ),
@@ -268,14 +255,11 @@ class _TrackerPageState extends State<TrackerPage> with AutomaticKeepAliveClient
               ),
             ),
           ),
-
         ],
       ),
     );
   }
-
   bool get wantKeepAlive => true;
-
   @override
   Widget build(BuildContext context) {
     return file == null ? displayUploadScreen() : displayUploadFormScreen();

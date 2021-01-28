@@ -132,7 +132,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Scaffold BuildOnboardScreen(List<SkOnboardingModel> pages, Widget widget){
     return Scaffold(
       key: _globalKey,
-      appBar: header(context, strTitle: "Profile",),
       body: SKOnboardingScreen(
         bgColor: Colors.white,
         themeColor: Hexcolor("#FF9900"),
@@ -181,21 +180,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   final pages2 = [
     SkOnboardingModel(
-        title: 'Choose your ttttt',
+        title: 'Benefit 1',
         description:
         'Easily find your grocery items and you will get delivery in wide range',
         titleColor: Colors.black,
         descripColor: const Color(0xFF929794),
         imagePath: 'assets/images/eating.png'),
     SkOnboardingModel(
-        title: 'Pick Up or Delivery',
+        title: 'Benefit 2',
         description:
         'Easily find your grocery items and you will get delivery in wide range',
         titleColor: Colors.black,
         descripColor: const Color(0xFF929794),
         imagePath: 'assets/images/eating.png'),
     SkOnboardingModel(
-        title: 'Pay quick and easy',
+        title: 'Benefit 3',
         description: 'Pay for order using credit or debit card',
         titleColor: Colors.black,
         descripColor: const Color(0xFF929794),

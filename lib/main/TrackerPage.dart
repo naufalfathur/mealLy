@@ -186,7 +186,7 @@ class _TrackerPageState extends State<TrackerPage> with AutomaticKeepAliveClient
     TrackerReference.document(widget.gCurrentUser.id).collection("userTrack").document(postId).setData({
       "postId": postId,
       "ownerId": widget.gCurrentUser.id,
-      "timestamp": timestamp,
+      "timestamp": DateTime.now(),
       "profileName": widget.gCurrentUser.profileName,
       "description": description,
       "url": url,
@@ -194,68 +194,97 @@ class _TrackerPageState extends State<TrackerPage> with AutomaticKeepAliveClient
     userReference.document(widget.currentOnlineUserId).updateData({
       "weight" : double.tryParse(descriptionTextEditingController.text),
     });
-
   }
   displayUploadFormScreen(){
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        elevation: 0,
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
-        leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.black,),onPressed: clearPostInfo,),
-        title: Text("New Post", style: TextStyle(fontSize: 24.0, color: Colors.black, fontWeight: FontWeight.bold),),
+        leading: IconButton(icon: Icon(Icons.close, color: Colors.black,),onPressed: clearPostInfo,),
+        centerTitle: true,
+        title: Text("Add Weight", style: GoogleFonts.poppins(textStyle:
+        TextStyle(fontSize: 18.0, color: Colors.black, fontWeight: FontWeight.w600),),),
         actions: <Widget>[
-          FlatButton(
-              onPressed: uploading ? null : ()=> controlUploadAndSave(),
-              child: Text("Share", style: TextStyle(color: Colors.lightGreenAccent, fontWeight: FontWeight.bold,fontSize: 16.0),)),
+          IconButton(icon: Icon(Icons.check, color: Colors.black,), onPressed: uploading ? null : ()=> controlUploadAndSave(),)
         ],
       ),
-      body: ListView(
-        children: <Widget>[
-          uploading ? linearProgress() : Text(""),
-          Container(
-            height: 230.0,
-            width: MediaQuery.of(context).size.width * 0.8,
-            child: Center(
-              child: AspectRatio(
-                aspectRatio: 16/9,
-                child: Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: FileImage(file),
-                        fit: BoxFit.cover,
-                      )
+      body: Container(
+        padding: EdgeInsets.only(left: 20, right: 20),
+        child: ListView(
+          children: <Widget>[
+            uploading ? linearProgress() : Text(""),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Weight", style: GoogleFonts.poppins(textStyle:
+                TextStyle(fontSize: 15.0, color: Colors.black, fontWeight: FontWeight.w500),),),
+                Container(
+                  //color: Colors.blue,
+                  width: MediaQuery.of(context).size.width-150,
+                  child: TextField(
+                    style: TextStyle(color: Colors.black),
+                    textAlign: TextAlign.end,
+                    controller: descriptionTextEditingController,
+                    decoration: InputDecoration(
+                        hintText: "Put your Weight now",
+                        hintStyle: TextStyle(color: Colors.grey),
+                        border: InputBorder.none
+                    ),
+                  ),
+                ),
+                Text("Kg", style: GoogleFonts.poppins(textStyle:
+                TextStyle(fontSize: 15.0, color: Colors.black, fontWeight: FontWeight.w500),),),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Date", style: GoogleFonts.poppins(textStyle:
+                TextStyle(fontSize: 15.0, color: Colors.black, fontWeight: FontWeight.w500),),),
+                Text(DateTime.now().day.toString()+ "/" + DateTime.now().month.toString() + "/" + DateTime.now().year.toString(), style: GoogleFonts.poppins(textStyle:
+                TextStyle(fontSize: 15.0, color: Colors.black, fontWeight: FontWeight.w500),),),
+              ],
+            ),
+            SizedBox(height: 10,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Progress Photo", style: GoogleFonts.poppins(textStyle:
+                TextStyle(fontSize: 15.0, color: Colors.black, fontWeight: FontWeight.w500),),),
+                Container(
+                  alignment: Alignment.center,
+                  child: RaisedButton.icon(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35.0)),
+                      color: Colors.orangeAccent,
+                      onPressed: () => takeImage(context),
+                      icon: Icon(Icons.camera_alt, color: Colors.white,),
+                      label: Text("Upload Photo", style: TextStyle(color: Colors.white),)),
+                ),
+              ],
+            ),
+            SizedBox(height: 10,),
+            Container(
+              height: 230.0,
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Center(
+                child: AspectRatio(
+                  aspectRatio: 16/9,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: FileImage(file),
+                          fit: BoxFit.cover,
+                        )
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          Container(
-            width: 220.0,
-            height: 110.0,
-            alignment: Alignment.center,
-            child: RaisedButton.icon(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35.0)),
-                color: Colors.green,
-                onPressed: () => takeImage(context),
-                icon: Icon(Icons.camera_alt, color: Colors.white,),
-                label: Text("Upload a Photo", style: TextStyle(color: Colors.white),)),
-          ),
-          ListTile(
-            leading: CircleAvatar(backgroundImage: CachedNetworkImageProvider(widget.gCurrentUser.url,),),
-            title: Container(
-              width: 250.0,
-              child: TextField(
-                style: TextStyle(color: Colors.black),
-                controller: descriptionTextEditingController,
-                decoration: InputDecoration(
-                    hintText: "Put your Weight now",
-                    hintStyle: TextStyle(color: Colors.grey),
-                    border: InputBorder.none
-                ),
-              ),
-            ),
-          ),
-        ],
+
+          ],
+        ),
       ),
     );
   }

@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "436682820754-qdpmsc8v44v77s59a89co4ajdpvbit1h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.naufal.meally2",
+            "certificate_hash": "0365baecf8f6145591d25ff3738f8ecaea9a23e2"
+          }
+        },
+        {
           "client_id": "436682820754-qcvssq5e38l6lv63fkero6444d932jrs.apps.googleusercontent.com",
           "client_type": 3
         }

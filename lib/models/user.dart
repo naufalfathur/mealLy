@@ -13,6 +13,10 @@ class User {
   final double bodyfat;
   final double lbm;
   final int tdee;
+  final String phoneNo;
+  final String postcode;
+  final String city;
+  final String location;
 
   User({
     this.id,
@@ -27,6 +31,10 @@ class User {
     this.bodyfat,
     this.lbm,
     this.tdee,
+    this.location,
+    this.city,
+    this.postcode,
+    this.phoneNo
   });
 
   factory User.fromDocument(DocumentSnapshot doc) {
@@ -43,6 +51,10 @@ class User {
       bodyfat: doc['bodyfat'],
       lbm: doc["lbm"],
       tdee: doc["tdee"],
+      location: doc['location'],
+      city: doc["city"],
+      postcode: doc["postcode"],
+      phoneNo: doc["phoneNo"],
     );
   }
 }

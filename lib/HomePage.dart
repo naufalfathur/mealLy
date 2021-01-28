@@ -4,17 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meally2/CreateAccountPage.dart';
 import 'package:meally2/main/MainPage.dart';
-import 'package:meally2/main/NotificationPage.dart';
+import 'package:meally2/main/MyOrderPage.dart';
 import 'package:meally2/main/ProfilePage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:meally2/main/ProgressPage.dart';
-import 'package:meally2/main/restaurantList.dart';
+import 'package:meally2/main/TrackerPage.dart';
+import 'package:meally2/main/myPlanPage.dart';
 import 'package:meally2/models/user.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:meally2/widgets/bubble_bottom_bar.dart';
 import 'package:meally2/main/MenuPlanning.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 final GoogleSignIn gSignIn = GoogleSignIn();
 final userReference = Firestore.instance.collection("users");
@@ -23,7 +25,10 @@ final TrackerReference = Firestore.instance.collection("tracker");
 final followingReference = Firestore.instance.collection("following");
 final followersReference = Firestore.instance.collection("followers");
 final reviewsReference = Firestore.instance.collection("reviews");
+final ordersReference = Firestore.instance.collection("order");
+final custOrdersReference = Firestore.instance.collection("custOrder");
 final timelineReference = Firestore.instance.collection("timeline");
+final CustActivityFeedReference = Firestore.instance.collection("custActivity");
 final DateTime timestamp = DateTime.now();
 User currentUser;
 
@@ -36,7 +41,7 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _globalKey = new GlobalKey<ScaffoldState>();
   bool isSignedIn = false;
   PageController pageController;
-  int getPageIndex = 0;
+  int getPageIndex = 1;
 
   logInUser(){
     gSignIn.signIn();
@@ -61,7 +66,7 @@ class _HomePageState extends State<HomePage> {
     DocumentSnapshot documentSnapshot = await userReference.document(gCurrentUser.id).get();
 
     if(!documentSnapshot.exists){
-      final input = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccountPage()));
+      final input = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccountPage(userProfileId: gCurrentUser)));
 
       userReference.document(gCurrentUser.id).setData({
         "id": gCurrentUser.id,
@@ -77,6 +82,11 @@ class _HomePageState extends State<HomePage> {
         "lbm":input[5],
         "tdee": input[6],
         "timestamp" : timestamp,
+        "postcode": input[7],
+        "city":input[8],
+        "location": input[9],
+        "phoneNo": input[10],
+        "program" : input[11]
       });
       documentSnapshot = await userReference.document(gCurrentUser.id).get();
     }
@@ -85,7 +95,7 @@ class _HomePageState extends State<HomePage> {
   void initState(){
     super.initState();
 
-    pageController =  PageController();
+    pageController =  PageController(initialPage: 1);
 
     gSignIn.onCurrentUserChanged.listen((gSignInAccount) {
       controlSignIn(gSignInAccount);
@@ -96,7 +106,7 @@ class _HomePageState extends State<HomePage> {
     gSignIn.signInSilently(suppressErrors: false).then((gSignInAccount) {
       controlSignIn(gSignInAccount);
     }).catchError((gError){
-      print("Error Message: " + gError);
+      print("Error Message: " + gError.toString());
     });
   }
   void dispose(){
@@ -104,7 +114,7 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
   onTapChangePage(int pageIndex){
-    pageController.animateToPage(pageIndex, duration: Duration(milliseconds: 400), curve: Curves.easeInSine);
+    pageController.jumpToPage(pageIndex);
   }
   whenPageChanges(int pageIndex){
     setState(() {
@@ -117,11 +127,13 @@ class _HomePageState extends State<HomePage> {
       body: PageView(
         children: <Widget>[
           //TimeLinePage(),
+          MyPlanPage(gCurrentUser: currentUser, userProfileId: currentUser.id),
           MainPage(userProfileId: currentUser.id, gCurrentUser: currentUser,),
-          MenuPlanning( userProfileId: currentUser.id),
-          //OrderPage(gCurrentUser: currentUser,),
+          //MenuPlanning( userProfileId: currentUser.id),
+          //MyOrderPage(gCurrentUser: currentUser, userProfileId: currentUser.id),
           //TrackerPage(gCurrentUser: currentUser,),
           //restaurantList(),
+
           ProgressPage(userProfileId: currentUser.id, gCurrentUser: currentUser,),
           //Container(child: Text("a"),),
           //NotificationPage(),
@@ -131,63 +143,45 @@ class _HomePageState extends State<HomePage> {
         onPageChanged: whenPageChanges,
         physics: NeverScrollableScrollPhysics(),
       ),
-      bottomNavigationBar: BubbleBottomBar(
-        hasNotch: false,
-        opacity: .15,
-        currentIndex: getPageIndex,
-        //backgroundColor: Colors.orangeAccent,
-        onTap: onTapChangePage,
-        borderRadius: BorderRadius.vertical(
-          //top: Radius.circular(30),
-          //bottom: Radius.circular(30),
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.only(left: 30, right: 30),
+        //color: Colors.black,
+        child: SalomonBottomBar(
+          currentIndex: getPageIndex,
+          //backgroundColor: Colors.orangeAccent,
+          onTap: onTapChangePage,
+          items: [
+            SalomonBottomBarItem(
+                icon: Icon(
+                  Icons.list_alt_rounded,
+                  color: getPageIndex == 0 ? Hexcolor("#FF9900") : Hexcolor("#3C3C3C"),
+                ),
+                //unselectedColor: Hexcolor("#3C3C3C"),
+                selectedColor: Hexcolor("#FF9900"),
+                title: Text("My Plan")),
+            SalomonBottomBarItem(
+                icon: Icon(
+                  Icons.home,
+                  color: getPageIndex == 1 ? Hexcolor("#FF9900") : Hexcolor("#3C3C3C"),
+                ),
+                selectedColor: Hexcolor("#FF9900"),
+                title: Text("Home")),
+            SalomonBottomBarItem(
+                icon: Icon(
+                  Icons.track_changes_rounded,
+                  color: getPageIndex == 2 ? Hexcolor("#FF9900") : Hexcolor("#3C3C3C"),
+                ),
+                selectedColor: Hexcolor("#FF9900"),
+                title: Text("Tracker")),
+            SalomonBottomBarItem(
+                icon: Icon(
+                  Icons.account_circle,
+                  color: getPageIndex == 3 ? Hexcolor("#FF9900") : Hexcolor("#3C3C3C"),
+                ),
+                selectedColor: Hexcolor("#FF9900"),
+                title: Text("Profile")),
+          ],
         ),
-        elevation: 8,
-        items: <BubbleBottomBarItem>[
-          BubbleBottomBarItem(
-              backgroundColor: Colors.white,
-              icon: Icon(
-                Icons.dashboard,
-                color: Hexcolor("#FF9900"),
-              ),
-              activeIcon: Icon(
-                Icons.dashboard,
-                color: Colors.white,
-              ),
-              title: Text("Home")),
-          BubbleBottomBarItem(
-              backgroundColor: Colors.white,
-              icon: Icon(
-                Icons.dashboard,
-                color: Hexcolor("#FF9900"),
-              ),
-              activeIcon: Icon(
-                Icons.dashboard,
-                color: Colors.white,
-              ),
-              title: Text("Home")),
-          BubbleBottomBarItem(
-              backgroundColor: Colors.white,
-              icon: Icon(
-                Icons.access_time,
-                color: Hexcolor("#FF9900"),
-              ),
-              activeIcon: Icon(
-                Icons.access_time,
-                color: Colors.white,
-              ),
-              title: Text("Order")),
-          BubbleBottomBarItem(
-              backgroundColor: Colors.white,
-              icon: Icon(
-                Icons.account_circle,
-                color: Hexcolor("#FF9900"),
-              ),
-              activeIcon: Icon(
-                Icons.account_circle,
-                color: Colors.white,
-              ),
-              title: Text("Profile")),
-        ],
       ),
     );
   }

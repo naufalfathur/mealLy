@@ -36,27 +36,39 @@ class _ProgressPageState extends State<ProgressPage> {
     return Scaffold(
       body: Container(
         //color: Hexcolor("#FF9900"),
+
         child: ListView(
           children: <Widget>[
-            TopBar(),
-            Divider(),
+            topBar(),
+            //Divider(),
             ProgressData(),
-            UploadProgress(),
-            Divider(),
+            //
+            //Divider(),
             displayProfilePost(),
           ],
         ),
       ),
+      bottomSheet: UploadProgress(),
     );
   }
 
-  TopBar(){
+  topBar(){
     return Container(
-      alignment: Alignment.center,
-      height: 120,
-      color: Hexcolor("#FF9900"),
-      child: Text("Weight Tracker", style: GoogleFonts.poppins(textStyle:
-      TextStyle(fontSize: 18.0, color: Colors.white, fontWeight: FontWeight.w600),),),
+      padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+      width: MediaQuery.of(context).size.width,
+      height: 70,
+      alignment: Alignment.bottomLeft,
+      //margin: EdgeInsets.only(bottom: 20),
+      decoration: BoxDecoration(
+        //color: Colors.blue
+      ),
+      child:
+      Text("Weight Track",
+        style: GoogleFonts.poppins(
+            textStyle: TextStyle(color: Colors.black,
+                fontWeight: FontWeight.w600,
+                fontSize: 25)
+        ),),
     );
   }
 
@@ -71,36 +83,37 @@ class _ProgressPageState extends State<ProgressPage> {
         return Column(
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.only(top: 5,bottom: 10,left: 15,right: 15),
-                    padding: EdgeInsets.only(top: 15, bottom: 15),
-                    /*
+                    margin: EdgeInsets.only(top: 10,bottom: 10),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          offset: Offset(0.0,3.0),
-                          blurRadius: 37,
-                          spreadRadius: -8,
-                        ),
-                      ],
+                      image: DecorationImage(
+                        alignment: Alignment(-1, 0),
+                        image: AssetImage("assets/images/bg.png"),
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                     */
-                    child:Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Container(
-                          child: createColumns("Start", user.initialWeight.round().toString() + "Kg"),
+                    child:Container(
+                      decoration: BoxDecoration(
+                          color : Hexcolor("#690000").withOpacity(0.15)
+                      ),
+                      child: Container(
+                        padding: EdgeInsets.only(top: 15, bottom: 15),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Container(
+                              child: createColumns("Start", user.initialWeight.round()),
+                            ),
+                            Container(
+                              child: createColumns("Current", user.weight.round()),
+                            ),
+                            Container(
+                              //color: Colors.black45,
+                              child: createColumns("Change", (user.weight - user.initialWeight).round()),
+                            ),
+                          ],
                         ),
-                        Container(
-                          child: createColumns("Current", user.weight.round().toString()+ "Kg"),
-                        ),
-                        Container(
-                          child: createColumns("Change", (user.weight - user.initialWeight).round().toString()+"↑"),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ],
@@ -109,19 +122,19 @@ class _ProgressPageState extends State<ProgressPage> {
     );
   }
 
-  Column createColumns(String title, String Value  ){
+  Column createColumns(String title, int Value  ){
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(Value.toString(), style: GoogleFonts.poppins(textStyle:
-        TextStyle(fontSize: 18.0, color: title != "Change" ? Colors.orangeAccent : Colors.blueAccent, fontWeight: FontWeight.bold),),),
+        TextStyle(fontSize: 18.0, color: title != "Change" ? Colors.white : Value >0 ? Colors.lightBlueAccent : Hexcolor("#690000"), fontWeight:FontWeight.w700),),),
         Container(
           margin: EdgeInsets.only(top: 5.0),
           child: Text(
               title,
               style: GoogleFonts.poppins(textStyle:
-              TextStyle(fontSize: 15.0, color: Colors.black, fontWeight: FontWeight.w600),)
+              TextStyle(fontSize: 15.0, color: Colors.white, fontWeight: FontWeight.w500),)
           ),
         )
       ],
@@ -134,11 +147,17 @@ class _ProgressPageState extends State<ProgressPage> {
         child: FlatButton(
           onPressed: uploadPict,
           child: Container(
+
             width: double.infinity,
             height: 50.0,
             child: Text("Update Weight", style: GoogleFonts.poppins(textStyle: TextStyle(color:Colors.white , fontWeight: FontWeight.w600),)),
             alignment: Alignment.center,
             decoration: BoxDecoration(
+              image: DecorationImage(
+                alignment: Alignment(-1, 0),
+                image: AssetImage("assets/images/bg.png"),
+                fit: BoxFit.cover,
+              ),
               color: Colors.orangeAccent,
               border: Border.all(color: Colors.orangeAccent),
               //borderRadius: BorderRadius.circular(6.0),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meally2/EditProfilePage.dart';
+import 'package:meally2/main/MyOrderPage.dart';
 import 'package:meally2/main/TrackerPage.dart';
 import 'package:meally2/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,32 +24,62 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final String currentOnlineUserId = currentUser.id;
   bool loading = false;
-  //int countPost = 0;
-  //List<Post> postlist = [];
-  //String postOrientation = "list";
-  /*void initState(){
-    getAllProfilePost();
-  }
-   */
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Stack(
+        body: Container(
+            padding: EdgeInsets.only(left: 40, right: 40),
+          //width: MediaQuery.of(context).size.width,
+          //height: MediaQuery.of(context).size.height,
+          child: ListView(
             children: <Widget>[
-              createProfileTopView(),
-              menuOption(),
+              logo(),
+              accountDetails(),
+              menu(),
             ],
           )
         ),
+      bottomSheet: Container(
+        height: 150,
+        width: MediaQuery.of(context).size.width,
+        color: Colors.white,
+        child: ClipPath(
+          clipper: TopBarClipper(),
+          child: Container(
+            height: 150,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/bg.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
+            padding: EdgeInsets.all(20),
+            alignment: Alignment.bottomLeft,
+            width: MediaQuery.of(context).size.width,
+            child: Text("MealLy 1.0", textAlign: TextAlign.center,
+                style: GoogleFonts.poppins(
+                    textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 15, color: Colors.white)
+                )),
+          ),
+        ),
+      ),
+    );
+  }
+
+  logo(){
+    return Container(
+      height: 100,
+      alignment: Alignment.bottomLeft,
+      child: Text("mealLy", textAlign: TextAlign.center,
+          style: GoogleFonts.poppins(
+              textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 30, color: Colors.black)
+          )),
     );
   }
 
 
-  createProfileTopView(){
+  accountDetails(){
     return FutureBuilder(
       future: userReference.document(widget.userProfileId).get(),
       builder: (context, dataSnapshot){
@@ -56,139 +87,83 @@ class _ProfilePageState extends State<ProfilePage> {
           return circularProgress(Colors.orangeAccent);
         }
         User user = User.fromDocument(dataSnapshot.data);
-        return Stack(
-          children: <Widget>[
-            Container(
-              height: 200,
-              color: Hexcolor("#FF9900"),
-              width: MediaQuery.of(context).size.width,
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 65, left: 30, right: 30, bottom: 1),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            //color : Colors.white,
-                            //padding: EdgeInsets.only(top: 20.0),
-                            child: Text(
-                              user.profileName,
-                              style: GoogleFonts.poppins(textStyle:
-                              TextStyle(fontSize: 20.0, color: Colors.white, fontWeight: FontWeight.w600),),
-                            ),
-                          ),
-                          Container(
-                            //color : Colors.white,
-                            //padding: EdgeInsets.only(top: 3.0),
-                            child: Text(
-                              user.email,
-                              style: GoogleFonts.poppins(textStyle:
-                              TextStyle(fontSize: 14.0, color: Colors.white),),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white, width: 2),
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child:ClipRRect(
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: Image(
-                                image: CachedNetworkImageProvider(user.url),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 40),
-                    padding: EdgeInsets.only(top: 15, bottom: 15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          offset: Offset(0.0,3.0),
-                          blurRadius: 37,
-                          spreadRadius: -8,
-                        ),
-                      ],
-                    ),
-                    child:Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Container(
-                          child: createColumns("Weight", user.weight.toString()),
-                        ),
-                        Container(
-                          child: createColumns("TDEE", user.tdee.toString()),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+        return Container(
+          height: 120,
+          //color: Colors.blue,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CircleAvatar(backgroundImage: NetworkImage(user.url),radius: 30,),
+              SizedBox(width: 20,),
+              Container(
+                width: MediaQuery.of(context).size.width/2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(user.profileName, overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 15, color: Colors.black)
+                        )),
+                    Text("012030101", textAlign: TextAlign.center,
+                        style: GoogleFonts.poppins(
+                            textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12, color: Colors.black)
+                        )),
+                    Text(user.postcode + ", " + user.city,
+                        style: GoogleFonts.poppins(
+                            textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12, color: Colors.black)
+                        )),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );
   }
 
-  menuOption(){
+  menu(){
     return Container(
-      margin: EdgeInsets.only(top: 280, left: 30, right: 30),
-      padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+      margin: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(left: 10, right: 10),
       height: 300,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            offset: Offset(0.0,2.0),
-            blurRadius: 23,
-            spreadRadius: 0,
-          ),
-        ],
-      ),
+      //color: Colors.blue,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          createList("Update Weight",editUserProfile),
-          createList("Edit Plans",editUserProfile),
-          createList("Edit Profile",editUserProfile),
-          createList("Log Out",logoutUser),
+          createList(Icons.edit, "Edit Profile",editUserProfile),
+          createList(Icons.shopping_bag_outlined,"Orders",viewOrder),
+          createList(Icons.system_update_alt_rounded,"Update TDEE",editUserProfile),
+          createList(Icons.person,"Update Weight",editUserProfile),
+          createList(Icons.logout, "Log Out",logoutUser),
         ],
       ),
     );
   }
 
-  ListTile createList(String title, Function function){
-    return ListTile(
-      leading: Icon(Icons.account_circle),
-      title: GestureDetector(
-        onTap: function,
-        child: Text(
-          title,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w300
+  createList(IconData icon, String title, Function function){
+    return GestureDetector(
+      onTap: function,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 18,),
+              SizedBox(width: 20,),
+              Text(
+                title,
+                style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 15
+                ),
+              ),
+            ],
           ),
-        ),
+          SizedBox(width: 10,),
+          Icon(Icons.arrow_forward_ios_rounded, size: 10,),
+        ],
       ),
     );
   }
@@ -197,17 +172,13 @@ class _ProfilePageState extends State<ProfilePage> {
     await gSignIn.signOut();
     Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage()));
   }
-
-
   editUserProfile(){
     Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage(currentOnlineUserId: currentOnlineUserId)));
   }
-
-
-  Row createRows(String title, Function function){
-    return Row (
-    );
+  viewOrder(){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MyOrderPage(gCurrentUser: currentUser, userProfileId: currentUser.id)));
   }
+
 
   Column createColumns(String title, String Value  ){
     return Column(
@@ -250,5 +221,27 @@ class _ProfilePageState extends State<ProfilePage> {
   uploadPict(){
     Navigator.push(context, MaterialPageRoute(builder: (context) => TrackerPage(gCurrentUser: currentUser, currentOnlineUserId: currentOnlineUserId)));
   }
+}
 
+class TopBarClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+
+    path.moveTo(size.width, 0);
+    path.quadraticBezierTo(size.width-50, size.height+20, 0, size.height-90);
+    path.lineTo(0, size.height);
+    path.lineTo(size.width, size.height);
+    path.lineTo(size.width, 0);
+    path.close();
+    // TODO: implement getClip
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    // TODO: implement shouldReclip
+    return true;
+    throw UnimplementedError();
+  }
 }

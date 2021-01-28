@@ -72,68 +72,90 @@ class _restaurantProfileState extends State<restaurantProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        children: <Widget>[
-          profilePage(),
-        ],
-      ),
+    return FutureBuilder(
+        future: restReference.document(widget.userRestId).get(),
+        builder: (context, dataSnapshot) {
+          if (!dataSnapshot.hasData) {
+            return circularProgress(Colors.orangeAccent);
+          }
+          Restaurant restaurant = Restaurant.fromDocument(dataSnapshot.data);
+          return Scaffold(
+            body: ListView(
+              children: <Widget>[
+                profilePage(restaurant),
+              ],
+            ),
+          );
+        }
     );
   }
 
-  profilePage(){
-    return FutureBuilder(
-      future: restReference.document(widget.userRestId).get(),
-      builder: (context, dataSnapshot){
-        if(!dataSnapshot.hasData){
-          return circularProgress(Colors.orangeAccent);
-        }
-        Restaurant restaurant = Restaurant.fromDocument(dataSnapshot.data);
-        return Stack(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 240,
-              alignment: Alignment.center,
-              margin: EdgeInsets.only( top: 60),
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/restaurant.jpg"),
-                    fit: BoxFit.fitHeight,
-                  )
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors:[
-                        Hexcolor("#616161").withOpacity(0.6),
-                        Hexcolor("#000000").withOpacity(0.5)
-                      ],
-                      stops: [0.2, 1],
-                      begin: Alignment.topRight,
-                    )
+  Future<void> _showCert(Restaurant restaurant){
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Halal Certification'),
+          content: SingleChildScrollView(
+            child: Container(
+             // height: MediaQuery.of(context).size.height/2,
+              //width: MediaQuery.of(context).size.width,
+              child: ClipRRect(
+                child: Image(
+                  image: NetworkImage(restaurant.certificate),
+                  fit: BoxFit.scaleDown,
                 ),
               ),
             ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 240,
-              alignment: Alignment.center,
-              margin: EdgeInsets.only( top: 60),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(restaurant.RestaurantName,textAlign: TextAlign.center,
-                    style: GoogleFonts.poppins(
-                        textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 30)
-                    ),),
-                  Text("★★★★★",textAlign: TextAlign.center,
-                    style: GoogleFonts.poppins(
-                        textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 15)
-                    ),),
-                ],
-              ),
+          ),
+        );
+      },
+    );
+  }
+
+  profilePage(Restaurant restaurant){
+    return Column(
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width,
+          height: 200,
+          alignment: Alignment.center,
+          //margin: EdgeInsets.only( top: 60),
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/restaurant.jpg"),
+                fit: BoxFit.cover,
+              )
+          ),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors:[
+                    Hexcolor("#616161").withOpacity(0.6),
+                    Hexcolor("#000000").withOpacity(0.5)
+                  ],
+                  stops: [0.2, 1],
+                  begin: Alignment.topRight,
+                )
             ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(restaurant.RestaurantName,textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                      textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 30)
+                  ),),
+                Text("★★★★★",textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                      textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 15)
+                  ),),
+              ],
+            ),
+          ),
+        ),
+        /*
             Container(
               width: MediaQuery.of(context).size.width,
               height: 100,
@@ -148,29 +170,29 @@ class _restaurantProfileState extends State<restaurantProfile> {
                     textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 25)
                 ),),
             ),
-            displayWidget(),
-          ],
-        );
-      },
+
+             */
+        displayWidget(restaurant),
+      ],
     );
   }
 
-  displayWidget(){
+  displayWidget(Restaurant restaurant){
     if(restOnline){
       //print("this is rest");
-      return menuBar();
+      return menuBar(restaurant);
     }else{
       //print("this is not rest");
       return displayProfilePost();
     }
   }
 
-  menuBar(){
+  menuBar(Restaurant restaurant){
     return Container(
       //width: MediaQuery.of(context).size.width-50,
       height: 250,
       alignment: Alignment.center,
-      margin: EdgeInsets.only( left: 30, right: 30, top: 260),
+      margin: EdgeInsets.only( left: 30, right: 30, top: 20),
       padding: EdgeInsets.only(left: 30, right: 30),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -187,17 +209,22 @@ class _restaurantProfileState extends State<restaurantProfile> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Row(
-            children: [
-              Icon(Icons.upload_file),
-              SizedBox(width: 10,),
-              Text("Certification",textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                    textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 15)
-                ),),
-              SizedBox(width: 10,),
-              Icon(Icons.error_outline,color: Colors.red,),
-            ],
+          GestureDetector(
+            onTap: (){
+              _showCert(restaurant);
+            },
+            child: Row(
+              children: [
+                Icon(Icons.upload_file),
+                SizedBox(width: 10,),
+                Text("Halal Certification",textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                      textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 15)
+                  ),),
+                SizedBox(width: 10,),
+                //Icon(Icons.error_outline,color: Colors.red,),
+              ],
+            ),
           ),
           Row(
             children: [
@@ -283,7 +310,7 @@ class _restaurantProfileState extends State<restaurantProfile> {
           child: Text(block? "unblock" : "block", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: Colors.red.withOpacity(0.3),
+            color: Colors.red,
             border: Border.all(color: Colors.white),
             borderRadius: BorderRadius.circular(6.0),
           ),
@@ -298,14 +325,14 @@ class _restaurantProfileState extends State<restaurantProfile> {
     }else if(postlist.isEmpty){
       return Container(
         alignment: Alignment.center,
-        margin: EdgeInsets.only(top: 225),
+        //margin: EdgeInsets.only(top: 225),
         padding: EdgeInsets.only(top: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             //blockButton(),
             Padding(
-              padding: EdgeInsets.only(top: 100),
+              padding: EdgeInsets.only(top: 10),
               child: Icon(Icons.photo_library, color: Colors.grey, size: 100,),
             ),
             Padding(
@@ -318,14 +345,14 @@ class _restaurantProfileState extends State<restaurantProfile> {
     }else if(block){
       return Container(
         alignment: Alignment.center,
-        margin: EdgeInsets.only(top: 225),
+        //margin: EdgeInsets.only(top: 225),
         padding: EdgeInsets.only(top: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             blockButton(),
             Padding(
-              padding: EdgeInsets.only(top: 100),
+              padding: EdgeInsets.only(top: 10),
               child: Icon(Icons.block, color: Colors.grey, size: 100,),
             ),
             Padding(
@@ -338,7 +365,7 @@ class _restaurantProfileState extends State<restaurantProfile> {
     }else if(!block){
       return Container(
         alignment: Alignment.center,
-        margin: EdgeInsets.only(top: 225),
+        //margin: EdgeInsets.only(top: 225),
         padding: EdgeInsets.only(top: 20),
         child:
         Column(

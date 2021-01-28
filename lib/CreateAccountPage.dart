@@ -4,6 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:meally2/HomePage.dart';
+import 'package:meally2/main/paymentPage.dart';
+import 'package:meally2/models/user.dart';
+import 'package:meally2/widgets/ProgressWidget.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:geolocator/geolocator.dart';
 
 class Item {
   const Item(this.name,this.icon, this.value);
@@ -13,17 +18,25 @@ class Item {
 }
 
 class CreateAccountPage extends StatefulWidget {
+  final GoogleSignInAccount userProfileId;
+  CreateAccountPage({this.userProfileId});
   @override
-  _CreateAccountPageState createState() => _CreateAccountPageState();
+  _CreateAccountPageState createState() => _CreateAccountPageState(userProfileId: userProfileId);
 }
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
+  final GoogleSignInAccount userProfileId;
+  _CreateAccountPageState({this.userProfileId});
   final _scaffoldkey =  GlobalKey<ScaffoldState>();
   //final _formkey = GlobalKey<FormState>();
   final _formkey2 = GlobalKey<FormState>();
   final _formkey3 = GlobalKey<FormState>();
   final _formkey4 = GlobalKey<FormState>();
   final _formkey5 = GlobalKey<FormState>();
+  TextEditingController ZIPTextEditingController = TextEditingController();
+  TextEditingController cityTextEditingController = TextEditingController();
+  TextEditingController locationTextEditingController = TextEditingController();
+  TextEditingController phoneNo = TextEditingController();
   String gender;
   int age;
   double weight;
@@ -39,9 +52,22 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   Color _color = Colors.white;
   double rating = 0;
   int error = 0;
+  bool locationAsk = true;
 
   List<bool> isSelected = [true, false, false,false, false];
   List<bool> isSelected2 = [true, false, false];
+
+  getLocation() async{
+    Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    List<Placemark> placemark = await Geolocator().placemarkFromCoordinates(position.latitude, position.longitude);
+    Placemark mPlacemark = placemark[0];
+    String completeAddressInfo = '${mPlacemark.subThoroughfare} ${mPlacemark.thoroughfare}, ${mPlacemark.subLocality} ${mPlacemark.locality}, ${mPlacemark.subAdministrativeArea} ${mPlacemark.administrativeArea}, ${mPlacemark.postalCode} ${mPlacemark.country}, ';
+    String cityAddress = '${mPlacemark.locality}';
+    String postcodeAddress = '${mPlacemark.postalCode}';
+    ZIPTextEditingController.text = postcodeAddress;
+    cityTextEditingController.text = cityAddress;
+    locationTextEditingController.text = completeAddressInfo;
+  }
 
   submitForm(){
     final form2 = _formkey2.currentState;
@@ -85,17 +111,25 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   @override
   Widget build(BuildContext parentContext) {
-    return CreateAccount();
+    if(locationAsk){
+      return page0();
+    }else{
+      return CreateAccount();
+    }
+
   }
   PageController pageController = PageController();
+
+
   Scaffold CreateAccount(){
     return Scaffold(
       key: _scaffoldkey,
       body: ListView(
         children: [
           Container(
+
             alignment: Alignment.center,
-            padding: EdgeInsets.only(top: 50),
+            padding: EdgeInsets.only(top: 50, left: 40, right: 40),
             color: Colors.white,
             child: Column(
               children: <Widget>[
@@ -110,7 +144,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   width: MediaQuery.of(context).size.width/4,
                 ),
                 SizedBox(height: 30,),
-                Text("Hi Jane Doe, ",textAlign: TextAlign.center,
+                Text("Hi " +  userProfileId.displayName,textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20)
                   ),),
@@ -133,7 +167,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 SizedBox(height: 10,),
                 Container(
                   margin: EdgeInsets.only(top: 10),
-                  height: (MediaQuery.of(context).size.height/3)+80,
+                  height: MediaQuery.of(context).size.height/3+80,
                   //color: Hexcolor("#FF9900"),
                   //padding: EdgeInsets.only(top: 10),
                   width: MediaQuery.of(context).size.width,
@@ -148,6 +182,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       print(pageChanged);
                     },
                     children: [
+                      //page0(),
                       page1(),
                       page2(),
                       page3(),
@@ -156,13 +191,15 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 ),
                 SizedBox(height: 10,),
                 FlatButton(
-                  onPressed: (){
+                  onPressed: () {
                     if(pageChanged == 0){
                       submitForm();
+                      //pageController.animateToPage(++pageChanged, duration: Duration(milliseconds: 250), curve: Curves.bounceInOut);
                     }else if (pageChanged == 1){
                       pageController.animateToPage(++pageChanged, duration: Duration(milliseconds: 250), curve: Curves.bounceInOut);
                     }else if (pageChanged == 2){
                       print("a");
+                      //await Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage()));
                       _successModal(context);
                     }
                   },
@@ -178,7 +215,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   ),
                 ),
                 SizedBox(height: 5,),
-                Text((pageChanged+1).toString() + "/3",textAlign: TextAlign.center,
+                if(pageChanged != 0) Text((pageChanged).toString() + "/3",textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       textStyle: TextStyle(color: Colors.black54, fontWeight: FontWeight.w700, fontSize: 12)
                   ),),
@@ -191,10 +228,81 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       ),
     );
   }
-
+  Scaffold page0(){
+    return Scaffold(
+      body: Container(
+        alignment: Alignment.center,
+        height: MediaQuery.of(context).size.height,
+        //color: Colors.blue,
+          padding: EdgeInsets.only(left: 40, right: 40),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              //SizedBox(height: 60,),
+              CircleAvatar(backgroundImage: NetworkImage(userProfileId.photoUrl),radius: 50,),
+              SizedBox(height: 20,),
+              Text("Hi " +  userProfileId.displayName.toString(),textAlign: TextAlign.center,
+                style: GoogleFonts.poppins(
+                    textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 15)
+                ),),
+              Container(
+                padding: EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 20),
+                child:  Text("Thank you for registering to mealLy, before you set up your account"
+                    " \nin order to MealLy be able to works, we needs your phone number and location to continue",textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                      textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 12)
+                  ),),
+              ),
+              SizedBox(height: 15,),
+              Text("Phone No : ",textAlign: TextAlign.left,
+                style: GoogleFonts.poppins(
+                    textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 12)
+                ),),
+              Container(
+                width: 90,
+                child: TextField(
+                  keyboardType: TextInputType.number,
+                  controller: phoneNo,
+                ),
+              ),
+              SizedBox(height: 20,),
+              FlatButton(
+                onPressed: (){
+                  if(phoneNo.text.isEmpty){
+                    print("error");
+                  }else{
+                    getLocation();
+                    setState(() {
+                      locationAsk = false;
+                    });
+                  }
+                },
+                //color: Hexcolor("#FF9900"),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 40.0,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/images/bg.png"),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: Text("Get my location",textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13)
+                    ),),
+                  alignment: Alignment.center,
+                ),
+              ),
+            ],
+          ),
+      ),
+    );
+  }
   page1(){
     return Container(
-      padding: EdgeInsets.only(left: 40, right: 40),
+      //padding: EdgeInsets.only(left: 40, right: 40),
       child: ListView(
         children: <Widget>[
           Column(
@@ -421,7 +529,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   }
   page2(){
     return Container(
-      padding: EdgeInsets.only(left: 15, right: 15),
+      //padding: EdgeInsets.only(left: 15, right: 15),
       child: ListView(
         children: <Widget>[
           Column(
@@ -532,7 +640,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   }
   page3(){
     return Container(
-      padding: EdgeInsets.only(left: 20, right: 20),
+      //padding: EdgeInsets.only(left: 20, right: 20),
       child: Column(
         children: <Widget>[
           Container(
@@ -619,58 +727,134 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     );
   }
 
-  void  _successModal(context){
-    showModalBottomSheet(context: context, builder: (BuildContext bc){
-      return Container(
-        height: MediaQuery.of(context).size.height/2+100,
-        alignment: Alignment.center,
-        padding: EdgeInsets.all(40),
-        color: Hexcolor("#FF9900"),
-        child: Column(
-          children: <Widget>[
-            Text("Congrats!", textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                    textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 30, color: Colors.white)
-                )),
-            SizedBox(height: 5,),
-            Text("Your account has been successfully created", textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                    textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: Colors.white)
-                )),
-            SizedBox(height: 10,),
-            Icon(Icons.check_circle_outline, color: Colors.white,size: 80,),
-            SizedBox(height: 10,),
-            Text(program + " program", textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                    textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 12, color: Colors.white)
-                )),
-            Text("Using Katch-McArdle Formula, the calories is for your " + program + " program is " + tdee.toString() + " calories per day", textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                    textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 10, color: Colors.white)
-                )),
-            SizedBox(height: 10,),
-            FlatButton(
-              onPressed: (){
-                Navigator.pop(context, [gender, age, weight, height, bodyfat, lbm, tdee]);
-                Navigator.pop(context, [gender, age, weight, height, bodyfat, lbm, tdee]);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-              },
-              color: Colors.white,
-              child: Container(
-                width: MediaQuery.of(context).size.width/2,
-                height: 40.0,
-                child: Text("Great! Thank you",textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
-                      textStyle: TextStyle(color: Hexcolor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 13)
-                  ),),
-                alignment: Alignment.center,
-              ),
-            ),
-
-          ],
+  void _successModal(context){
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
         ),
-      );
-    });
+      ),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      builder: (context) =>
+        GestureDetector(
+          //onVerticalDragStart: (_) {},
+          child: Container(
+            height: MediaQuery.of(context).size.height/2+100,
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(40),
+            color: Hexcolor("#FF9900"),
+            child: Column(
+              children: <Widget>[
+                Text("Congrats!", textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 30, color: Colors.white)
+                    )),
+                SizedBox(height: 5,),
+                Text("Your data has ben updated", textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: Colors.white)
+                    )),
+                SizedBox(height: 10,),
+                Container(
+                  height: 80,
+                  //width: MediaQuery.of(context).size.width,
+                  child: ClipRRect(
+                    child: Image(
+                      image: AssetImage("assets/images/loadOr.gif"),
+                      fit: BoxFit.scaleDown,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10,),
+                Text("Using Katch-McArdle Formula, the calories intake that your body needs for your " + program + " program is " + tdee.toString() + " calories per day", textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12, color: Colors.white)
+                    )),
+                SizedBox(height: 10,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Program ", style: GoogleFonts.poppins(textStyle:
+                    TextStyle(fontSize: 12.0, color: Colors.white, fontWeight: FontWeight.w600),),),
+                    Text(program, style: GoogleFonts.poppins(textStyle:
+                    TextStyle(fontSize: 12.0, color: Colors.white, fontWeight: FontWeight.w500),),),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Gender ", style: GoogleFonts.poppins(textStyle:
+                    TextStyle(fontSize: 12.0, color: Colors.white, fontWeight: FontWeight.w600),),),
+                    Text(gender, style: GoogleFonts.poppins(textStyle:
+                    TextStyle(fontSize: 12.0, color: Colors.white, fontWeight: FontWeight.w500),),),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("age ", style: GoogleFonts.poppins(textStyle:
+                    TextStyle(fontSize: 12.0, color: Colors.white, fontWeight: FontWeight.w600),),),
+                    Text(age.toString(), style: GoogleFonts.poppins(textStyle:
+                    TextStyle(fontSize: 12.0, color: Colors.white, fontWeight: FontWeight.w500),),),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("bodyfat ", style: GoogleFonts.poppins(textStyle:
+                    TextStyle(fontSize: 12.0, color: Colors.white, fontWeight: FontWeight.w600),),),
+                    Text(bodyfat.toString() + " %", style: GoogleFonts.poppins(textStyle:
+                    TextStyle(fontSize: 12.0, color: Colors.white, fontWeight: FontWeight.w500),),),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("weight ", style: GoogleFonts.poppins(textStyle:
+                    TextStyle(fontSize: 12.0, color: Colors.white, fontWeight: FontWeight.w600),),),
+                    Text(weight.toString(), style: GoogleFonts.poppins(textStyle:
+                    TextStyle(fontSize: 12.0, color: Colors.white, fontWeight: FontWeight.w500),),),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Calories intake ", style: GoogleFonts.poppins(textStyle:
+                    TextStyle(fontSize: 12.0, color: Colors.white, fontWeight: FontWeight.w600),),),
+                    Text(tdee.toString(), style: GoogleFonts.poppins(textStyle:
+                    TextStyle(fontSize: 12.0, color: Colors.white, fontWeight: FontWeight.w500),),),
+                  ],
+                ),
+
+                SizedBox(height: 10,),
+
+                FlatButton(
+                  onPressed: (){
+                    Navigator.pop(context, [gender, age, weight, height, bodyfat, lbm, tdee, ZIPTextEditingController.text,cityTextEditingController.text,locationTextEditingController.text, phoneNo.text, program]);
+                    Navigator.pop(context, [gender, age, weight, height, bodyfat, lbm, tdee, ZIPTextEditingController.text,cityTextEditingController.text,locationTextEditingController.text, phoneNo.text, program]);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                  },
+                  color: Colors.white,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width/2,
+                    height: 40.0,
+                    child: Text("Great! Thank you",textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                          textStyle: TextStyle(color: Hexcolor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 13)
+                      ),),
+                    alignment: Alignment.center,
+                  ),
+                ),
+
+              ],
+            ),
+          )
+        ),
+        isDismissible: false,
+        isScrollControlled: true,
+    );
   }
 
 }

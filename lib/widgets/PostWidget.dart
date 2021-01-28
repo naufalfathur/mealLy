@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meally2/models/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:meally2/widgets/ProgressWidget.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Post extends StatefulWidget {
   final String postId;
@@ -88,15 +89,12 @@ class _PostState extends State<Post> {
         bool isPostOwner = currentOnlineUserId == ownerId;
 
         return ListTile(
-          leading: CircleAvatar(backgroundImage: CachedNetworkImageProvider(user.url), backgroundColor: Colors.grey,),
+          //leading: CircleAvatar(backgroundImage: CachedNetworkImageProvider(user.url), backgroundColor: Colors.grey,),
           title: GestureDetector(
             onTap: ()=> print("show profile"),
-            child: Text(
-              description + " Kg",
-              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-            ),
+            child: Text("$description Kg", style: GoogleFonts.poppins(textStyle: TextStyle(color:Colors.black , fontWeight: FontWeight.w600),)),
           ),
-          subtitle: Text("timestamp", style: TextStyle(color: Colors.black),),
+          subtitle: Text("timestamp", style: GoogleFonts.poppins(textStyle: TextStyle(color:Colors.black , fontWeight: FontWeight.w400, fontSize: 12),)),
           trailing: CircleAvatar(backgroundImage: CachedNetworkImageProvider(url), backgroundColor: Colors.grey,),
         );
       },

@@ -5,6 +5,13 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:meally2/main/RestaurantHome.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'dart:math';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:image/image.dart' as ImD;
+import 'package:firebase_storage/firebase_storage.dart';
 
 class Item {
   const Item(this.name,this.icon, this.value);
@@ -14,11 +21,16 @@ class Item {
 }
 
 class CreateRestaurantAcc extends StatefulWidget {
+  final String userRestId;
+  CreateRestaurantAcc({this.userRestId});
   @override
-  _CreateRestaurantAccState createState() => _CreateRestaurantAccState();
+  _CreateRestaurantAccState createState() => _CreateRestaurantAccState(userRestId:userRestId);
 }
 
 class _CreateRestaurantAccState extends State<CreateRestaurantAcc> {
+  final String userRestId;
+  _CreateRestaurantAccState({this.userRestId});
+
   TextEditingController ZIPTextEditingController = TextEditingController();
   TextEditingController cityTextEditingController = TextEditingController();
   TextEditingController locationTextEditingController = TextEditingController();
@@ -32,7 +44,7 @@ class _CreateRestaurantAccState extends State<CreateRestaurantAcc> {
   final _formPICName = GlobalKey<FormState>();
   final _formPICNo = GlobalKey<FormState>();
   final _formPICPos = GlobalKey<FormState>();
-
+  File file;
   String RestaurantName;
   int postcode = 123;
   String city = "empty";
@@ -42,7 +54,7 @@ class _CreateRestaurantAccState extends State<CreateRestaurantAcc> {
   String PICName = "john";
   int PICNo = 0122;
   String PICPosition = "owner";
-
+  bool uploading = false;
   int page = 0;
   int pageChanged = 0;
   Color _color = Colors.white;
@@ -63,8 +75,21 @@ class _CreateRestaurantAccState extends State<CreateRestaurantAcc> {
     cityTextEditingController.text = cityAddress;
     locationTextEditingController.text = completeAddressInfo;
   }
-
-
+  compressingPhoto() async{
+    final tDirectory = await getTemporaryDirectory();
+    final path = tDirectory.path;
+    ImD.Image mImageFile = ImD.decodeImage(file.readAsBytesSync());
+    final compressedImageFile = File('$path/img_$userRestId.jpg')..writeAsBytesSync(ImD.encodeJpg(mImageFile, quality: 60));
+    setState(() {
+      file = compressedImageFile;
+    });
+  }
+  Future<String> uploadPhoto(mImageFile) async{
+    StorageUploadTask mStorageUploadTask = certReference.child("cert_$userRestId.jpg").putFile(mImageFile);
+    StorageTaskSnapshot storageTaskSnapshot =  await mStorageUploadTask.onComplete;
+    String downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
+    return downloadUrl;
+  }
   submitForm1(){
     final form = _formName.currentState;
     final form2 = _formAcc.currentState;
@@ -85,7 +110,12 @@ class _CreateRestaurantAccState extends State<CreateRestaurantAcc> {
       form6.save();
     }
   }
-  submitForm3(){
+  submitForm3() async{
+    setState(() {
+      uploading = true;
+    });
+    await compressingPhoto();
+    String downloadUrl = await uploadPhoto(file);
     final form7 = _formPICName.currentState;
     final form8 = _formPICNo.currentState;
     final form9 = _formPICPos.currentState;
@@ -93,7 +123,11 @@ class _CreateRestaurantAccState extends State<CreateRestaurantAcc> {
       form7.save();
       form8.save();
       form9.save();
-      Navigator.pop(context, [RestaurantName, postcode, city, accreditation, location, PICName, PICNo, PICPosition, cuisine]);
+      Navigator.pop(context, [RestaurantName, postcode, city, accreditation, location, PICName, PICNo, PICPosition, cuisine, downloadUrl]);
+      setState(() {
+        file = null;
+        uploading = false;
+      });
       Navigator.push(context, MaterialPageRoute(builder: (context) => RestaurantHome()));
     }
   }
@@ -103,12 +137,83 @@ class _CreateRestaurantAccState extends State<CreateRestaurantAcc> {
     const Item('Female',Icon(Icons.flag,color:  const Color(0xFF167F67),),"female"),
   ];
 
+
   @override
   Widget build(BuildContext context) {
     return CreateAccount();
   }
 
+  captureImageWithCamera() async {
+    Navigator.pop(context);
+    File imageFile = await ImagePicker.pickImage(
+      source: ImageSource.camera,
+      maxHeight: 680,
+      maxWidth: 680,
+    );
+    setState(() {
+      this.file =  imageFile;
+    });
+  }
+  pickImageFromGallery() async {
+    Navigator.pop(context);
+    File imageFile = await ImagePicker.pickImage(
+      source: ImageSource.gallery,
+    );
+    setState(() {
+      this.file =  imageFile;
+    });
+  }
+  defaultImage() async {
+    File imageFile = await urlToFile("https://i.ibb.co/NFfysyq/No-Image-Available.png");
+    setState(() {
+      this.file =  imageFile;
+    });
+  }
+  Future<File> urlToFile(String imageUrl) async {
+    // generate random number.
+    var rng = new Random();
+    // get temporary directory of device.
+    Directory tempDir = await getTemporaryDirectory();
+    // get temporary path from temporary directory.
+    String tempPath = tempDir.path;
+    // create a new file in temporary path with random file name.
+    File file = new File('$tempPath'+ (rng.nextInt(100)).toString() +'.png');
+    // call http.get method and pass imageUrl into it to get response.
+    http.Response response = await http.get(imageUrl);
+    // write bodyBytes received in response to file.
+    await file.writeAsBytes(response.bodyBytes);
+    // now return the file which is created with random name in
+    // temporary directory and image bytes from response is written to // that file.
+    return file;
+  }
+
+  takeImage(mContext){
+    return showDialog(
+      context: mContext,
+      builder: (context){
+        return SimpleDialog(
+          title: Text("New meals", style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),),
+          children: <Widget>[
+            SimpleDialogOption(
+              child: Text("Capture Image with Camera", style: TextStyle(color: Colors.black54),),
+              onPressed: captureImageWithCamera,
+            ),
+            SimpleDialogOption(
+              child: Text("Select Image from Gallery", style: TextStyle(color: Colors.black54),),
+              onPressed: pickImageFromGallery,
+            ),
+            SimpleDialogOption(
+              child: Text("Cancel", style: TextStyle(color: Colors.black54),),
+              onPressed:() =>Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   PageController pageController = PageController();
+
   Scaffold CreateAccount(){
     return Scaffold(
       key: _scaffoldkey,
@@ -218,7 +323,7 @@ class _CreateRestaurantAccState extends State<CreateRestaurantAcc> {
         child: ListView(
           children: <Widget>[
             Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 SizedBox(height: 10,),
                 Column(
@@ -331,6 +436,26 @@ class _CreateRestaurantAccState extends State<CreateRestaurantAcc> {
                       ),
                     ),
                   ],
+                ),
+                SizedBox(height: 10,),
+                if(file != null) Text("Certification Uploaded", textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 12, color: Colors.black)
+                    )),
+                FlatButton(
+                  onPressed: (){
+                    takeImage(context);
+                  },
+                  color: file == null ? Hexcolor("#FF9900"): Colors.black54,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 40.0,
+                    child:  Text(file == null ? "Upload Halal Certification" : "Change Halal Certification",textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                          textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13)
+                      ),),
+                    alignment: Alignment.center,
+                  ),
                 ),
               ],
             ),

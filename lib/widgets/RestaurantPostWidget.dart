@@ -19,6 +19,11 @@ class Post extends StatefulWidget {
   final String ingredients;
   final double price;
   final String url;
+  final double calories ;
+  final double fat;
+  final double carbs;
+  final double sodium ;
+  final double protein;
 
   Post({
     this.mealId,
@@ -30,6 +35,11 @@ class Post extends StatefulWidget {
     this.price,
     this.url,
     this.restOnline,
+    this.fat,
+    this.sodium,
+    this.carbs,
+    this.calories,
+    this.protein
   });
 
   factory Post.fromDocument(DocumentSnapshot documentSnapshot, bool restOnline){
@@ -42,6 +52,11 @@ class Post extends StatefulWidget {
       ingredients: documentSnapshot["ingredients"],
       price: documentSnapshot["price"],
       url: documentSnapshot["url"],
+      calories: documentSnapshot["calories"],
+      protein: documentSnapshot["protein"],
+      carbs: documentSnapshot["carbs"],
+      sodium: documentSnapshot["sodium"],
+      fat: documentSnapshot["fat"],
       restOnline: restOnline,
     );
   }
@@ -71,6 +86,11 @@ class Post extends StatefulWidget {
     price : this.price,
     url : this.url,
     orderCount: getTotalNumberOfOrder(this.order),
+    calories: this.calories,
+    protein: this.protein,
+    carbs: this.carbs,
+    sodium: this.sodium,
+    fat: this.fat,
   );
 }
 
@@ -84,6 +104,12 @@ class _PostState extends State<Post> {
   final String ingredients;
   final double price;
   final String url;
+  final double calories ;
+  final double fat;
+  final double carbs;
+  final double sodium ;
+  final double protein;
+  Color color;
   int orderCount;
   bool isOrdered;
   bool showHeart = false;
@@ -100,11 +126,16 @@ class _PostState extends State<Post> {
     this.orderCount,
     this.price,
     this.url,
+    this.fat,
+    this.sodium,
+    this.carbs,
+    this.calories,
+    this.protein
   });
 
   @override
   Widget build(BuildContext context) {
-    print(restOnline);
+    //(restOnline);
     isOrdered = (order[currentOnlineRestId] == true);
     return Padding(
       padding: EdgeInsets.only(bottom: 12.0),
@@ -113,12 +144,32 @@ class _PostState extends State<Post> {
         children: <Widget>[
           createPostHead(),
           //createPostPicture(),
-          createPostFooter(),
+          //createPostFooter(),
         ],
       ),
     );
   }
+
+  square(){
+    if(price<=200){
+      setState(() {
+        color = Colors.lightBlueAccent;
+      });
+    }else if(price>200 && price <=500){
+      setState(() {
+        color = Colors.orangeAccent;
+      });
+    }else{
+      setState(() {
+        color = Colors.redAccent;
+      });
+    }
+  }
+
+
+
   createPostHead(){
+    square();
     return FutureBuilder(
       future: restReference.document(ownerId).get(),
       builder: (context, dataSnapshot){
@@ -127,61 +178,82 @@ class _PostState extends State<Post> {
         }
         Restaurant restaurant = Restaurant.fromDocument(dataSnapshot.data);
         bool isPostOwner = currentOnlineRestId == ownerId;
-
-        return Column(
-          children: <Widget>[
-            Row(
-              children: [
-                Container(
-                  height: 150,
-                  width: 150,
-                  margin: EdgeInsets.only(left: 20, right: 10),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: NetworkImage(url),
-                        fit: BoxFit.cover,
-                      ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12,
-                        offset: Offset(0.0,5.0),
-                        blurRadius: 30,
-                        spreadRadius: -8,
-                      ),
-                    ],
-                  ),
+        double cal;
+        if(calories == null){
+          cal = 0.0;
+        }else{
+          cal = calories;
+        }
+        return GestureDetector(
+          onTap: ()=> displayComment(context, mealId: mealId, ownerId: ownerId, url: url),
+          child: ListTile(
+            minVerticalPadding: 10,
+            leading: Container(
+              height: 100,
+              width: 100,
+              //margin: EdgeInsets.only(left: 20, right: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                image: DecorationImage(
+                  image: NetworkImage(url),
+                  fit: BoxFit.cover,
                 ),
-                //CircleAvatar(backgroundImage: CachedNetworkImageProvider(url), backgroundColor: Colors.grey,),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text("$name", textAlign: TextAlign.center,
+              ),
+            ),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text("$name", textAlign: TextAlign.start,
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: Colors.black)
+                    )),
+
+                /*
+             Container(
+              height: 100,
+              //color: Colors.blue,
+              child: Text("$ingredients",
+                  style: GoogleFonts.poppins(
+                      textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 11, color: Colors.black)
+                  )),
+            ),
+             */
+                Text("RM $price",
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 13, color: Colors.black)
+                    )),
+                Row(
+                  children: [
+                    Text("██  ",
                         style: GoogleFonts.poppins(
-                            textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: Colors.black)
+                            textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 12, color: color)
                         )),
-                    Container(
-                      height: 100,
-                      //color: Colors.blue,
-                      child: Text("$ingredients",
-                          style: GoogleFonts.poppins(
-                              textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 11, color: Colors.black)
-                          )),
-                    ),
-                    Text("Calories : 5000",
-                        style: GoogleFonts.poppins(
-                            textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12, color: Colors.black)
-                        )),
-                    Text("RM $price",
+                    Text("Cal : " + cal.toString(),
                         style: GoogleFonts.poppins(
                             textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 12, color: Colors.black)
                         )),
                   ],
-                ),
+                )
               ],
             ),
-          ],
+            trailing:Container(
+              width: 40,
+              child: Row(
+                children: [
+                  GestureDetector(
+                      onTap: (){
+                      },
+                      child: Icon(Icons.edit, color: Colors.black54, size: 20,)),
+                  GestureDetector(
+                    onTap: (){
+                      mealsReference.document(ownerId).collection("mealList").document(mealId).delete();
+                    },
+                      child: Icon(Icons.delete, color: Colors.black54, size: 20,)),
+                ],
+              ),
+            ) ,
+          ),
         );
       },
     );

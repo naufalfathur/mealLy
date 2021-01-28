@@ -13,6 +13,8 @@ class Restaurant {
   final String PICName;
   final int PICNo;
   final String PICPosition;
+  final String certificate;
+  final double earnings;
 
   Restaurant({
     this.id,
@@ -27,22 +29,26 @@ class Restaurant {
     this.PICName,
     this.PICNo,
     this.PICPosition,
+    this.certificate,
+    this.earnings
   });
 
   factory Restaurant.fromDocument(DocumentSnapshot doc) {
     return Restaurant(
-      id: doc.documentID,
-      email: doc['email'],
-      url: doc['url'],
-      RestaurantName: doc['RestaurantName'],
-      postcode: doc['postcode'],
-      cuisine: doc['cuisine'],
-      city: doc['city'],
-      accreditation: doc['accreditation'],
-      location: doc['location'],
-      PICName: doc['PICName'],
-      PICNo: doc['PICNo'],
-      PICPosition: doc["PICPosition"]
+        id: doc.documentID,
+        email: doc['email'],
+        url: doc['url'],
+        RestaurantName: doc['RestaurantName'],
+        postcode: doc['postcode'],
+        cuisine: doc['cuisine'],
+        city: doc['city'],
+        accreditation: doc['accreditation'],
+        location: doc['location'],
+        PICName: doc['PICName'],
+        PICNo: doc['PICNo'],
+        PICPosition: doc["PICPosition"],
+        certificate: doc["certificate"],
+        earnings: doc["earnings"]
     );
   }
 }

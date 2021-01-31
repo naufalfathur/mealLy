@@ -110,7 +110,7 @@ class _BottomNavigationTile extends StatelessWidget {
                 height: 30,
                 decoration: BoxDecoration(
                     color: selected
-                        ? Hexcolor("#FF9900")
+                        ? HexColor("#FF9900")
                         : Colors.transparent,
                     borderRadius: BorderRadius.horizontal(
                       right: Radius.circular(50),

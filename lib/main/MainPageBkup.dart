@@ -60,7 +60,7 @@ class _MainPageState extends State<MainPage> {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30.0),
-                color: Hexcolor("#FF9900"),
+                color: HexColor("#FF9900"),
               ),
               /*
               child: ClipRRect(
@@ -163,7 +163,7 @@ class _MainPageState extends State<MainPage> {
                   Container(
                     padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
                     decoration: BoxDecoration(
-                      color: Hexcolor("#FF9900"),
+                      color: HexColor("#FF9900"),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black26,
@@ -271,7 +271,7 @@ class _MainPageState extends State<MainPage> {
           width: MediaQuery.of(context).size.width - 45,
           padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Hexcolor("#FF9900"),
+            color: HexColor("#FF9900"),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
@@ -325,7 +325,7 @@ class _MainPageState extends State<MainPage> {
                 child: Container(
                   width: 80,
                   decoration: BoxDecoration(
-                    color: Hexcolor("#FF9900"),
+                    color: HexColor("#FF9900"),
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: Text("See All",textAlign: TextAlign.center,
@@ -493,7 +493,7 @@ class _MainPageState extends State<MainPage> {
             ),),
           FlatButton(
             onPressed: PlanMeal,
-            color: Hexcolor("#FF9900"),
+            color: HexColor("#FF9900"),
             child: Container(
               width: MediaQuery.of(context).size.width/2,
               height: 40.0,

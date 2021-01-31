@@ -22,7 +22,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           Container(
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
-              color: Hexcolor("#FF9900"),
+              color: HexColor("#FF9900"),
             ),
           ),
           Positioned(
@@ -59,7 +59,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
                 child: Text("Start as Restaurant instead",
                   style: GoogleFonts.poppins(
-                      textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: Hexcolor("#FF9900"))
+                      textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: HexColor("#FF9900"))
                   ),
                 ),
               ),
@@ -77,7 +77,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               children: <Widget>[
                 Text("mealLy",textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
-                      textStyle: TextStyle(color: Hexcolor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 35)
+                      textStyle: TextStyle(color: HexColor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 35)
                   ),),
                 Container(
                   //height: 500,
@@ -91,7 +91,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
                 Text("your personalized meal planning and ordering system",textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
-                      textStyle: TextStyle(color: Hexcolor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 15)
+                      textStyle: TextStyle(color: HexColor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 15)
                   ),),
                 GestureDetector(
                   onTap: () {
@@ -107,7 +107,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     margin: EdgeInsets.only(top: 15, bottom: 10),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: Hexcolor("#FF9900"),
+                      color: HexColor("#FF9900"),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text("Start as Customer",
@@ -119,7 +119,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
                 Text("or",textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
-                      textStyle: TextStyle(color: Hexcolor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 18)
+                      textStyle: TextStyle(color: HexColor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 18)
                   ),),
               ],
             ),
@@ -134,7 +134,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       key: _globalKey,
       body: SKOnboardingScreen(
         bgColor: Colors.white,
-        themeColor: Hexcolor("#FF9900"),
+        themeColor: HexColor("#FF9900"),
         pages: pages,
         skipClicked: (value) {
           print(value);
@@ -157,22 +157,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   final pages1 = [
     SkOnboardingModel(
-        title: 'Choose your item',
-        description:
-        'Easily find your grocery items and you will get delivery in wide range',
+        title: 'One time order',
+        description: 'Order just once a day or even once in a week for the whole plan',
         titleColor: Colors.black,
         descripColor: const Color(0xFF929794),
-        imagePath: 'assets/images/eating.png'),
+        imagePath: 'assets/images/delivered.png'),
     SkOnboardingModel(
-        title: 'Pick Up or Delivery',
-        description:
-        'Easily find your grocery items and you will get delivery in wide range',
+        title: 'Measured meals',
+        description: 'Every meal delivered to you is measured precisely for its calories',
         titleColor: Colors.black,
         descripColor: const Color(0xFF929794),
-        imagePath: 'assets/images/eating.png'),
+        imagePath: 'assets/images/mealsphone.png'),
     SkOnboardingModel(
-        title: 'Pay quick and easy',
-        description: 'Pay for order using credit or debit card',
+        title: 'Order by Plan',
+        description:
+        'Your meals are based on your Generated plan from your calorie intake',
         titleColor: Colors.black,
         descripColor: const Color(0xFF929794),
         imagePath: 'assets/images/eating.png'),
@@ -180,22 +179,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   final pages2 = [
     SkOnboardingModel(
-        title: 'Benefit 1',
+        title: 'Greater reach of market',
         description:
-        'Easily find your grocery items and you will get delivery in wide range',
+        'can reach people that arent aware of the restaurant',
         titleColor: Colors.black,
         descripColor: const Color(0xFF929794),
         imagePath: 'assets/images/eating.png'),
     SkOnboardingModel(
-        title: 'Benefit 2',
+        title: 'Efficient customer and order management',
         description:
-        'Easily find your grocery items and you will get delivery in wide range',
-        titleColor: Colors.black,
-        descripColor: const Color(0xFF929794),
-        imagePath: 'assets/images/eating.png'),
-    SkOnboardingModel(
-        title: 'Benefit 3',
-        description: 'Pay for order using credit or debit card',
+        'Everything is in one app',
         titleColor: Colors.black,
         descripColor: const Color(0xFF929794),
         imagePath: 'assets/images/eating.png'),
@@ -216,44 +209,44 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             Container(
               margin: EdgeInsets.only(top: 10),
               height: 5,
-              color: Hexcolor("#FF9900"),
+              color: HexColor("#FF9900"),
               width: MediaQuery.of(context).size.width/2,
             ),
             Container(
               margin: EdgeInsets.only(top: 30),
               height: (MediaQuery.of(context).size.height/2),
-              //color: Hexcolor("#FF9900"),
+              //color: HexColor("#FF9900"),
               width: MediaQuery.of(context).size.width/2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Text("Delivery",textAlign: TextAlign.center,
+                  Text("One time order",
                     style: GoogleFonts.poppins(
-                        textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 25)
+                        textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20)
                     ),),
-                  Text("Easily find your grocery items and you will get delivery in wide range",
-                    style: GoogleFonts.poppins(
-                        textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 12)
-                    ),),
-                  Text("Plan",textAlign: TextAlign.center,
-                    style: GoogleFonts.poppins(
-                        textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 22)
-                    ),),
-                  Text("Easily find your grocery items and you will get delivery in wide range",
+                  Text("Order just once a day or even once in a week for the whole plan",
                     style: GoogleFonts.poppins(
                         textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 12)
                     ),),
-                  Text("Cashless",textAlign: TextAlign.center,
+                  Text("Measured meals",
                     style: GoogleFonts.poppins(
-                        textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 25)
+                        textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20)
                     ),),
-                  Text("Easily find your grocery items and you will get delivery in wide range",
+                  Text("Every meal delivered to you is measured precisely for its calories",
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 12)
+                    ),),
+                  Text("Order by Plan",
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20)
+                    ),),
+                  Text("Your meals are based on your Generated plan from your calorie intake",
                     style: GoogleFonts.poppins(
                         textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 12)
                     ),),
                   Text(" "),
-                  Text("And much more..",textAlign: TextAlign.center,
+                  Text("And much more..",
                     style: GoogleFonts.poppins(
                         textStyle: TextStyle(color: Colors.black54, fontWeight: FontWeight.w600, fontSize: 11)
                     ),),
@@ -261,7 +254,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
             ),
             SizedBox(height: 30,),
-            Text("1 days free, then RM 3/days or RM5/week",textAlign: TextAlign.center,
+            Text("RM 1 for 1 days and RM 5 for weeks plan",textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
                   textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 12)
               ),),
@@ -274,7 +267,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       builder: (context) => HomePage()),
                 );
               },
-              color: Hexcolor("#FF9900"),
+              color: HexColor("#FF9900"),
               child: Container(
                 width: MediaQuery.of(context).size.width/2,
                 height: 40.0,
@@ -286,7 +279,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
             ),
             SizedBox(height: 20,),
-            Text("Cancel anytime",textAlign: TextAlign.center,
+            Text("mealLy",textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
                   textStyle: TextStyle(color: Colors.black54, fontWeight: FontWeight.w700, fontSize: 12)
               ),),
@@ -310,39 +303,31 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             Container(
               margin: EdgeInsets.only(top: 10),
               height: 5,
-              color: Hexcolor("#FF9900"),
+              color: HexColor("#FF9900"),
               width: MediaQuery.of(context).size.width/2,
             ),
             Container(
               margin: EdgeInsets.only(top: 30),
               height: (MediaQuery.of(context).size.height/2),
-              //color: Hexcolor("#FF9900"),
+              //color: HexColor("#FF9900"),
               width: MediaQuery.of(context).size.width/2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Text("Delivery",textAlign: TextAlign.center,
+                  Text("Greater reach of market",
                     style: GoogleFonts.poppins(
                         textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 25)
                     ),),
-                  Text("Easily find your grocery items and you will get delivery in wide range",
+                  Text("can reach people that arent awarre of the restaurant",
                     style: GoogleFonts.poppins(
                         textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 12)
                     ),),
-                  Text("Plan",textAlign: TextAlign.center,
+                  Text("Efficient customer and order management",
                     style: GoogleFonts.poppins(
                         textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 22)
                     ),),
-                  Text("Easily find your grocery items and you will get delivery in wide range",
-                    style: GoogleFonts.poppins(
-                        textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 12)
-                    ),),
-                  Text("Cashless",textAlign: TextAlign.center,
-                    style: GoogleFonts.poppins(
-                        textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 25)
-                    ),),
-                  Text("Easily find your grocery items and you will get delivery in wide range",
+                  Text("eveything is in one app",
                     style: GoogleFonts.poppins(
                         textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 12)
                     ),),
@@ -355,10 +340,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
             ),
             SizedBox(height: 30,),
-            Text("1 days free, then RM 3/days or RM5/week",textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(
-                  textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 12)
-              ),),
             SizedBox(height: 10,),
             FlatButton(
               onPressed: (){
@@ -368,7 +349,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       builder: (context) => RestaurantHome()),
                 );
               },
-              color: Hexcolor("#FF9900"),
+              color: HexColor("#FF9900"),
               child: Container(
                 width: MediaQuery.of(context).size.width/2,
                 height: 40.0,
@@ -380,7 +361,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
             ),
             SizedBox(height: 20,),
-            Text("Cancel anytime",textAlign: TextAlign.center,
+            Text("mealLy",textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
                   textStyle: TextStyle(color: Colors.black54, fontWeight: FontWeight.w700, fontSize: 12)
               ),),

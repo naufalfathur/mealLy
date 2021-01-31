@@ -120,6 +120,7 @@ class OrdersItem extends StatelessWidget {
   final String custId;
   final String userProfileImg;
   final String url;
+  final price;
   int changedStatus;
   OrdersItem({
     this.url,
@@ -127,6 +128,7 @@ class OrdersItem extends StatelessWidget {
     this.commentData,
     this.status,
     this.userProfileImg,
+    this.price,
     this.datetime,
     this.custId,
     this.location,
@@ -144,6 +146,7 @@ class OrdersItem extends StatelessWidget {
       location: documentSnapshot["location"],
       mealName: documentSnapshot["mealName"],
       mealId: documentSnapshot["mealId"],
+      price: documentSnapshot["price"],
       orderId: documentSnapshot["orderId"],
       userRestId : userRestId,
     );
@@ -220,7 +223,7 @@ class OrdersItem extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.blue, width: 2),
                     ),
-                    child: Text(intl.DateFormat.Hm().format(datetime.toDate()), style: GoogleFonts.poppins(textStyle:
+                    child: Text("+ rm" + price.toString(), style: GoogleFonts.poppins(textStyle:
                     TextStyle(fontSize: 10.0, color: Colors.black, fontWeight: FontWeight.w500),),),
                   ),
                   Text(mealName,textAlign: TextAlign.left,
@@ -294,7 +297,7 @@ class OrdersItem extends StatelessWidget {
                                 width: MediaQuery.of(context).size.width,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(30.0),
-                                    color: Hexcolor("#000000").withOpacity(0.3)//Hexcolor("#690000").withOpacity(0.35)
+                                    color: HexColor("#000000").withOpacity(0.3)//HexColor("#690000").withOpacity(0.35)
                                 ),
                               ),
                             ),
@@ -390,7 +393,7 @@ class OrdersItem extends StatelessWidget {
                                         alignment: Alignment.center,
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            color: Hexcolor("#F6F6F6"),
+                                            color: HexColor("#F6F6F6"),
                                           ),
                                           child:
                                           ToggleButtons(
@@ -439,12 +442,6 @@ class OrdersItem extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                      RaisedButton(
-                                        onPressed: () => MapsLauncher.launchQuery(
-                                            '1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA'),
-                                        child: Text('LAUNCH QUERY'),
-                                      ),
-
                                     ],
                                   ),
                                 ),
@@ -452,6 +449,31 @@ class OrdersItem extends StatelessWidget {
                             )
                           ],
                         ),
+                      bottomSheet:  Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: FlatButton(
+                          onPressed: () => MapsLauncher.launchQuery(
+                              location),
+                          //color: HexColor("#FF9900"),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 45.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              image: DecorationImage(
+                                image: AssetImage("assets/images/bg.png"),
+                                fit: BoxFit.fitWidth,
+                              ),
+
+                            ),
+                            child: Text("Open Maps",textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                  textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13)
+                              ),),
+                            alignment: Alignment.center,
+                          ),
+                        ),
+                      ),
                     )
                 );
               });

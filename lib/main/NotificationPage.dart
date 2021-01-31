@@ -69,7 +69,7 @@ class _NotificationPageState extends State<NotificationPage> {
       padding: EdgeInsets.only(left: 3, right: 3),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        color: Hexcolor("#F6F6F6"),
+        color: HexColor("#F6F6F6"),
         //border: Border.all(color: Colors.black, width: 1.0),
         //borderRadius: BorderRadius.all(Radius.circular(5.0)),
       ),

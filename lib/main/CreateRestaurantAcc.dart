@@ -232,7 +232,7 @@ class _CreateRestaurantAccState extends State<CreateRestaurantAcc> {
                 Container(
                   margin: EdgeInsets.only(left: 90),
                   height: 5,
-                  color: Hexcolor("#FF9900"),
+                  color: HexColor("#FF9900"),
                   width: MediaQuery.of(context).size.width/4,
                 ),
                 SizedBox(height: 30,),
@@ -291,7 +291,7 @@ class _CreateRestaurantAccState extends State<CreateRestaurantAcc> {
                       submitForm3();
                     }
                   },
-                  color: Hexcolor("#FF9900"),
+                  color: HexColor("#FF9900"),
                   child: Container(
                     width: MediaQuery.of(context).size.width/2,
                     height: 40.0,
@@ -446,7 +446,7 @@ class _CreateRestaurantAccState extends State<CreateRestaurantAcc> {
                   onPressed: (){
                     takeImage(context);
                   },
-                  color: file == null ? Hexcolor("#FF9900"): Colors.black54,
+                  color: file == null ? HexColor("#FF9900"): Colors.black54,
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: 40.0,
@@ -727,7 +727,7 @@ class _CreateRestaurantAccState extends State<CreateRestaurantAcc> {
         height: MediaQuery.of(context).size.height/2+100,
         alignment: Alignment.center,
         padding: EdgeInsets.all(40),
-        color: Hexcolor("#FF9900"),
+        color: HexColor("#FF9900"),
         child: Column(
           children: <Widget>[
             Text("Congrats!", textAlign: TextAlign.center,
@@ -753,7 +753,7 @@ class _CreateRestaurantAccState extends State<CreateRestaurantAcc> {
                 height: 40.0,
                 child: Text("Great! Thank you",textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
-                      textStyle: TextStyle(color: Hexcolor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 13)
+                      textStyle: TextStyle(color: HexColor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 13)
                   ),),
                 alignment: Alignment.center,
               ),

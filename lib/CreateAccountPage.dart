@@ -140,7 +140,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 Container(
                   margin: EdgeInsets.only(left: 90),
                   height: 5,
-                  color: Hexcolor("#FF9900"),
+                  color: HexColor("#FF9900"),
                   width: MediaQuery.of(context).size.width/4,
                 ),
                 SizedBox(height: 30,),
@@ -168,7 +168,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 Container(
                   margin: EdgeInsets.only(top: 10),
                   height: MediaQuery.of(context).size.height/3+80,
-                  //color: Hexcolor("#FF9900"),
+                  //color: HexColor("#FF9900"),
                   //padding: EdgeInsets.only(top: 10),
                   width: MediaQuery.of(context).size.width,
                   child: PageView(
@@ -203,7 +203,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       _successModal(context);
                     }
                   },
-                  color: Hexcolor("#FF9900"),
+                  color: HexColor("#FF9900"),
                   child: Container(
                     width: MediaQuery.of(context).size.width/2,
                     height: 40.0,
@@ -278,7 +278,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     });
                   }
                 },
-                //color: Hexcolor("#FF9900"),
+                //color: HexColor("#FF9900"),
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   height: 40.0,
@@ -542,7 +542,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                         onTap: (){
                           pageController.animateToPage(--pageChanged, duration: Duration(milliseconds: 250), curve: Curves.bounceInOut);
                         },
-                        child: Icon(Icons.arrow_back_ios, size: 20, color: Hexcolor("#FF9900"),)
+                        child: Icon(Icons.arrow_back_ios, size: 20, color: HexColor("#FF9900"),)
                       ),
                       Container(
                         //padding: EdgeInsets.only(bottom: 20),
@@ -555,7 +555,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                         onTap: (){
                           pageController.animateToPage(++pageChanged, duration: Duration(milliseconds: 250), curve: Curves.bounceInOut);
                         },
-                          child: Icon(Icons.arrow_forward_ios, size: 20, color: Hexcolor("#FF9900"),)
+                          child: Icon(Icons.arrow_forward_ios, size: 20, color: HexColor("#FF9900"),)
                       ),
                     ],
                   ),
@@ -651,7 +651,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     onTap: (){
                       pageController.animateToPage(--pageChanged, duration: Duration(milliseconds: 250), curve: Curves.bounceInOut);
                     },
-                    child: Icon(Icons.arrow_back_ios, size: 20, color: Hexcolor("#FF9900"),)
+                    child: Icon(Icons.arrow_back_ios, size: 20, color: HexColor("#FF9900"),)
                 ),
                 Container(
                   //padding: EdgeInsets.only(bottom: 20),
@@ -664,7 +664,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     onTap: (){
                       pageController.animateToPage(++pageChanged, duration: Duration(milliseconds: 250), curve: Curves.bounceInOut);
                     },
-                    child: Icon(Icons.check_circle, size: 20, color: Hexcolor("#FF9900"),)
+                    child: Icon(Icons.check_circle, size: 20, color: HexColor("#FF9900"),)
                 ),
               ],
             ),
@@ -744,7 +744,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             height: MediaQuery.of(context).size.height/2+100,
             alignment: Alignment.center,
             padding: EdgeInsets.all(40),
-            color: Hexcolor("#FF9900"),
+            color: HexColor("#FF9900"),
             child: Column(
               children: <Widget>[
                 Text("Congrats!", textAlign: TextAlign.center,
@@ -832,8 +832,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
                 FlatButton(
                   onPressed: (){
-                    Navigator.pop(context, [gender, age, weight, height, bodyfat, lbm, tdee, ZIPTextEditingController.text,cityTextEditingController.text,locationTextEditingController.text, phoneNo.text, program]);
-                    Navigator.pop(context, [gender, age, weight, height, bodyfat, lbm, tdee, ZIPTextEditingController.text,cityTextEditingController.text,locationTextEditingController.text, phoneNo.text, program]);
+                    Navigator.pop(context, [gender, age, weight, height, bodyfat, lbm, tdee, int.tryParse(ZIPTextEditingController.text),cityTextEditingController.text,locationTextEditingController.text, int.tryParse(phoneNo.text), program]);
+                    Navigator.pop(context, [gender, age, weight, height, bodyfat, lbm, tdee, int.tryParse(ZIPTextEditingController.text),cityTextEditingController.text,locationTextEditingController.text, int.tryParse(phoneNo.text), program]);
                     Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
                   },
                   color: Colors.white,
@@ -842,7 +842,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     height: 40.0,
                     child: Text("Great! Thank you",textAlign: TextAlign.center,
                       style: GoogleFonts.poppins(
-                          textStyle: TextStyle(color: Hexcolor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 13)
+                          textStyle: TextStyle(color: HexColor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 13)
                       ),),
                     alignment: Alignment.center,
                   ),

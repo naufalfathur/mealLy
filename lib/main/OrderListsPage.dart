@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:meally2/HomePage.dart';
-import 'package:meally2/main/OrderDetailsPage.dart';
-import 'package:meally2/models/user.dart';
+import 'package:meally2/models/restaurant.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meally2/widgets/ProgressWidget.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
-import 'package:intl/intl.dart' as intl;
-class MyOrderPage extends StatefulWidget {
-  final String userProfileId;
-  final User gCurrentUser;
-  MyOrderPage({this.userProfileId, this.gCurrentUser});
+
+class OrderListsPage extends StatefulWidget {
+  final String userRestId;
+  final Restaurant gCurrentRest;
+
+  OrderListsPage({this.userRestId, this.gCurrentRest});
   @override
-  _MyOrderPageState createState() => _MyOrderPageState(gCurrentUser:gCurrentUser, userProfileId:userProfileId);
+  _OrderListsPageState createState() => _OrderListsPageState(userRestId: userRestId);
 }
 
-class _MyOrderPageState extends State<MyOrderPage> {
-  final User gCurrentUser;
-  final String userProfileId;
-  _MyOrderPageState({this.userProfileId, this.gCurrentUser});
+class _OrderListsPageState extends State<OrderListsPage> {
+  final String userRestId;
+  _OrderListsPageState({this.userRestId});
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -36,14 +35,14 @@ class _MyOrderPageState extends State<MyOrderPage> {
             indicatorColor: Colors.orangeAccent,
             tabs: [
               Tab(text: 'Current'),
-              Tab(text: 'Delivered'),
+              Tab(text: 'Past'),
             ],
             labelColor: Colors.black,
             indicator: MaterialIndicator(
               height: 5,
               topLeftRadius: 8,
               topRightRadius: 8,
-              color: Colors.orangeAccent,
+              color: Colors.black,
               horizontalPadding: 50,
               tabPosition: TabPosition.bottom,
             ),
@@ -61,27 +60,27 @@ class _MyOrderPageState extends State<MyOrderPage> {
 
   topBar(){
     return Container(
-      width: MediaQuery.of(context).size.width,
-      //color: Colors.blue,
-      alignment: Alignment.bottomLeft,
-      padding: EdgeInsets.only(top: 60, left: 20, right: 20),
-      child:
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          GestureDetector(
-            onTap: (){Navigator.pop(context);},
-              child: Icon(Icons.arrow_back_ios_rounded, color: Colors.orangeAccent,)),
-          SizedBox(height: 5,),
-          Text("Orders",
-            style: GoogleFonts.poppins(
-                textStyle: TextStyle(color: Colors.orangeAccent,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 27)
-            ),),
-        ],
-      )
+        width: MediaQuery.of(context).size.width,
+        //color: Colors.blue,
+        alignment: Alignment.bottomLeft,
+        padding: EdgeInsets.only(top: 40, left: 20, right: 20),
+        child:
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            GestureDetector(
+                onTap: (){Navigator.pop(context);},
+                child: Icon(Icons.arrow_back_ios_rounded, color: Colors.black,)),
+            SizedBox(height: 5,),
+            Text("Orders",
+              style: GoogleFonts.poppins(
+                  textStyle: TextStyle(color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 27)
+              ),),
+          ],
+        )
     );
   }
   /*
@@ -111,18 +110,18 @@ class _MyOrderPageState extends State<MyOrderPage> {
         )
     );
   }
-  
+
    */
   retrieveOrder(){
     return StreamBuilder(
-      stream: custOrdersReference.document(userProfileId).collection("custOrder").where("status", isLessThan: 4).orderBy("status", descending: true).snapshots(),
+      stream: ordersReference.document(userRestId).collection("order").where("status", isLessThan: 4).orderBy("status", descending: false).snapshots(),
       builder: (context, dataSnapshot){
         if(!dataSnapshot.hasData){
           return circularProgress(Colors.orangeAccent);
         }
         List<OrdersItem> comments = [];
         dataSnapshot.data.documents.forEach((document){
-          comments.add(OrdersItem.fromDocument(document, userProfileId));
+          comments.add(OrdersItem.fromDocument(document, userRestId));
         });
         if(comments.isEmpty){
           return Center(child: Text("No Data Available"));
@@ -136,14 +135,14 @@ class _MyOrderPageState extends State<MyOrderPage> {
 
   retrievePastOrder(){
     return StreamBuilder(
-      stream: custOrdersReference.document(userProfileId).collection("custOrder").where("status", isEqualTo: 4).snapshots(),
+      stream: ordersReference.document(userRestId).collection("order").where("status", isEqualTo: 4).snapshots(),
       builder: (context, dataSnapshot){
         if(!dataSnapshot.hasData){
           return circularProgress(Colors.orangeAccent);
         }
         List<OrdersItem> comments = [];
         dataSnapshot.data.documents.forEach((document){
-          comments.add(OrdersItem.fromDocument(document, userProfileId));
+          comments.add(OrdersItem.fromDocument(document, userRestId));
         });
         if(comments.isEmpty){
           return Center(child: Text("No Data Available"));
@@ -162,21 +161,25 @@ class OrdersItem extends StatelessWidget {
   final String mealName;
   final String mealId;
   final int status;
+  final double calories;
   final String custId;
   final String orderId;
   final String userProfileImg;
   final String url;
-  final String userProfileId;
+  final price;
+  final String userRestId;
   OrdersItem({
     this.url,
     this.status,
     this.userProfileImg,
     this.datetime,
+    this.calories,
     this.custId,
     this.location,
-    this.mealName, this.mealId, this.userProfileId, this.orderId});
+    this.price,
+    this.mealName, this.mealId, this.userRestId, this.orderId});
 
-  factory OrdersItem.fromDocument(DocumentSnapshot documentSnapshot, String userProfileId){
+  factory OrdersItem.fromDocument(DocumentSnapshot documentSnapshot, String userRestId){
     return OrdersItem(
       custId: documentSnapshot["custId"],
       url: documentSnapshot["url"],
@@ -185,9 +188,11 @@ class OrdersItem extends StatelessWidget {
       status: documentSnapshot["status"],
       location: documentSnapshot["location"],
       mealName: documentSnapshot["mealName"],
+      calories: documentSnapshot["calories"],
       mealId: documentSnapshot["mealId"],
       orderId: documentSnapshot["orderId"],
-      userProfileId : userProfileId,
+      price: documentSnapshot["price"],
+      userRestId : userRestId,
     );
   }
 
@@ -209,7 +214,7 @@ class OrdersItem extends StatelessWidget {
     return Padding(
         padding: EdgeInsets.only(left: 5, right: 5),
         child: GestureDetector(
-            onTap: (){displayDetails(context, userProfileId);},
+            onTap: (){},
             child: Container(
               decoration: BoxDecoration(
                 border: Border(
@@ -223,21 +228,17 @@ class OrdersItem extends StatelessWidget {
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(intl.DateFormat('EEEE').format(DateTime.parse(datetime.toDate().toString())) + " " + intl.DateFormat.Hm().format(datetime.toDate()), style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700,color: Colors.black),),
-                    Text(mealName , style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400,color: Colors.black),),
+                    Text(datetime.toDate().toString(), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700,color: Colors.black54),),
+                    Text(mealName , style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400,color: Colors.black54),),
+                    Text("Status : $stats", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400,
+                        color: status == 0 ? Colors.red:Colors.black54),),
                   ],
                 ),
-                subtitle: Text("Status : $stats", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400,
-                    color: status == 0 ? Colors.red:Colors.black),),
-                trailing: Icon(Icons.arrow_forward_ios_rounded, size: 15,)
+                trailing: Text("+ rm" + price.toString(), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700,color: Colors.blue),),
               ),
             )
         )
     );
-  }
-
-  displayDetails(context, userProfileId){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => OrderDetailsPage(userProfileId: userProfileId, orderId: orderId)));
   }
 
 }

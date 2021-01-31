@@ -147,7 +147,7 @@ class _ReviewPageState extends State<ReviewPage> {
           Container(
             margin: EdgeInsets.only(left: 50),
             height: 5,
-            color: Hexcolor("#FF9900"),
+            color: HexColor("#FF9900"),
             width: MediaQuery.of(context).size.width/7,
           ),
           SizedBox(height: 10,),
@@ -183,7 +183,7 @@ class _ReviewPageState extends State<ReviewPage> {
               children: [
                 Text("RM" + meals.price.toString(),
                   style: GoogleFonts.poppins(
-                      textStyle: TextStyle(color: Hexcolor("#FF9900"), fontWeight: FontWeight.w700, fontSize: 30)
+                      textStyle: TextStyle(color: HexColor("#FF9900"), fontWeight: FontWeight.w700, fontSize: 30)
                   ),),
                 Container(
                     width: 80,
@@ -196,7 +196,7 @@ class _ReviewPageState extends State<ReviewPage> {
                       child: Text("Back", style: GoogleFonts.poppins(textStyle: TextStyle(color:Colors.white , fontWeight: FontWeight.w600),)),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: Hexcolor("#FF9900"),
+                        color: HexColor("#FF9900"),
                         //borderRadius: BorderRadius.circular(6.0),
                       ),
                     ),
@@ -247,7 +247,7 @@ class _ReviewPageState extends State<ReviewPage> {
         children: [
           Text("Italian Cuisine",
             style: GoogleFonts.poppins(
-                textStyle: TextStyle(color: Hexcolor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 15)
+                textStyle: TextStyle(color: HexColor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 15)
             ),),
           Text(meals.name,
             style: GoogleFonts.poppins(
@@ -260,7 +260,7 @@ class _ReviewPageState extends State<ReviewPage> {
             ),),
           Text(meals.calories.toString() + " Kcal",
             style: GoogleFonts.poppins(
-                textStyle: TextStyle(color: Hexcolor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 27)
+                textStyle: TextStyle(color: HexColor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 27)
             ),),
           SizedBox(height: 10,),
           Text("Main Ingredients",
@@ -388,7 +388,7 @@ class _ReviewPageState extends State<ReviewPage> {
                 controller: commentTextEditingController,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: Hexcolor("#EFEFEF"),
+                  fillColor: HexColor("#EFEFEF"),
                   contentPadding: new EdgeInsets.symmetric(vertical: 9.0, horizontal: 10.0),
                   border: OutlineInputBorder(
                     borderSide: BorderSide.none,
@@ -425,7 +425,7 @@ class _ReviewPageState extends State<ReviewPage> {
                   child: Text("Upload meals", style: GoogleFonts.poppins(textStyle: TextStyle(color:Colors.white , fontWeight: FontWeight.w600),)),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: Hexcolor("#FF9900"),
+                    color: HexColor("#FF9900"),
                     borderRadius: BorderRadius.circular(10),
                     //borderRadius: BorderRadius.circular(6.0),
                   ),
@@ -445,7 +445,7 @@ class _ReviewPageState extends State<ReviewPage> {
         alignment: Alignment.center,
         height: 50,
         margin: EdgeInsets.only(bottom: 20),
-        color: Hexcolor("#FF9900"),
+        color: HexColor("#FF9900"),
         child: Text("Back", style: GoogleFonts.poppins(textStyle:
         TextStyle(fontSize: 18.0, color: Colors.white, fontWeight: FontWeight.w600),),),
       ),

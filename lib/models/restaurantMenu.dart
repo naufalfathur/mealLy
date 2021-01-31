@@ -219,7 +219,7 @@ class _restaurantMenuState extends State<restaurantMenu> {
   }
   defaultImage(String url) async {
     File imageFile = await urlToFile(url);
-    setState(() {
+    setStateIfMounted(() {
       this.file =  imageFile;
     });
     if(file==null){
@@ -229,6 +229,12 @@ class _restaurantMenuState extends State<restaurantMenu> {
     }
 
   }
+
+  void setStateIfMounted(f) {
+    if (mounted) setState(f);
+  }
+
+
   Future<File> urlToFile(String imageUrl) async {
     // generate random number.
     var rng = new Random();

@@ -16,7 +16,7 @@ import 'package:meally2/widgets/ProgressWidget.dart';
 import 'package:uuid/uuid.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
+import 'package:flutter_native_image/flutter_native_image.dart';
 class mealUpload extends StatefulWidget {
   final Restaurant gCurrentRest;
   final String userRestId;
@@ -34,6 +34,7 @@ class _mealUploadState extends State<mealUpload> {
   String mealId = Uuid().v4();
   double abcaaa = 0.0;
   double calories = 0.0 ;
+  String ing;
   double fat = 0.0;
   double carbs = 0.0;
   double sodium = 0.0;
@@ -116,7 +117,7 @@ class _mealUploadState extends State<mealUpload> {
 
   displayUploadScreen(){
     return Scaffold(
-      backgroundColor: Hexcolor("#FF9900"),
+      backgroundColor: HexColor("#FF9900"),
       body: Stack(
         children: <Widget>[
           Container(
@@ -349,12 +350,10 @@ class _mealUploadState extends State<mealUpload> {
     });
   }
   compressingPhoto() async{
-    final tDirectory = await getTemporaryDirectory();
-    final path = tDirectory.path;
-    ImD.Image mImageFile = ImD.decodeImage(file.readAsBytesSync());
-    final compressedImageFile = File('$path/img_$mealId.jpg')..writeAsBytesSync(ImD.encodeJpg(mImageFile, quality: 40));
+    File compressedFile = await FlutterNativeImage.compressImage(file.path,
+      quality: 25,);
     setState(() {
-      file = compressedImageFile;
+      file = compressedFile;
     });
   }
   Future<String> uploadPhoto(mImageFile) async{
@@ -456,7 +455,7 @@ class _mealUploadState extends State<mealUpload> {
               //width: MediaQuery.of(context).size.width,
               child: ClipRRect(
                 child: Image(
-                  image: NetworkImage("https://media.giphy.com/media/l41m3Dps5EQ8W1rZS/giphy.gif"),
+                  image: AssetImage('assets/images/chemist.gif'),
                   fit: BoxFit.scaleDown,
                 ),
               ),
@@ -586,23 +585,30 @@ class _mealUploadState extends State<mealUpload> {
                     ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("disclaimer : \nmealLy will not store the exact info about your ingredients, only the name and its nutrition", style: GoogleFonts.poppins(textStyle:
+                  TextStyle(fontSize: 11.0, color: Colors.black, fontWeight: FontWeight.w500),),),
+                ),
               ],
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 40, right: 40, top: 20),
+            padding: EdgeInsets.only(left: 40, right: 40, top: 10),
             child:
               GestureDetector(
 
                 onTap: uploading ? null : () async {
                   _showMyDialog();
                   print(IngridientsTextEditingController.text);
+                  ing = await API_Manager().getIng(IngridientsTextEditingController.text);
                   calories = (await API_Manager().getRec(IngridientsTextEditingController.text, "Calories")+0.1);
-                  fat = await API_Manager().getRec(IngridientsTextEditingController.text, "Fat");
-                  carbs = await API_Manager().getRec(IngridientsTextEditingController.text, "Carbohydrates");
-                  sodium = await API_Manager().getRec(IngridientsTextEditingController.text, "Sodium");
-                  protein = await API_Manager().getRec(IngridientsTextEditingController.text, "Protein");
+                  fat = await API_Manager().getRec(IngridientsTextEditingController.text, "Fat")+0.1;
+                  carbs = await API_Manager().getRec(IngridientsTextEditingController.text, "Carbohydrates")+0.1;
+                  sodium = await API_Manager().getRec(IngridientsTextEditingController.text, "Sodium")+0.1;
+                  protein = await API_Manager().getRec(IngridientsTextEditingController.text, "Protein")+0.1;
                   print("$calories, $fat, $carbs, $sodium, $protein");
+                  print("$ing");
                   _successModal(context);
                 },
                 //onPressed: uploading ? null : ()=> controlUploadAndSave(),
@@ -661,7 +667,7 @@ class _mealUploadState extends State<mealUpload> {
                     title: Text("Meals summary", style: GoogleFonts.poppins(textStyle:
                     TextStyle(fontSize: 18.0, color: Colors.black, fontWeight: FontWeight.w600),),),
                     actions: <Widget>[
-                      IconButton(icon: Icon(Icons.check, color: Colors.black,), onPressed: uploading ? null : ()=> controlUploadAndSave(),)
+                      IconButton(icon: Icon(Icons.check, color: Colors.black,), onPressed: uploading ? true : ()=> controlUploadAndSave(),)
                     ],
                   ),
                   body: Container(
@@ -706,14 +712,14 @@ class _mealUploadState extends State<mealUpload> {
                                   ),),
                                 Text("$calories kcal",
                                   style: GoogleFonts.poppins(
-                                      textStyle: TextStyle(color: Hexcolor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 27)
+                                      textStyle: TextStyle(color: HexColor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 27)
                                   ),),
                                 SizedBox(height: 10,),
                                 Text("Ingredients",
                                   style: GoogleFonts.poppins(
                                       textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 15)
                                   ),),
-                                Text(IngridientsTextEditingController.text, style: GoogleFonts.poppins(
+                                Text(ing, style: GoogleFonts.poppins(
                                     textStyle: TextStyle(color: Colors.black26, fontWeight: FontWeight.w600, fontSize: 15)
                                 ),),
                                 SizedBox(height: 10,),
@@ -798,7 +804,7 @@ class _mealUploadState extends State<mealUpload> {
                                   ),),
                                 Text("rm" + priceTextEditingController.text,
                                   style: GoogleFonts.poppins(
-                                      textStyle: TextStyle(color: Hexcolor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 27)
+                                      textStyle: TextStyle(color: HexColor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 27)
                                   ),),
                               ],
                             ),
@@ -903,6 +909,7 @@ class API_Manager {
         double value = 0.0;
         for(int i = 0; i< posts2.length; i++){
           print("a" + i.toString());
+          //print("ingName" + posts2[i].name);
           print("a2" +  posts2[i].nutrition.nutrients.length.toString());
           for(int j = 0; j< posts2[i].nutrition.nutrients.length; j++){
             if(posts2[i].nutrition.nutrients[j].name == type){
@@ -915,10 +922,44 @@ class API_Manager {
         result = value.round().truncateToDouble();
         print("total Value" + result.toString());
 
-
-
         //print(abcaaa.toString() + "adadbb");
         //print(jsonString);
+
+      }
+    }catch(Exception){
+      print(Exception);
+      return result;
+    }
+
+    //print("bb");
+    return result;
+  }
+
+  Future<String> getIng(String text) async{
+    var client = http.Client();
+    String result;
+    String ups = text;
+
+    try{
+      var response = await client.post(
+        'https://api.spoonacular.com/recipes/parseIngredients?apiKey=871cc9ddc1ea4733830dd2c30e3d691a',
+        body: "includeNutrition=true&servings=1&ingredientList=$ups",);
+      //print(response.body);
+      //print(response.statusCode);
+      if(response.statusCode == 200){
+        var jsonString = response.body;
+        var jsonMap = jsonDecode(jsonString);
+        List<Welcome> posts2 = List<Welcome>.from(jsonMap.map((model)=> Welcome.fromJson(model)));
+
+        String ing = "";
+        for(int i = 0; i< posts2.length; i++){
+          //print("a" + i.toString());
+          //print("ingName" + posts2[i].name);
+          String ing2 = posts2[i].name + "\n";
+          ing = ing + ing2;
+        }
+        //print (ing);
+        result = ing;
 
       }
     }catch(Exception){

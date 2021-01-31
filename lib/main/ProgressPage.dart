@@ -35,7 +35,7 @@ class _ProgressPageState extends State<ProgressPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        //color: Hexcolor("#FF9900"),
+        //color: HexColor("#FF9900"),
 
         child: ListView(
           children: <Widget>[
@@ -93,7 +93,7 @@ class _ProgressPageState extends State<ProgressPage> {
                     ),
                     child:Container(
                       decoration: BoxDecoration(
-                          color : Hexcolor("#690000").withOpacity(0.15)
+                          color : HexColor("#690000").withOpacity(0.15)
                       ),
                       child: Container(
                         padding: EdgeInsets.only(top: 15, bottom: 15),
@@ -128,7 +128,7 @@ class _ProgressPageState extends State<ProgressPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(Value.toString(), style: GoogleFonts.poppins(textStyle:
-        TextStyle(fontSize: 18.0, color: title != "Change" ? Colors.white : Value >0 ? Colors.lightBlueAccent : Hexcolor("#690000"), fontWeight:FontWeight.w700),),),
+        TextStyle(fontSize: 18.0, color: title != "Change" ? Colors.white : Value >0 ? Colors.lightBlueAccent : HexColor("#690000"), fontWeight:FontWeight.w700),),),
         Container(
           margin: EdgeInsets.only(top: 5.0),
           child: Text(

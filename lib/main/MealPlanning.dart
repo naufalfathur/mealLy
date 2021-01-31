@@ -36,6 +36,7 @@ class _MealPlanningState extends State<MealPlanning> {
   var nums;
   double sum = 0;
   String name;
+  int loop;
   double tdee;
   double total,randomNum,min,max,a;
   Random rnd;
@@ -277,6 +278,7 @@ class _MealPlanningState extends State<MealPlanning> {
     setState(() {
       this.list = list;
     });
+    print(list);
     int p;
     if (plan==1){
       p= 1;
@@ -347,11 +349,15 @@ class _MealPlanningState extends State<MealPlanning> {
         trial = trial +1;
         print("trial " + trial.toString());
       }
-    }while(sum>(total+200)||sum<(total-100));
+    }while(sum>(total+250)||sum<(total-200));
     print(nums.toString() + "1a $k");
     print(sum.toString() + "1 $k");
+    print("amm " + amm.toString());
     sum = 0;
     total = tdee;
+    setState(() {
+      loop = amm;
+    });
 
     var newList;
     QuerySnapshot querySnapshot;
@@ -507,7 +513,7 @@ class _MealPlanningState extends State<MealPlanning> {
                         children: [
                           Text(intl.DateFormat('EEEE').format(DateTime.parse(pickDate.getDate())),
                             style: GoogleFonts.poppins(
-                                textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 20, color: Hexcolor("#FF9900"))
+                                textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 20, color: HexColor("#FF9900"))
                             ),),
                           pickDate,
                         ],
@@ -608,7 +614,7 @@ class _MealPlanningState extends State<MealPlanning> {
                         children: [
                           Text(intl.DateFormat('EEEE').format(DateTime.parse(dropdownDatePicker2.getDate())),
                             style: GoogleFonts.poppins(
-                                textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 20, color: Hexcolor("#FF9900"))
+                                textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 20, color: HexColor("#FF9900"))
                             ),),
                           dropdownDatePicker2,
                         ],
@@ -700,7 +706,7 @@ class _MealPlanningState extends State<MealPlanning> {
                         children: [
                           Text(intl.DateFormat('EEEE').format(DateTime.parse(dropdownDatePicker3.getDate())),
                             style: GoogleFonts.poppins(
-                                textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 20, color: Hexcolor("#FF9900"))
+                                textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 20, color: HexColor("#FF9900"))
                             ),),
                           dropdownDatePicker3,
                         ],
@@ -773,7 +779,7 @@ class _MealPlanningState extends State<MealPlanning> {
    */
 
 
-  makeOrder(List whichPosts){
+  makeOrder(List<Post> whichPosts){
     List<DateTime> setMealsTime;
     if(whichPosts == posts){
       setMealsTime = mealsTime;
@@ -790,7 +796,7 @@ class _MealPlanningState extends State<MealPlanning> {
     }else if(whichPosts == posts7){
       setMealsTime = mealsTime7;
     }
-    for (int i = 0; i < 3; i++){
+    for (int i = 0; i < loop; i++){
       var orderId = Uuid().v4();
       custOrdersReference.document(currentUser.id).collection("custOrder").document(orderId).setData({
         "custId": currentUser.id,
@@ -806,6 +812,7 @@ class _MealPlanningState extends State<MealPlanning> {
         "userProfileImg": currentUser.url,
         "url": whichPosts[i].url,
         "calories": whichPosts[i].calories,
+        "price":whichPosts[i].price,
       });
       ordersReference.document(whichPosts[i].ownerId).collection("order").document(orderId).setData({
         "CustomerName" : currentUser.profileName,
@@ -821,6 +828,7 @@ class _MealPlanningState extends State<MealPlanning> {
         "userProfileImg": currentUser.url,
         "url": whichPosts[i].url,
         "calories": whichPosts[i].calories,
+        "price":whichPosts[i].price,
       });
       activityFeedReference.document(whichPosts[i].ownerId).collection("activityItems").add({
         "type" : "order",
@@ -834,11 +842,9 @@ class _MealPlanningState extends State<MealPlanning> {
         "mealId": whichPosts[i].mealId,
         "timestamp" : DateTime.now(),
       });
-      /*
       restReference.document(whichPosts[i].ownerId).updateData({
-        //"earnings": FieldValue.increment
+        "earnings": FieldValue.increment(whichPosts[i].price)
       });
-       */
     }
 
   }
@@ -944,7 +950,7 @@ class _MealPlanningState extends State<MealPlanning> {
     nav.pop();
     nav.pop();
     nav.pop();
-    nav.pop();
+    //nav.pop();
     print("vack");
   }
   @override
@@ -1045,7 +1051,7 @@ class _MealPlanningState extends State<MealPlanning> {
                 Container(
                   margin: EdgeInsets.only(left: 90),
                   height: 5,
-                  color: Hexcolor("#FF9900"),
+                  color: HexColor("#FF9900"),
                   width: MediaQuery.of(context).size.width/4,
                 ),
                 SizedBox(height: 10,),

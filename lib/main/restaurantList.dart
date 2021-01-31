@@ -69,7 +69,7 @@ class _restaurantListState extends State<restaurantList> {
               Container(
                 margin: EdgeInsets.only(left: 90),
                 height: 5,
-                color: Hexcolor("#FF9900"),
+                color: HexColor("#FF9900"),
                 width: MediaQuery.of(context).size.width/4,
               ),
               SizedBox(height: 20,),
@@ -200,7 +200,7 @@ class RestResult extends StatelessWidget {
   }
 
   displayUserProfile(BuildContext context, {String userProfileId, String restaurantName}){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => restaurantProfile(userRestId : userProfileId, restaurantName: restaurantName, restOnline: false),));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => restaurantProfile(userRestId :eachRest.id, restaurantName: restaurantName, restOnline: false),));
   }
 
 }

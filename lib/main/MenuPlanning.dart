@@ -199,7 +199,7 @@ class _MenuPlanningState extends State<MenuPlanning> {
                       children: [
                         Text("Today",
                           style: GoogleFonts.poppins(
-                              textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 25, color: Hexcolor("#FF9900"))
+                              textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 25, color: HexColor("#FF9900"))
                           ),),
                         dropdownDatePicker,
                       ],

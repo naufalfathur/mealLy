@@ -118,6 +118,11 @@ class _TrackerPageState extends State<TrackerPage> with AutomaticKeepAliveClient
             ),
           ),
           Container(
+            padding: EdgeInsets.only(left: 50, right: 50),
+            child: Text("Update your weight regularly to see your progress!", textAlign: TextAlign.center, style: GoogleFonts.poppins(textStyle:
+            TextStyle(fontSize: 15.0, color: Colors.black, fontWeight: FontWeight.w500),),),
+          ),
+          Container(
             //color: Colors.black26,
             height: 100,
             alignment: Alignment.center,
@@ -132,7 +137,7 @@ class _TrackerPageState extends State<TrackerPage> with AutomaticKeepAliveClient
                   ),),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Hexcolor("#FF9900"),
+                  color: HexColor("#FF9900"),
                   borderRadius: BorderRadius.circular(6.0),
                 ),
               ),

@@ -9,6 +9,7 @@ import 'package:meally2/main/ProfilePage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:meally2/main/ProgressPage.dart';
+import 'package:meally2/main/RestaurantHome.dart';
 import 'package:meally2/main/TrackerPage.dart';
 import 'package:meally2/main/myPlanPage.dart';
 import 'package:meally2/models/user.dart';
@@ -25,6 +26,7 @@ final TrackerReference = Firestore.instance.collection("tracker");
 final followingReference = Firestore.instance.collection("following");
 final followersReference = Firestore.instance.collection("followers");
 final reviewsReference = Firestore.instance.collection("reviews");
+//final ratingReference = Firestore.instance.collection("ratings");
 final ordersReference = Firestore.instance.collection("order");
 final custOrdersReference = Firestore.instance.collection("custOrder");
 final timelineReference = Firestore.instance.collection("timeline");
@@ -154,31 +156,31 @@ class _HomePageState extends State<HomePage> {
             SalomonBottomBarItem(
                 icon: Icon(
                   Icons.list_alt_rounded,
-                  color: getPageIndex == 0 ? Hexcolor("#FF9900") : Hexcolor("#3C3C3C"),
+                  color: getPageIndex == 0 ? HexColor("#FF9900") : HexColor("#3C3C3C"),
                 ),
-                //unselectedColor: Hexcolor("#3C3C3C"),
-                selectedColor: Hexcolor("#FF9900"),
+                //unselectedColor: HexColor("#3C3C3C"),
+                selectedColor: HexColor("#FF9900"),
                 title: Text("My Plan")),
             SalomonBottomBarItem(
                 icon: Icon(
                   Icons.home,
-                  color: getPageIndex == 1 ? Hexcolor("#FF9900") : Hexcolor("#3C3C3C"),
+                  color: getPageIndex == 1 ? HexColor("#FF9900") : HexColor("#3C3C3C"),
                 ),
-                selectedColor: Hexcolor("#FF9900"),
+                selectedColor: HexColor("#FF9900"),
                 title: Text("Home")),
             SalomonBottomBarItem(
                 icon: Icon(
                   Icons.track_changes_rounded,
-                  color: getPageIndex == 2 ? Hexcolor("#FF9900") : Hexcolor("#3C3C3C"),
+                  color: getPageIndex == 2 ? HexColor("#FF9900") : HexColor("#3C3C3C"),
                 ),
-                selectedColor: Hexcolor("#FF9900"),
+                selectedColor: HexColor("#FF9900"),
                 title: Text("Tracker")),
             SalomonBottomBarItem(
                 icon: Icon(
                   Icons.account_circle,
-                  color: getPageIndex == 3 ? Hexcolor("#FF9900") : Hexcolor("#3C3C3C"),
+                  color: getPageIndex == 3 ? HexColor("#FF9900") : HexColor("#3C3C3C"),
                 ),
-                selectedColor: Hexcolor("#FF9900"),
+                selectedColor: HexColor("#FF9900"),
                 title: Text("Profile")),
           ],
         ),
@@ -200,13 +202,13 @@ class _HomePageState extends State<HomePage> {
             Container(
               margin: EdgeInsets.only(top: 10),
               height: 5,
-              color: Hexcolor("#FF9900"),
+              color: HexColor("#FF9900"),
               width: 120,
             ),
             Container(
               margin: EdgeInsets.only(top: 120),
               //height: (MediaQuery.of(context).size.height/2),
-              //color: Hexcolor("#FF9900"),
+              //color: HexColor("#FF9900"),
               width: (MediaQuery.of(context).size.width/2)+80,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -264,12 +266,18 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(height: 20,),
             GestureDetector(
-              onTap: ()=> print("aa"),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => RestaurantHome()),
+                );
+              },
               child: Container(
                 height: 60,
                 width: 270.0,
                 decoration: BoxDecoration(
-                  color: Hexcolor("#FF9900"),
+                  color: HexColor("#FF9900"),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black12,

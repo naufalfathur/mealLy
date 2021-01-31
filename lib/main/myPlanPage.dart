@@ -43,7 +43,7 @@ class _MyPlanPageState extends State<MyPlanPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
+          padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 90),
           child: Column(
             children: [
               topBar(),
@@ -78,7 +78,7 @@ class _MyPlanPageState extends State<MyPlanPage> {
           onPressed: (){
             planMeal();
           },
-          //color: Hexcolor("#FF9900"),
+          //color: HexColor("#FF9900"),
           child: Container(
             width: MediaQuery.of(context).size.width,
             height: 45.0,
@@ -140,7 +140,7 @@ class _MyPlanPageState extends State<MyPlanPage> {
                     onPressed: (){
                       planMeal();
                     },
-                    //color: Hexcolor("#FF9900"),
+                    //color: HexColor("#FF9900"),
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: 45.0,
@@ -295,8 +295,8 @@ class _MyPlanPageState extends State<MyPlanPage> {
                   borderRadius: BorderRadius.circular(10),
                   gradient: LinearGradient(
                     colors:[
-                      Hexcolor("#616161").withOpacity(0.2),
-                      Hexcolor("#000000").withOpacity(0.4)
+                      HexColor("#616161").withOpacity(0.2),
+                      HexColor("#000000").withOpacity(0.4)
                     ],
                     stops: [0.2, 0.7],
                     begin: Alignment.bottomLeft,
@@ -425,8 +425,8 @@ class OrdersItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             gradient: LinearGradient(
               colors:[
-                Hexcolor("#616161").withOpacity(0.2),
-                Hexcolor("#000000").withOpacity(0.4)
+                HexColor("#616161").withOpacity(0.2),
+                HexColor("#000000").withOpacity(0.4)
               ],
               stops: [0.2, 0.7],
               begin: Alignment.bottomLeft,

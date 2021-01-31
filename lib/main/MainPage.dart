@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:meally2/HomePage.dart';
+import 'package:meally2/main/MyOrderPage.dart';
 import 'package:meally2/main/NotificationPage.dart';
 import 'package:meally2/main/OrderDetailsPage.dart';
 import 'package:meally2/main/Planner.dart';
@@ -28,8 +29,10 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   final now = DateTime.now();
   final String userProfileId;
-  double calories = 0.0;
-  double totCal = 0.0;
+  double calories;
+  double caloriesCons;
+  double caloriesRemain;
+  int counter =0;
 
   _MainPageState({this.userProfileId});
   @override
@@ -62,7 +65,7 @@ class _MainPageState extends State<MainPage> {
                       child:
                       Container(
                       decoration: BoxDecoration(
-                          color: Hexcolor("#000000").withOpacity(0.1)
+                          color: HexColor("#000000").withOpacity(0.1)
                       ),
                      ),
                     ),
@@ -81,9 +84,9 @@ class _MainPageState extends State<MainPage> {
                           if(index == 0){
                             return message1();
                           }else if(index == 1){
-                            return message1();
+                            return message2();
                           }else if(index == 2){
-                            return message1();
+                            return message3();
                           }else{
                             return Container(color: Colors.red,child: Text("Error, Please try again"));
                           }
@@ -156,7 +159,40 @@ class _MainPageState extends State<MainPage> {
         child: RotationTransition(
           turns: new AlwaysStoppedAnimation(-5 / 360),
           child: Text("Build your desired\nbody without\nwasting\ntime ", style: GoogleFonts.architectsDaughter(textStyle:
-          TextStyle(fontWeight: FontWeight.w600, fontSize: 28, color: Hexcolor("#69320A").withOpacity(0.8))
+          TextStyle(fontWeight: FontWeight.w600, fontSize: 28, color: HexColor("#69320A").withOpacity(0.8))
+          ),),
+        )
+    );
+  }
+  message2(){
+    return Container(
+        padding: EdgeInsets.only(left: 50, top: 80, right: 120),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            alignment: Alignment(0, 1),
+            image: AssetImage("assets/images/phone.png"),
+            fit: BoxFit.fitWidth,
+          ),
+        ),
+        child:  Text("One time order for whole week plan", style: GoogleFonts.architectsDaughter(textStyle:
+    TextStyle(fontWeight: FontWeight.w600, fontSize: 28, color: HexColor("#69320A").withOpacity(0.8)))
+        )
+    );
+  }
+  message3(){
+    return Container(
+        padding: EdgeInsets.only(left: 50, top: 60),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            alignment: Alignment(0, -0.4),
+            image: AssetImage("assets/images/delivered.png"),
+            fit: BoxFit.fitWidth,
+          ),
+        ),
+        child: RotationTransition(
+          turns: new AlwaysStoppedAnimation(-5 / 360),
+          child: Text("Suited meals \nat your door", style: GoogleFonts.architectsDaughter(textStyle:
+          TextStyle(fontWeight: FontWeight.w600, fontSize: 28, color: HexColor("#69320A").withOpacity(0.8))
           ),),
         )
     );
@@ -215,7 +251,7 @@ class _MainPageState extends State<MainPage> {
                 padding: EdgeInsets.only(top: 10, bottom: 10),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Hexcolor("#FF9900"),
+                  color: HexColor("#FF9900"),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.orangeAccent.withOpacity(0.9),
@@ -226,65 +262,15 @@ class _MainPageState extends State<MainPage> {
                   ],
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      width: 70,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          //alignment: Alignment(0, -3),
-                          image: AssetImage("assets/images/healthy.png"),
-                          fit: BoxFit.fitWidth,
-                        ),
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        if (calories == 0.0 ) Text("Welcome to \nMealLy",
-                          style: GoogleFonts.poppins(
-                              textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 18, color: Colors.white)
-                          ),),
-                        if (calories != 0.0 ) Text("$calories kcal\nRemaining",
-                          style: GoogleFonts.poppins(
-                              textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 18, color: Colors.white)
-                          ),),
-                        if (calories == 0.0 ) Text("Start make your plan now!",
-                          style: GoogleFonts.poppins(
-                              textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12, color: Colors.white)
-                          ),),
-                        if (calories != 0.0 ) Text("800/2000 of Calories Consumed",
-                          style: GoogleFonts.poppins(
-                              textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12, color: Colors.white)
-                          ),),
-                        Container(
-                          margin: EdgeInsets.only(top: 3),
-                          width: 160,
-                          height: 8,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            child: LinearProgressIndicator(
-                              value: 0.7,
-                              valueColor: AlwaysStoppedAnimation(Colors.white),
-                              backgroundColor: Color(0xffD6D6D6),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
+                child: consMealsWidget(),
               ),
               SizedBox(height: 15,),
               todaysPlan(),
               Container(
                 height: 120,
                 decoration: BoxDecoration(
-                  color: Hexcolor("#FF9900"),
-                  //color: Hexcolor("#181716"),
+                  color: HexColor("#FF9900"),
+                  //color: HexColor("#181716"),
                   //color: Colors.white,
                   image: DecorationImage(
                     alignment: Alignment(-1, 0),
@@ -315,7 +301,7 @@ class _MainPageState extends State<MainPage> {
                 margin: EdgeInsets.only(left: 15, right: 15),
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                  color: Hexcolor("#181716"),
+                  color: HexColor("#181716"),
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
@@ -331,7 +317,7 @@ class _MainPageState extends State<MainPage> {
                     padding: EdgeInsets.all(15),
                     width: 150,
                     decoration: BoxDecoration(
-                      color: Hexcolor("#FF4747"),
+                      color: HexColor("#FF4747"),
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Column(
@@ -378,10 +364,15 @@ class _MainPageState extends State<MainPage> {
                             style: GoogleFonts.poppins(
                                 textStyle: TextStyle(color: Colors.black54, fontWeight: FontWeight.w600, fontSize: 14)
                             ),),
-                          Text("see all",
-                            style: GoogleFonts.poppins(
-                                textStyle: TextStyle(color: Colors.black54, fontWeight: FontWeight.w600, fontSize: 14)
-                            ),),
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => MyOrderPage(gCurrentUser: currentUser, userProfileId: currentUser.id)));
+                            },
+                            child: Text("see all",
+                              style: GoogleFonts.poppins(
+                                  textStyle: TextStyle(color: Colors.black54, fontWeight: FontWeight.w600, fontSize: 14)
+                              ),),
+                          ),
                         ],
                       ),
                     ),
@@ -403,6 +394,10 @@ class _MainPageState extends State<MainPage> {
     int weight;
     if(weightProg<0){
       weight = weightProg*-1;
+    }else if(weightProg == 0){
+      weight = weightProg;
+    }else if(weightProg>0){
+      weight = weightProg;
     }
     return GestureDetector(
       onTap: (){
@@ -413,7 +408,7 @@ class _MainPageState extends State<MainPage> {
         width: 150,
         padding: EdgeInsets.all(15),
         decoration: BoxDecoration(
-          color: Hexcolor("#575757"),
+          color: HexColor("#575757"),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Column(
@@ -763,7 +758,7 @@ class _MainPageState extends State<MainPage> {
                         FlatButton(
                           onPressed: (){
                           },
-                          //color: Hexcolor("#FF9900"),
+                          //color: HexColor("#FF9900"),
                           child: Container(
                             width: MediaQuery.of(context).size.width,
                             height: 45.0,
@@ -824,7 +819,7 @@ class _MainPageState extends State<MainPage> {
                   child: Container(
                     width: 70,
                     decoration: BoxDecoration(
-                      color: Hexcolor("#FF9900"),
+                      color: HexColor("#FF9900"),
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Text("See All",textAlign: TextAlign.center,
@@ -855,10 +850,11 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getCalories();
+    //getCalories();
 
   }
 
+  /*
   getCalories() async{
     QuerySnapshot querySnapshot =  await custOrdersReference.document(userProfileId).collection("custOrder")
         .where("datetime", isGreaterThanOrEqualTo: DateTime(now.year, now.month, now.day),
@@ -867,65 +863,152 @@ class _MainPageState extends State<MainPage> {
     for (int i = 0; i < newList.length; i++) {
       calories += newList[i].calories;
     }
+    for (int i = 0; i < newList.length; i++) {
+      if(newList[i].status==4){
+        counter++;
+      }
+    }
     return calories;
   }
-/*
-  caloriesProgress(User user){
+
+   */
+
+  consMealsWidget(){
     return StreamBuilder(
-      stream: custOrdersReference.document(userProfileId).collection("custOrder").where("datetime", isGreaterThanOrEqualTo: DateTime(now.year, now.month, now.day), isLessThan: DateTime(now.year, now.month, now.day+ 1)).snapshots(),
-      builder: (context, dataSnapshot){
-        if(!dataSnapshot.hasData){
+      stream: custOrdersReference.document(userProfileId).collection("custOrder")
+          .where("datetime", isGreaterThanOrEqualTo: DateTime(now.year, now.month, now.day),
+          isLessThan: DateTime(now.year, now.month, now.day+ 1)).snapshots(),
+      builder: (context, dataSnapshot) {
+        if (!dataSnapshot.hasData) {
           return circularProgress(Colors.orangeAccent);
         }
-        List<OrdersItem> comments = [];
-        dataSnapshot.data.documents.forEach((document){
-          comments.add(OrdersItem.fromDocument(document, userProfileId));
+        List<OrdersItem> meals = [];
+        dataSnapshot.data.documents.forEach((document) {
+          meals.add(OrdersItem.fromDocument(document, userProfileId));
         });
-        for (int i = 0; i < comments.length; i++) {
-          print(comments[i].calories.toString() + "a");
-          cal = cal + comments[i].calories;
+        calories = 0.0;
+        counter = 0;
+        caloriesCons = 0.0;
+        caloriesRemain = 0.0;
+        for (int i = 0; i < meals.length; i++) {
+          calories += meals[i].calories;
+        }
+        for (int i = 0; i < meals.length; i++) {
+          if(meals[i].status==4){
+            counter++;
+            caloriesCons+= meals[i].calories;
+          }
+        }
+        for (int i = 0; i < meals.length; i++) {
+          if(meals[i].status<4){
+            //print(meals[i].mealName);
+            caloriesRemain+= meals[i].calories;
+          }
         }
 
-        if(comments.isEmpty){
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text("Calories Consumed : "+user.tdee.toString()+"/"+user.tdee.toString(),
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),),
-              SizedBox(height: 5,),
+
+
+        if (meals.isEmpty) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
               Container(
-                width: 200,
-                child:  LinearProgressIndicator(
-                  value: user.tdee/user.tdee,
-                  backgroundColor: Colors.black26,
-                  valueColor: AlwaysStoppedAnimation(Colors.orangeAccent,),
+                width: 70,
+                height: 100,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    //alignment: Alignment(0, -3),
+                    image: AssetImage("assets/images/healthy.png"),
+                    fit: BoxFit.fitWidth,
+                  ),
                 ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text("Welcome to \nMealLy",
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(fontWeight: FontWeight.w700,
+                            fontSize: 18,
+                            color: Colors.white)
+                    ),),
+                  Text("Start make your plan now!",
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            color: Colors.white)
+                    ),),
+                  Container(
+                    margin: EdgeInsets.only(top: 3),
+                    width: 160,
+                    height: 8,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      child: LinearProgressIndicator(
+                        value: 1.0,
+                        valueColor: AlwaysStoppedAnimation(Colors.white),
+                        backgroundColor: Color(0xffD6D6D6),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          );
+        } else {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                width: 70,
+                height: 100,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    //alignment: Alignment(0, -3),
+                    image: AssetImage("assets/images/healthy.png"),
+                    fit: BoxFit.fitWidth,
+                  ),
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text( caloriesRemain.toStringAsFixed(2) + " kcal\nRemaining",
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(fontWeight: FontWeight.w700,
+                            fontSize: 18,
+                            color: Colors.white)
+                    ),),
+                  Text("$counter Meals Consumed",
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            color: Colors.white)
+                    ),),
+                  Container(
+                    margin: EdgeInsets.only(top: 3),
+                    width: 160,
+                    height: 8,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      child: LinearProgressIndicator(
+                        value: caloriesCons.round()/calories.round(),
+                        valueColor: AlwaysStoppedAnimation(Colors.white),
+                        backgroundColor: Color(0xffD6D6D6),
+                      ),
+                    ),
+                  )
+                ],
               ),
             ],
           );
         }
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text("Calories Consumed : 0/"+cal.round().toString(),
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),),
-            SizedBox(height: 5,),
-            Container(
-              width: 200,
-              child:  LinearProgressIndicator(
-                value: 0/cal.round(),
-                backgroundColor: Colors.black26,
-                valueColor: AlwaysStoppedAnimation(Colors.orangeAccent,),
-              ),
-            ),
-          ],
-        );
-      },
+
+      }
     );
   }
-
-
- */
 
   retrieveOrder(){
     return StreamBuilder(
@@ -945,21 +1028,26 @@ class _MainPageState extends State<MainPage> {
                 children: [
                   Text("No Meals Available", textAlign: TextAlign.center,),
                   SizedBox(height: 20,),
-                  Container(
-                    height: 40,
-                    width:180,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/images/bg.png"),
-                        fit: BoxFit.cover,
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Planner(userProfileId: userProfileId)));
+                    },
+                    child: Container(
+                      height: 40,
+                      width:180,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/images/bg.png"),
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.circular(35),
                       ),
-                      borderRadius: BorderRadius.circular(35),
+                      child: Text("Create New Plan",textAlign: TextAlign.center,
+                        style: GoogleFonts.poppins(
+                            textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13)
+                        ),),
                     ),
-                    child: Text("Create New Plan",textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
-                          textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13)
-                      ),),
                   )
                 ],
               )
@@ -998,8 +1086,8 @@ class _MainPageState extends State<MainPage> {
                       borderRadius: BorderRadius.circular(10),
                       gradient: LinearGradient(
                         colors:[
-                          Hexcolor("#616161").withOpacity(0.2),
-                          Hexcolor("#000000").withOpacity(0.4)
+                          HexColor("#616161").withOpacity(0.2),
+                          HexColor("#000000").withOpacity(0.4)
                         ],
                         stops: [0.2, 1],
                         begin: Alignment.topRight,
@@ -1065,8 +1153,8 @@ class _MainPageState extends State<MainPage> {
                       borderRadius: BorderRadius.circular(10),
                       gradient: LinearGradient(
                         colors:[
-                          Hexcolor("#616161").withOpacity(0.2),
-                          Hexcolor("#000000").withOpacity(0.4)
+                          HexColor("#616161").withOpacity(0.2),
+                          HexColor("#000000").withOpacity(0.4)
                         ],
                         stops: [0.2, 1],
                         begin: Alignment.topRight,
@@ -1171,7 +1259,7 @@ class _MainPageState extends State<MainPage> {
                             textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12, color: Colors.white)
                         ),
                       ),
-                      SizedBox(width: 130,),
+                      SizedBox(width: 100,),
                       Icon(Icons.arrow_forward_ios_rounded, color: Colors.white, size: 15,)
                     ],
                   ),
@@ -1304,8 +1392,8 @@ class OrdersItem extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 border: Border(
-                  //top: BorderSide(width: 2.0, color: Hexcolor("#9D9D9D")),
-                  bottom: BorderSide(width: 1.0, color: Hexcolor("#E8E8E8")),
+                  //top: BorderSide(width: 2.0, color: HexColor("#9D9D9D")),
+                  bottom: BorderSide(width: 1.0, color: HexColor("#E8E8E8")),
                 ),
                 color: Colors.white,
               ),

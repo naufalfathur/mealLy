@@ -13,8 +13,8 @@ class User {
   final double bodyfat;
   final double lbm;
   final int tdee;
-  final String phoneNo;
-  final String postcode;
+  final int phoneNo;
+  final int postcode;
   final String city;
   final String location;
 

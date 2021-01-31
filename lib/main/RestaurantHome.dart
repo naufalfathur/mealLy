@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meally2/CreateAccountPage.dart';
+import 'package:meally2/HomePage.dart';
 import 'package:meally2/main/CreateRestaurantAcc.dart';
 import 'package:meally2/main/MainPage.dart';
 import 'package:meally2/main/NotificationPage.dart';
@@ -159,7 +160,7 @@ class _RestaurantHomeState extends State<RestaurantHome> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("EatNEat",textAlign: TextAlign.center,
+            Text(currentRest.RestaurantName,textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
                   textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 13)
               ),),
@@ -287,31 +288,31 @@ class _RestaurantHomeState extends State<RestaurantHome> {
             SalomonBottomBarItem(
                 icon: Icon(
                   Icons.calendar_today_rounded,
-                  color: getPageIndex == 0 ? Hexcolor("#FF9900") : Hexcolor("#3C3C3C"),
+                  color: getPageIndex == 0 ? HexColor("#FF9900") : HexColor("#3C3C3C"),
                 ),
-                //unselectedColor: Hexcolor("#3C3C3C"),
-                selectedColor: Hexcolor("#FF9900"),
+                //unselectedColor: HexColor("#3C3C3C"),
+                selectedColor: HexColor("#FF9900"),
                 title: Text("Schedule")),
             SalomonBottomBarItem(
                 icon: Icon(
                   Icons.home,
-                  color: getPageIndex == 1 ? Hexcolor("#FF9900") : Hexcolor("#3C3C3C"),
+                  color: getPageIndex == 1 ? HexColor("#FF9900") : HexColor("#3C3C3C"),
                 ),
-                selectedColor: Hexcolor("#FF9900"),
+                selectedColor: HexColor("#FF9900"),
                 title: Text("Home")),
             SalomonBottomBarItem(
                 icon: Icon(
                   Icons.list_alt_rounded,
-                  color: getPageIndex == 2 ? Hexcolor("#FF9900") : Hexcolor("#3C3C3C"),
+                  color: getPageIndex == 2 ? HexColor("#FF9900") : HexColor("#3C3C3C"),
                 ),
-                selectedColor: Hexcolor("#FF9900"),
+                selectedColor: HexColor("#FF9900"),
                 title: Text("Meals")),
             SalomonBottomBarItem(
                 icon: Icon(
                   Icons.account_circle,
-                  color: getPageIndex == 3 ? Hexcolor("#FF9900") : Hexcolor("#3C3C3C"),
+                  color: getPageIndex == 3 ? HexColor("#FF9900") : HexColor("#3C3C3C"),
                 ),
-                selectedColor: Hexcolor("#FF9900"),
+                selectedColor: HexColor("#FF9900"),
                 title: Text("Profile")),
           ],
         ),
@@ -452,13 +453,13 @@ class _RestaurantHomeState extends State<RestaurantHome> {
             Container(
               margin: EdgeInsets.only(top: 10),
               height: 5,
-              color: Hexcolor("#FF9900"),
+              color: HexColor("#FF9900"),
               width: 120,
             ),
             Container(
               margin: EdgeInsets.only(top: 120),
               //height: (MediaQuery.of(context).size.height/2),
-              //color: Hexcolor("#FF9900"),
+              //color: HexColor("#FF9900"),
               width: (MediaQuery.of(context).size.width/2)+80,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -516,12 +517,18 @@ class _RestaurantHomeState extends State<RestaurantHome> {
             ),
             SizedBox(height: 20,),
             GestureDetector(
-              onTap: ()=> print("aa"),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HomePage()),
+                );
+              },
               child: Container(
                 height: 60,
                 width: 270.0,
                 decoration: BoxDecoration(
-                  color: Hexcolor("#FF9900"),
+                  color: HexColor("#FF9900"),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black12,
@@ -535,7 +542,7 @@ class _RestaurantHomeState extends State<RestaurantHome> {
                 //color: Colors.black,
                 child: Container(
                     alignment: Alignment.center,
-                    child: Text("Sign as Restaurant",
+                    child: Text("Sign as Customers",
                       style: GoogleFonts.poppins(
                           textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 15, color: Colors.white)
                       ),

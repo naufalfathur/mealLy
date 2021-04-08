@@ -422,7 +422,7 @@ class _ReviewPageState extends State<ReviewPage> {
                   width: double.infinity,
                   height: 50.0,
                   margin: EdgeInsets.only(top: 10, bottom: 20),
-                  child: Text("Upload meals", style: GoogleFonts.poppins(textStyle: TextStyle(color:Colors.white , fontWeight: FontWeight.w600),)),
+                  child: Text("Submit", style: GoogleFonts.poppins(textStyle: TextStyle(color:Colors.white , fontWeight: FontWeight.w600),)),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: HexColor("#FF9900"),
@@ -532,7 +532,7 @@ class Comment extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Text(CustomerName + ": " , style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700,color: Colors.black),),
+                      Text(CustomerName + ": " , style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700,color: Colors.black),),
                       SmoothStarRating(
                         rating: rating,
                         isReadOnly: true,

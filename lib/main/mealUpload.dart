@@ -44,6 +44,7 @@ class _mealUploadState extends State<mealUpload> {
   TextEditingController priceTextEditingController = TextEditingController();
   PageController pageController = PageController();
   int pageChanged = 0;
+  bool error = false;
   //final snackBar = SnackBar(content: Text('Yay! A SnackBar!'));
 
   captureImageWithCamera() async {
@@ -431,7 +432,7 @@ class _mealUploadState extends State<mealUpload> {
       "profileName": widget.gCurrentRest.RestaurantName,
       "order": {},
       "name": name,
-      "ingredients": ingredients,
+      "ingredients": ing,
       "price": price+0.01,
       "url": url,
       "calories": calories+0.01,
@@ -585,7 +586,11 @@ class _mealUploadState extends State<mealUpload> {
                     ),
                   ),
                 ),
-                Padding(
+                error ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("There is a mistake on your input, please follow the correct format", style: GoogleFonts.poppins(textStyle:
+                  TextStyle(fontSize: 11.0, color: Colors.red, fontWeight: FontWeight.w500),),),
+                ) : Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text("disclaimer : \nmealLy will not store the exact info about your ingredients, only the name and its nutrition", style: GoogleFonts.poppins(textStyle:
                   TextStyle(fontSize: 11.0, color: Colors.black, fontWeight: FontWeight.w500),),),
@@ -600,6 +605,7 @@ class _mealUploadState extends State<mealUpload> {
 
                 onTap: uploading ? null : () async {
                   _showMyDialog();
+
                   print(IngridientsTextEditingController.text);
                   ing = await API_Manager().getIng(IngridientsTextEditingController.text);
                   calories = (await API_Manager().getRec(IngridientsTextEditingController.text, "Calories")+0.1);
@@ -608,8 +614,14 @@ class _mealUploadState extends State<mealUpload> {
                   sodium = await API_Manager().getRec(IngridientsTextEditingController.text, "Sodium")+0.1;
                   protein = await API_Manager().getRec(IngridientsTextEditingController.text, "Protein")+0.1;
                   print("$calories, $fat, $carbs, $sodium, $protein");
-                  print("$ing");
-                  _successModal(context);
+                  print(" aaa $ing");
+                  if (ing == null || ing.isEmpty){
+                    error = true;
+                    Navigator.pop(context);
+                  }else{
+                    _successModal(context);
+                  }
+                  //_successModal(context);
                 },
                 //onPressed: uploading ? null : ()=> controlUploadAndSave(),
                 child: Container(

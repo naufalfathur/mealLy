@@ -250,7 +250,7 @@ class _MyPlanPageState extends State<MyPlanPage> {
         print("d");
         List<OrdersItem> comments = [];
         dataSnapshot.data.documents.forEach((document){
-          comments.add(OrdersItem.fromDocument(document, userProfileId));
+          comments.add(OrdersItem.fromDocument(document, userProfileId, gCurrentUser));
         });
         if(comments.isEmpty){
           return Container(height: 400, alignment: Alignment.center,child: Text("no meals available"));
@@ -314,7 +314,7 @@ class _MyPlanPageState extends State<MyPlanPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Icon(Icons.flash_on_rounded, color: Colors.white,size: 14,),
-                      Text(meals[index].calories.toString(),textAlign: TextAlign.left,
+                      Text(meals[index].calories.toStringAsFixed(2),textAlign: TextAlign.left,
                         style: GoogleFonts.poppins(
                             textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 14)
                         ),),
@@ -357,6 +357,7 @@ class OrdersItem extends StatelessWidget {
   final String userProfileImg;
   final String url;
   final String userProfileId;
+  final User gCurrentUser;
   OrdersItem({
     this.url,
     this.status,
@@ -365,9 +366,9 @@ class OrdersItem extends StatelessWidget {
     this.calories,
     this.custId,
     this.location,
-    this.mealName, this.mealId, this.userProfileId, this.orderId});
+    this.mealName, this.mealId, this.userProfileId, this.orderId, this.gCurrentUser});
 
-  factory OrdersItem.fromDocument(DocumentSnapshot documentSnapshot, String userProfileId){
+  factory OrdersItem.fromDocument(DocumentSnapshot documentSnapshot, String userProfileId, User gCurrentUser){
     return OrdersItem(
       custId: documentSnapshot["custId"],
       url: documentSnapshot["url"],
@@ -380,6 +381,7 @@ class OrdersItem extends StatelessWidget {
       orderId: documentSnapshot["orderId"],
       calories: documentSnapshot["calories"],
       userProfileId : userProfileId,
+        gCurrentUser:gCurrentUser
     );
   }
 
@@ -398,75 +400,80 @@ class OrdersItem extends StatelessWidget {
     }else {
       stats = "Delivered";
     }
-    return Container(
-      margin: EdgeInsets.only(top: 5, bottom: 5),
-      height: 140,
-      width: 130,
-      //color: Colors.blue,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            offset: Offset(0.0,3.0),
-            blurRadius: 30,
-            spreadRadius: -8,
-          ),
-        ],
-        image: DecorationImage(
-          image: CachedNetworkImageProvider(url),
-          fit: BoxFit.cover,
-        ),
-        borderRadius: BorderRadius.circular(10),
-        //border: Border.all(color: Colors.black12),
-      ),
+    return GestureDetector(
+      onTap: (){
+        displayDetails(context, userProfileId, gCurrentUser);
+      },
       child: Container(
-        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width/2-10, right: 10, bottom: 10),
+        margin: EdgeInsets.only(top: 5, bottom: 5),
+        height: 140,
+        width: 130,
+        //color: Colors.blue,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            gradient: LinearGradient(
-              colors:[
-                HexColor("#616161").withOpacity(0.2),
-                HexColor("#000000").withOpacity(0.4)
-              ],
-              stops: [0.2, 0.7],
-              begin: Alignment.bottomLeft,
-            )
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(mealName,textAlign: TextAlign.left,
-              style: GoogleFonts.poppins(
-                  textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 18)
-              ),),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Icon(Icons.flash_on_rounded, color: Colors.white,size: 14,),
-                Text(calories.toString(),textAlign: TextAlign.left,
-                  style: GoogleFonts.poppins(
-                      textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 14)
-                  ),),
-              ],
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 3, right: 3),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.blue, width: 2),
-              ),
-              child: Text(intl.DateFormat.Hm().format(datetime.toDate()), style: GoogleFonts.poppins(textStyle:
-              TextStyle(fontSize: 10.0, color: Colors.white, fontWeight: FontWeight.w500),),),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              offset: Offset(0.0,3.0),
+              blurRadius: 30,
+              spreadRadius: -8,
             ),
           ],
+          image: DecorationImage(
+            image: CachedNetworkImageProvider(url),
+            fit: BoxFit.cover,
+          ),
+          borderRadius: BorderRadius.circular(10),
+          //border: Border.all(color: Colors.black12),
+        ),
+        child: Container(
+          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width/2-10, right: 10, bottom: 10),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              gradient: LinearGradient(
+                colors:[
+                  HexColor("#616161").withOpacity(0.2),
+                  HexColor("#000000").withOpacity(0.4)
+                ],
+                stops: [0.2, 0.7],
+                begin: Alignment.bottomLeft,
+              )
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(mealName,textAlign: TextAlign.left,
+                style: GoogleFonts.poppins(
+                    textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 18)
+                ),),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(Icons.flash_on_rounded, color: Colors.white,size: 14,),
+                  Text(calories.toStringAsFixed(2),textAlign: TextAlign.left,
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 14)
+                    ),),
+                ],
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 3, right: 3),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.blue, width: 2),
+                ),
+                child: Text(intl.DateFormat.Hm().format(datetime.toDate()), style: GoogleFonts.poppins(textStyle:
+                TextStyle(fontSize: 10.0, color: Colors.white, fontWeight: FontWeight.w500),),),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  displayDetails(context, userProfileId){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => OrderDetailsPage(userProfileId: userProfileId, orderId: orderId)));
+  displayDetails(context, userProfileId, gCurrentUser){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => OrderDetailsPage(userProfileId: userProfileId, orderId: orderId, gCurrentUser: gCurrentUser)));
   }
 
 }

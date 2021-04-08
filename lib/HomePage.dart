@@ -88,7 +88,9 @@ class _HomePageState extends State<HomePage> {
         "city":input[8],
         "location": input[9],
         "phoneNo": input[10],
-        "program" : input[11]
+        "program" : input[11],
+        "longitude" : input[12],
+        "latitude" : input[13],
       });
       documentSnapshot = await userReference.document(gCurrentUser.id).get();
     }

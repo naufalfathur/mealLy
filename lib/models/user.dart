@@ -17,6 +17,8 @@ class User {
   final int postcode;
   final String city;
   final String location;
+  final longitude;
+  final latitude;
 
   User({
     this.id,
@@ -34,27 +36,31 @@ class User {
     this.location,
     this.city,
     this.postcode,
-    this.phoneNo
+    this.phoneNo,
+    this.latitude,
+    this.longitude
   });
 
   factory User.fromDocument(DocumentSnapshot doc) {
     return User(
-      id: doc.documentID,
-      email: doc['email'],
-      url: doc['url'],
-      profileName: doc['profileName'],
-      gender: doc['gender'],
-      age: doc['age'],
-      weight: doc['weight'],
-      initialWeight: doc['initialWeight'],
-      height: doc['height'],
-      bodyfat: doc['bodyfat'],
-      lbm: doc["lbm"],
-      tdee: doc["tdee"],
-      location: doc['location'],
-      city: doc["city"],
-      postcode: doc["postcode"],
-      phoneNo: doc["phoneNo"],
+        id: doc.documentID,
+        email: doc['email'],
+        url: doc['url'],
+        profileName: doc['profileName'],
+        gender: doc['gender'],
+        age: doc['age'],
+        weight: doc['weight'],
+        initialWeight: doc['initialWeight'],
+        height: doc['height'],
+        bodyfat: doc['bodyfat'],
+        lbm: doc["lbm"],
+        tdee: doc["tdee"],
+        location: doc['location'],
+        city: doc["city"],
+        postcode: doc["postcode"],
+        phoneNo: doc["phoneNo"],
+        latitude: doc["latitude"],
+        longitude: doc["longitude"]
     );
   }
 }

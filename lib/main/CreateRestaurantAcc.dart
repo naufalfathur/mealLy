@@ -12,6 +12,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as ImD;
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';import 'package:flutter_native_image/flutter_native_image.dart';
 
 class Item {
   const Item(this.name,this.icon, this.value);
@@ -21,14 +22,14 @@ class Item {
 }
 
 class CreateRestaurantAcc extends StatefulWidget {
-  final String userRestId;
+  final GoogleSignInAccount userRestId;
   CreateRestaurantAcc({this.userRestId});
   @override
   _CreateRestaurantAccState createState() => _CreateRestaurantAccState(userRestId:userRestId);
 }
 
 class _CreateRestaurantAccState extends State<CreateRestaurantAcc> {
-  final String userRestId;
+  final GoogleSignInAccount userRestId;
   _CreateRestaurantAccState({this.userRestId});
 
   TextEditingController ZIPTextEditingController = TextEditingController();
@@ -60,6 +61,8 @@ class _CreateRestaurantAccState extends State<CreateRestaurantAcc> {
   Color _color = Colors.white;
   double rating = 0;
   int error = 0;
+  var longitude;
+  var latitude;
 
   List<bool> isSelected = [true, false, false,false, false];
   List<bool> isSelected2 = [true, false, false];
@@ -74,14 +77,14 @@ class _CreateRestaurantAccState extends State<CreateRestaurantAcc> {
     ZIPTextEditingController.text = postcodeAddress;
     cityTextEditingController.text = cityAddress;
     locationTextEditingController.text = completeAddressInfo;
+    longitude = position.longitude;
+    latitude =  position.latitude;
   }
   compressingPhoto() async{
-    final tDirectory = await getTemporaryDirectory();
-    final path = tDirectory.path;
-    ImD.Image mImageFile = ImD.decodeImage(file.readAsBytesSync());
-    final compressedImageFile = File('$path/img_$userRestId.jpg')..writeAsBytesSync(ImD.encodeJpg(mImageFile, quality: 60));
+    File compressedFile = await FlutterNativeImage.compressImage(file.path,
+      quality: 25,);
     setState(() {
-      file = compressedImageFile;
+      file = compressedFile;
     });
   }
   Future<String> uploadPhoto(mImageFile) async{
@@ -123,7 +126,7 @@ class _CreateRestaurantAccState extends State<CreateRestaurantAcc> {
       form7.save();
       form8.save();
       form9.save();
-      Navigator.pop(context, [RestaurantName, postcode, city, accreditation, location, PICName, PICNo, PICPosition, cuisine, downloadUrl]);
+      Navigator.pop(context, [RestaurantName, postcode, city, accreditation, location, PICName, PICNo, PICPosition, cuisine, downloadUrl, longitude, latitude]);
       setState(() {
         file = null;
         uploading = false;
@@ -236,13 +239,13 @@ class _CreateRestaurantAccState extends State<CreateRestaurantAcc> {
                   width: MediaQuery.of(context).size.width/4,
                 ),
                 SizedBox(height: 30,),
-                Text("Hi Jane Doe, ",textAlign: TextAlign.center,
+                Text("Hi " + userRestId.displayName,textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20)
                   ),),
                 Container(
                   padding: EdgeInsets.only(left: 40, right: 40, top: 10, bottom: 20),
-                  child:  Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",textAlign: TextAlign.center,
+                  child:  Text("Here you can retrieve your calorie intake needs by fill in the data belows",textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                         textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 10)
                     ),),

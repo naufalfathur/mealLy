@@ -11,9 +11,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:geolocator/geolocator.dart';
 
 class Item {
-  const Item(this.name,this.icon, this.value);
+  const Item(this.name, this.value);
   final String name;
-  final Icon icon;
   final String value;
 }
 
@@ -44,6 +43,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   double bodyfat = 0.0;
   double lbm;
   int tdee;
+  int calInt;
   String program = "maintain";
   Item item;
   double activity = 1.2;
@@ -53,6 +53,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   double rating = 0;
   int error = 0;
   bool locationAsk = true;
+  var longitude;
+  var latitude;
 
   List<bool> isSelected = [true, false, false,false, false];
   List<bool> isSelected2 = [true, false, false];
@@ -67,6 +69,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     ZIPTextEditingController.text = postcodeAddress;
     cityTextEditingController.text = cityAddress;
     locationTextEditingController.text = completeAddressInfo;
+    longitude = position.longitude;
+    latitude =  position.latitude;
   }
 
   submitForm(){
@@ -79,15 +83,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       form3.save();
       form4.save();
       form5.save();
-      if(bodyfat == 0.0){
-        lbm = weight;
-        print(bodyfat);
-      }else{
-        lbm = weight - (weight * (bodyfat/100));
-        print(bodyfat);
-      }
-      tdee = ((370 + (21.6 * lbm))*activity).round();
-      print(tdee);
       pageController.animateToPage(++pageChanged, duration: Duration(milliseconds: 250), curve: Curves.bounceInOut);
 
     //final form = _formkey.currentState;
@@ -103,8 +98,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   }
 
   List<Item> items = <Item>[
-    const Item('Male',Icon(Icons.android,color:  const Color(0xFF167F67),),"male"),
-    const Item('Female',Icon(Icons.flag,color:  const Color(0xFF167F67),),"female"),
+    const Item('Male',"male"),
+    const Item('Female',"female"),
   ];
 
 
@@ -150,7 +145,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   ),),
                 Container(
                   padding: EdgeInsets.only(left: 40, right: 40, top: 10, bottom: 20),
-                  child:  Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",textAlign: TextAlign.center,
+                  child:  Text("Here you can retrieve your calorie intake needs by fill in the data belows",textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                         textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 10)
                     ),),
@@ -198,7 +193,26 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     }else if (pageChanged == 1){
                       pageController.animateToPage(++pageChanged, duration: Duration(milliseconds: 250), curve: Curves.bounceInOut);
                     }else if (pageChanged == 2){
-                      print("a");
+                      if(bodyfat == 0.0){
+                        lbm = weight;
+                        print(bodyfat);
+                      }else{
+                        lbm = weight - (weight * (bodyfat/100));
+                        print(bodyfat);
+                      }
+                      calInt = ((370 + (21.6 * lbm))*activity).round();
+                      print("bulk $program");
+                      if(program == "Cutting"){
+                        tdee = calInt - 500;
+                        print("c");
+                      }else if(program == "Bulking"){
+                        tdee = calInt + 500;
+                        print("b");
+                      }else{
+                        print("m");
+                        tdee = calInt;
+                      }
+                      print(tdee);
                       //await Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage()));
                       _successModal(context);
                     }
@@ -504,16 +518,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       items: items.map((Item items) {
                         return  DropdownMenuItem<Item>(
                           value: items,
-                          child: Row(
-                            children: <Widget>[
-                              items.icon,
-                              SizedBox(width: 15),
-                              Text(
-                                items.name,
-                                style:  TextStyle(color: Colors.black, fontSize: 12),
-                              ),
-                              SizedBox(width: MediaQuery.of(context).size.width/2-25),
-                            ],
+                          child: Text(
+                            items.name,
+                            style:  TextStyle(color: Colors.black, fontSize: 12),
                           ),
                         );
                       }).toList(),
@@ -741,7 +748,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         GestureDetector(
           //onVerticalDragStart: (_) {},
           child: Container(
-            height: MediaQuery.of(context).size.height/2+100,
+            height: MediaQuery.of(context).size.height/2+160,
             alignment: Alignment.center,
             padding: EdgeInsets.all(40),
             color: HexColor("#FF9900"),
@@ -768,7 +775,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   ),
                 ),
                 SizedBox(height: 10,),
-                Text("Using Katch-McArdle Formula, the calories intake that your body needs for your " + program + " program is " + tdee.toString() + " calories per day", textAlign: TextAlign.center,
+                Text("Calorie need to be consumed : $tdee", textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 15, color: Colors.white)
+                    )),
+                SizedBox(height: 10,),
+                Text("Using Katch-McArdle Formula, the calories intake that your body needs is $calInt and because you choose " + program + " program. Thus your calorie consumed should be " + tdee.toString() + " Kcal per day", textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                         textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12, color: Colors.white)
                     )),
@@ -779,24 +791,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     Text("Program ", style: GoogleFonts.poppins(textStyle:
                     TextStyle(fontSize: 12.0, color: Colors.white, fontWeight: FontWeight.w600),),),
                     Text(program, style: GoogleFonts.poppins(textStyle:
-                    TextStyle(fontSize: 12.0, color: Colors.white, fontWeight: FontWeight.w500),),),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Gender ", style: GoogleFonts.poppins(textStyle:
-                    TextStyle(fontSize: 12.0, color: Colors.white, fontWeight: FontWeight.w600),),),
-                    Text(gender, style: GoogleFonts.poppins(textStyle:
-                    TextStyle(fontSize: 12.0, color: Colors.white, fontWeight: FontWeight.w500),),),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("age ", style: GoogleFonts.poppins(textStyle:
-                    TextStyle(fontSize: 12.0, color: Colors.white, fontWeight: FontWeight.w600),),),
-                    Text(age.toString(), style: GoogleFonts.poppins(textStyle:
                     TextStyle(fontSize: 12.0, color: Colors.white, fontWeight: FontWeight.w500),),),
                   ],
                 ),
@@ -832,8 +826,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
                 FlatButton(
                   onPressed: (){
-                    Navigator.pop(context, [gender, age, weight, height, bodyfat, lbm, tdee, int.tryParse(ZIPTextEditingController.text),cityTextEditingController.text,locationTextEditingController.text, int.tryParse(phoneNo.text), program]);
-                    Navigator.pop(context, [gender, age, weight, height, bodyfat, lbm, tdee, int.tryParse(ZIPTextEditingController.text),cityTextEditingController.text,locationTextEditingController.text, int.tryParse(phoneNo.text), program]);
+                    Navigator.pop(context, [gender, age, weight, height, bodyfat, lbm, tdee, int.tryParse(ZIPTextEditingController.text),cityTextEditingController.text,locationTextEditingController.text, int.tryParse(phoneNo.text), program, longitude, latitude]);
+                    Navigator.pop(context, [gender, age, weight, height, bodyfat, lbm, tdee, int.tryParse(ZIPTextEditingController.text),cityTextEditingController.text,locationTextEditingController.text, int.tryParse(phoneNo.text), program, longitude, latitude]);
                     Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
                   },
                   color: Colors.white,

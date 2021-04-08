@@ -122,7 +122,7 @@ class _MyOrderPageState extends State<MyOrderPage> {
         }
         List<OrdersItem> comments = [];
         dataSnapshot.data.documents.forEach((document){
-          comments.add(OrdersItem.fromDocument(document, userProfileId));
+          comments.add(OrdersItem.fromDocument(document, userProfileId, gCurrentUser));
         });
         if(comments.isEmpty){
           return Center(child: Text("No Data Available"));
@@ -143,7 +143,7 @@ class _MyOrderPageState extends State<MyOrderPage> {
         }
         List<OrdersItem> comments = [];
         dataSnapshot.data.documents.forEach((document){
-          comments.add(OrdersItem.fromDocument(document, userProfileId));
+          comments.add(OrdersItem.fromDocument(document, userProfileId, gCurrentUser));
         });
         if(comments.isEmpty){
           return Center(child: Text("No Data Available"));
@@ -167,6 +167,7 @@ class OrdersItem extends StatelessWidget {
   final String userProfileImg;
   final String url;
   final String userProfileId;
+  final User gCurrentUser;
   OrdersItem({
     this.url,
     this.status,
@@ -174,9 +175,9 @@ class OrdersItem extends StatelessWidget {
     this.datetime,
     this.custId,
     this.location,
-    this.mealName, this.mealId, this.userProfileId, this.orderId});
+    this.mealName, this.mealId, this.userProfileId, this.orderId,this.gCurrentUser});
 
-  factory OrdersItem.fromDocument(DocumentSnapshot documentSnapshot, String userProfileId){
+  factory OrdersItem.fromDocument(DocumentSnapshot documentSnapshot, String userProfileId, User gCurrentUser){
     return OrdersItem(
       custId: documentSnapshot["custId"],
       url: documentSnapshot["url"],
@@ -188,6 +189,7 @@ class OrdersItem extends StatelessWidget {
       mealId: documentSnapshot["mealId"],
       orderId: documentSnapshot["orderId"],
       userProfileId : userProfileId,
+        gCurrentUser:gCurrentUser
     );
   }
 
@@ -237,7 +239,7 @@ class OrdersItem extends StatelessWidget {
   }
 
   displayDetails(context, userProfileId){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => OrderDetailsPage(userProfileId: userProfileId, orderId: orderId)));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => OrderDetailsPage(userProfileId: userProfileId, orderId: orderId, gCurrentUser:gCurrentUser)));
   }
 
 }

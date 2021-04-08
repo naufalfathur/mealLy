@@ -63,6 +63,7 @@ dev_dependencies:
   date_picker_timeline: ^1.2.1
   maps_launcher: ^1.2.2+2
   hexcolor: ^1.0.6
+  great_circle_distance: ^1.0.1
   flutter_svg:
 
 

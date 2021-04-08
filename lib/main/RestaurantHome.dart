@@ -67,7 +67,7 @@ class _RestaurantHomeState extends State<RestaurantHome> {
     DocumentSnapshot documentSnapshot = await restReference.document(gCurrentRest.id).get();
 
     if(!documentSnapshot.exists){
-      final input = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateRestaurantAcc(userRestId: gCurrentRest.id,)));
+      final input = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateRestaurantAcc(userRestId: gCurrentRest,)));
 
       restReference.document(gCurrentRest.id).setData({
         "id": gCurrentRest.id,
@@ -84,6 +84,8 @@ class _RestaurantHomeState extends State<RestaurantHome> {
         "cuisine": input[8],
         "certificate" : input[9],
         "earnings":0.0,
+        "longitude" : input[10],
+        "latitude" : input[11],
       });
       documentSnapshot = await restReference.document(gCurrentRest.id).get();
     }

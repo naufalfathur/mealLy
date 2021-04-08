@@ -324,7 +324,7 @@ class _MainPageState extends State<MainPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Calories\nIntake",
+                        Text("Calories\nConsume",
                           style: GoogleFonts.poppins(
                               textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15)
                           ),),
@@ -415,7 +415,7 @@ class _MainPageState extends State<MainPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Weight\nTrack",
+            Text("Weight\nChanges",
               style: GoogleFonts.poppins(
                   textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15)
               ),),
@@ -884,7 +884,7 @@ class _MainPageState extends State<MainPage> {
         }
         List<OrdersItem> meals = [];
         dataSnapshot.data.documents.forEach((document) {
-          meals.add(OrdersItem.fromDocument(document, userProfileId));
+          meals.add(OrdersItem.fromDocument(document, userProfileId, widget.gCurrentUser));
         });
         calories = 0.0;
         counter = 0;
@@ -1019,7 +1019,7 @@ class _MainPageState extends State<MainPage> {
         }
         List<OrdersItem> comments = [];
         dataSnapshot.data.documents.forEach((document){
-          comments.add(OrdersItem.fromDocument(document, userProfileId));
+          comments.add(OrdersItem.fromDocument(document, userProfileId, widget.gCurrentUser));
         });
         if(comments.isEmpty){
           return Center(
@@ -1212,7 +1212,7 @@ class _MainPageState extends State<MainPage> {
         }
         List<OrdersItem> comments = [];
         dataSnapshot.data.documents.forEach((document){
-          comments.add(OrdersItem.fromDocument(document, userProfileId));
+          comments.add(OrdersItem.fromDocument(document, userProfileId, widget.gCurrentUser));
         });
         if(comments.isEmpty){
           return Center(
@@ -1291,7 +1291,7 @@ class _MainPageState extends State<MainPage> {
         }
         List<OrdersItem> comments = [];
         dataSnapshot.data.documents.forEach((document){
-          comments.add(OrdersItem.fromDocument(document, userProfileId));
+          comments.add(OrdersItem.fromDocument(document, userProfileId, widget.gCurrentUser));
         });
         if(comments.isEmpty){
           return Center(child: Text("No Data Available"));
@@ -1344,6 +1344,7 @@ class OrdersItem extends StatelessWidget {
   final String userProfileImg;
   final String url;
   final String userProfileId;
+  final User gCurrentUser;
   OrdersItem({
     this.url,
     this.status,
@@ -1352,9 +1353,9 @@ class OrdersItem extends StatelessWidget {
     this.calories,
     this.custId,
     this.location,
-    this.mealName, this.mealId, this.userProfileId, this.orderId});
+    this.mealName, this.mealId, this.userProfileId, this.orderId, this.gCurrentUser});
 
-  factory OrdersItem.fromDocument(DocumentSnapshot documentSnapshot, String userProfileId){
+  factory OrdersItem.fromDocument(DocumentSnapshot documentSnapshot, String userProfileId, User gCurrentUser){
     return OrdersItem(
       custId: documentSnapshot["custId"],
       url: documentSnapshot["url"],
@@ -1367,6 +1368,7 @@ class OrdersItem extends StatelessWidget {
       mealId: documentSnapshot["mealId"],
       orderId: documentSnapshot["orderId"],
       userProfileId : userProfileId,
+        gCurrentUser: gCurrentUser
     );
   }
 
@@ -1402,7 +1404,7 @@ class OrdersItem extends StatelessWidget {
                   title: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(datetime.toDate().toString(), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700,color: Colors.black54),),
+                      Text(intl.DateFormat('EEEE').format(DateTime.parse(datetime.toDate().toString())) + " " + intl.DateFormat.Hm().format(datetime.toDate()), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700,color: Colors.black54),),
                       Text(mealName , style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400,color: Colors.black54),),
                       Text("Status : $stats", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400,
                           color: status == 0 ? Colors.red:Colors.black54),),
@@ -1416,7 +1418,7 @@ class OrdersItem extends StatelessWidget {
   }
 
   displayDetails(context, userProfileId){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => OrderDetailsPage(userProfileId: userProfileId, orderId: orderId)));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => OrderDetailsPage(userProfileId: userProfileId, orderId: orderId, gCurrentUser:gCurrentUser)));
   }
 
 }

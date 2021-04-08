@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meally2/widgets/ProgressWidget.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
-
+import 'package:intl/intl.dart' as intl;
 class OrderListsPage extends StatefulWidget {
   final String userRestId;
   final Restaurant gCurrentRest;
@@ -228,7 +228,7 @@ class OrdersItem extends StatelessWidget {
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(datetime.toDate().toString(), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700,color: Colors.black54),),
+                    Text(intl.DateFormat('EEEE').format(DateTime.parse(datetime.toDate().toString())) + " " + intl.DateFormat.Hm().format(datetime.toDate()), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700,color: Colors.black54),),
                     Text(mealName , style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400,color: Colors.black54),),
                     Text("Status : $stats", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400,
                         color: status == 0 ? Colors.red:Colors.black54),),

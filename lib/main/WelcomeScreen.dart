@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,10 +14,74 @@ class WelcomeScreen extends StatefulWidget {
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
+
+
 class _WelcomeScreenState extends State<WelcomeScreen> {
   final GlobalKey<ScaffoldState> _globalKey = new GlobalKey<ScaffoldState>();
+
+
+  @override
+  void initState(){
+    super.initState();
+    Timer(Duration(seconds: 2), (){
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => BuildWelcomeScreen()),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: Colors.orangeAccent,
+          image: DecorationImage(
+            alignment: Alignment(-1, 0),
+            image: AssetImage("assets/images/bg.png"),
+            fit: BoxFit.fitHeight,
+          ),
+        ),
+        alignment: Alignment.center,
+        child: Container(
+          child: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: HexColor("#FF9900").withOpacity(0.45)
+                ),
+              ),
+              Container(
+                alignment: Alignment.center,
+                child: Text("mealLy",
+                  style: GoogleFonts.poppins(
+                      textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 45, color: Colors.white)
+                  ),),
+              ),
+              Positioned(
+                bottom: -190,
+                right: -150,
+                child: Container(
+                  height: 480,
+                  child:
+                  Image(
+                    image: AssetImage("assets/images/diet.png"),
+                    fit: BoxFit.fitHeight,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      )
+    );
+  }
+
+  Scaffold BuildWelcomeScreen(){
     return Scaffold(
       body: Stack(
         children: [
@@ -117,6 +183,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                   ),
                 ),
+                SizedBox(height: 20,),
                 Text("or",textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                       textStyle: TextStyle(color: HexColor("#FF9900"), fontWeight: FontWeight.w600, fontSize: 18)

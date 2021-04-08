@@ -162,53 +162,53 @@ class _MealPlanningState extends State<MealPlanning> {
     TimeOfDay(hour: 22, minute: 00),
   ];
   List<DateTime> mealsTime = [
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+now.day.toString()+" 08:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+now.day.toString()+" 12:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+now.day.toString()+" 15:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+now.day.toString()+" 19:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+now.day.toString()+" 22:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-25 08:30:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-25 12:30:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-25 15:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-25 19:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-25 22:00:00"),
   ];
   List<DateTime> mealsTime2 = [
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+1).toString()+" 08:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+1).toString()+" 12:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+1).toString()+" 15:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+1).toString()+" 19:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+1).toString()+" 22:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-03 08:30:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-03 12:30:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-03 15:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-03 19:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-03 22:00:00"),
   ];
   List<DateTime> mealsTime3 = [
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+2).toString()+" 08:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+2).toString()+" 12:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+2).toString()+" 15:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+2).toString()+" 19:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+2).toString()+" 22:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-04 08:30:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-04 12:30:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-04 15:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-04 19:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-04 22:00:00"),
   ];
   List<DateTime> mealsTime4 = [
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+3).toString()+" 08:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+3).toString()+" 12:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+3).toString()+" 15:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+3).toString()+" 19:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+3).toString()+" 22:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-05 08:30:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-05 12:30:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-05 15:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-05 19:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-05 22:00:00"),
   ];
   List<DateTime> mealsTime5 = [
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+4).toString()+" 08:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+4).toString()+" 12:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+4).toString()+" 15:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+4).toString()+" 19:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+4).toString()+" 22:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-06 08:30:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-06 12:30:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-06 15:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-06 19:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-06 22:00:00"),
   ];
   List<DateTime> mealsTime6 = [
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+5).toString()+" 08:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+5).toString()+" 12:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+5).toString()+" 15:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+5).toString()+" 19:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+5).toString()+" 22:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-07 08:30:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-07 12:30:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-07 15:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-07 19:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-07 22:00:00"),
   ];
   List<DateTime> mealsTime7 = [
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+6).toString()+" 08:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+6).toString()+" 12:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+6).toString()+" 15:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+6).toString()+" 19:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-"+(now.day+6).toString()+" 22:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-08 08:30:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-08 12:30:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-08 15:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-08 19:00:00"),
+    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-08 22:00:00"),
   ];
 
   void onTimeChanged(TimeOfDay newTime) {
@@ -349,7 +349,7 @@ class _MealPlanningState extends State<MealPlanning> {
         trial = trial +1;
         print("trial " + trial.toString());
       }
-    }while(sum>(total+250)||sum<(total-200));
+    }while(sum>(total+350)||sum<(total-350));
     print(nums.toString() + "1a $k");
     print(sum.toString() + "1 $k");
     print("amm " + amm.toString());
@@ -1117,7 +1117,7 @@ class _MealPlanningState extends State<MealPlanning> {
                       allMeals = posts + posts2 + posts3 + posts4 + posts5 + posts6 + posts7;
                     }
 
-                    final paySuccess = await Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage(allMeals : allMeals)));
+                    final paySuccess = await Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage(allMeals : allMeals, plan : plan)));
                     if(paySuccess[0]) {
                       if(plan == 1){
                         makeOrder(posts);
@@ -1130,7 +1130,7 @@ class _MealPlanningState extends State<MealPlanning> {
                         makeOrder(posts6);
                         makeOrder(posts7);
                       }
-                      back();
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
                     }
                   },
                   child: Container(

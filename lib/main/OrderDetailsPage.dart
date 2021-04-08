@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meally2/HomePage.dart';
+import 'package:meally2/models/user.dart';
 import 'package:meally2/restaurant/ReviewPage.dart';
 import 'package:meally2/widgets/ProgressWidget.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -11,15 +12,17 @@ import 'package:intl/intl.dart' as intl;
 class OrderDetailsPage extends StatefulWidget {
   final String userProfileId;
   final String orderId;
-  OrderDetailsPage({this.userProfileId, this.orderId});
+  final User gCurrentUser;
+  OrderDetailsPage({this.userProfileId, this.orderId, this.gCurrentUser});
   @override
-  _OrderDetailsPageState createState() => _OrderDetailsPageState(userProfileId: userProfileId, orderId:orderId);
+  _OrderDetailsPageState createState() => _OrderDetailsPageState(userProfileId: userProfileId, orderId:orderId, gCurrentUser: currentUser);
 }
 
 class _OrderDetailsPageState extends State<OrderDetailsPage> {
   final String userProfileId;
   final String orderId;
-  _OrderDetailsPageState({this.userProfileId, this.orderId});
+  final User gCurrentUser;
+  _OrderDetailsPageState({this.userProfileId, this.orderId, this.gCurrentUser});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,7 +79,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
         }
         List<OrdersItem> ordersItem = [];
         dataSnapshot.data.documents.forEach((document){
-          ordersItem.add(OrdersItem.fromDocument(document, userProfileId));
+          ordersItem.add(OrdersItem.fromDocument(document, userProfileId, gCurrentUser));
         });
         return ListView(
           children: ordersItem,
@@ -98,6 +101,7 @@ class OrdersItem extends StatelessWidget {
   final String restId;
   final String orderId;
   final String userProfileId;
+  final User gCurrentUser;
   OrdersItem({
     this.url,
     this.status,
@@ -105,9 +109,9 @@ class OrdersItem extends StatelessWidget {
     this.datetime,
     this.custId,
     this.location,
-    this.mealName, this.mealId, this.userProfileId, this.restId,this.orderId});
+    this.mealName, this.mealId, this.userProfileId, this.restId,this.orderId, this.gCurrentUser});
 
-  factory OrdersItem.fromDocument(DocumentSnapshot documentSnapshot, String userProfileId){
+  factory OrdersItem.fromDocument(DocumentSnapshot documentSnapshot, String userProfileId, User gCurrentUser){
     return OrdersItem(
       custId: documentSnapshot["custId"],
       url: documentSnapshot["url"],
@@ -120,6 +124,7 @@ class OrdersItem extends StatelessWidget {
       restId: documentSnapshot["restId"],
       orderId: documentSnapshot["orderId"],
       userProfileId : userProfileId,
+        gCurrentUser:gCurrentUser
     );
   }
 
@@ -408,7 +413,7 @@ class OrdersItem extends StatelessWidget {
                                   Icon(Icons.location_pin, color: Colors.blue, size: 18,),
                                   Container(
                                     width:  MediaQuery.of(context).size.width-100,
-                                    child: Text(location, textAlign: TextAlign.left, overflow: TextOverflow.ellipsis, style: GoogleFonts.poppins(textStyle:
+                                    child: Text(gCurrentUser.location, textAlign: TextAlign.left, overflow: TextOverflow.ellipsis, style: GoogleFonts.poppins(textStyle:
                                     TextStyle(fontSize: 13.0, color: Colors.black, fontWeight: FontWeight.w500),),),
                                   ),
                                 ],

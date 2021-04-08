@@ -187,7 +187,7 @@ class _PostState extends State<Post> {
         return GestureDetector(
           onTap: ()=> displayComment(context, mealId: mealId, ownerId: ownerId, url: url),
           child: ListTile(
-            minVerticalPadding: 10,
+            //minVerticalPadding: 10,
             leading: Container(
               height: 100,
               width: 100,
@@ -229,7 +229,7 @@ class _PostState extends State<Post> {
                         style: GoogleFonts.poppins(
                             textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 12, color: color)
                         )),
-                    Text("Cal : " + cal.toString(),
+                    Text("Cal : " + cal.toStringAsFixed(2),
                         style: GoogleFonts.poppins(
                             textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 12, color: Colors.black)
                         )),
@@ -359,7 +359,7 @@ class _PostState extends State<Post> {
 
   displayComment(BuildContext context, {String mealId, String ownerId, String url}){
     Navigator.push(context, MaterialPageRoute(builder: (context){
-      return ReviewPage(mealId: mealId, mealOwnerId: ownerId, mealImageUrl: url, restOnline: restOnline);
+      return ReviewPage(mealId: mealId, mealOwnerId: ownerId, mealImageUrl: url, restOnline: true);
     }
     ));
   }

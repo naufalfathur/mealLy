@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meally2/CreateAccountPage.dart';
 import 'package:meally2/EditProfilePage.dart';
 import 'package:meally2/main/MyOrderPage.dart';
 import 'package:meally2/main/TrackerPage.dart';
@@ -12,6 +13,7 @@ import 'package:meally2/widgets/ProgressWidget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 class ProfilePage extends StatefulWidget {
   final String userProfileId;
   final User gCurrentUser;
@@ -164,7 +166,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           //createList(Icons.edit, "Edit Profile",(){editProfile(context, user);}),
           createList(Icons.shopping_bag_outlined,"Orders",viewOrder),
-          //createList(Icons.system_update_alt_rounded,"Update TDEE",editUserProfile),
+          createList(Icons.system_update_alt_rounded,"Update TDEE",saveUserInfoFirestore),
           createList(Icons.person,"Update Weight",updateWeight),
           createList(Icons.logout, "Log Out",logoutUser),
         ],
@@ -220,6 +222,27 @@ class _ProfilePageState extends State<ProfilePage> {
       "postcode" : int.tryParse(postcode.text),
     });
     Navigator.pop(context);
+  }
+
+  saveUserInfoFirestore() async {
+    final GoogleSignInAccount gCurrentUser = gSignIn.currentUser;
+    final input = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccountPage(userProfileId: gCurrentUser)));
+
+    userReference.document(widget.userProfileId).updateData({
+      "gender": input[0],
+      "age": input[1],
+      "weight": input[2],
+      "height": input[3],
+      "bodyfat": input[4],
+      "lbm":input[5],
+      "tdee": input[6],
+      "timestamp" : timestamp,
+      "postcode": input[7],
+      "city":input[8],
+      "location": input[9],
+      "phoneNo": input[10],
+      "program" : input[11]
+    });
   }
 
   getLocation() async{

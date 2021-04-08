@@ -10,6 +10,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,6 +24,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.grey,
         cardColor: Colors.white70,
         accentColor: Colors.orangeAccent,
+
       ),
       home: WelcomeScreen(),
     );

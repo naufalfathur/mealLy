@@ -301,21 +301,13 @@ class _restaurantMainState extends State<restaurantMain> {
                   style: GoogleFonts.poppins(
                       textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15)
                   ),),
-                Row(
-                  children: [
-                    Text("0",
-                      style: GoogleFonts.poppins(
-                          textStyle: TextStyle(color: Colors.blue, fontWeight: FontWeight.w500, fontSize: 65, height: 1.3,)
-                      ),),
-                    Text(" meals",
-                      style: GoogleFonts.poppins(
-                          textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 18, height: 4.5,)
-                      ),),
-                  ],
-                ),
-                Text("sold today, Steady!",
+                Text("0",
                   style: GoogleFonts.poppins(
-                      textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 11, height: 0.8 )
+                      textStyle: TextStyle(color: Colors.blue, fontWeight: FontWeight.w500, fontSize: 65, height: 1.3,)
+                  ),),
+                Text("meals sold today !",
+                  style: GoogleFonts.poppins(
+                      textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 13, height: 0.8 )
                   ),),
               ],
             ),
@@ -331,21 +323,13 @@ class _restaurantMainState extends State<restaurantMain> {
                 style: GoogleFonts.poppins(
                     textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15)
                 ),),
-              Row(
-                children: [
-                  Text(comments.length.toString(),
-                    style: GoogleFonts.poppins(
-                        textStyle: TextStyle(color: Colors.blue, fontWeight: FontWeight.w500, fontSize: 65, height: 1.3,)
-                    ),),
-                  Text(" meals",
-                    style: GoogleFonts.poppins(
-                        textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 18, height: 4.5,)
-                    ),),
-                ],
-              ),
+              Text(comments.length.toString(),
+                style: GoogleFonts.poppins(
+                    textStyle: TextStyle(color: Colors.blue, fontWeight: FontWeight.w500, fontSize: 65, height: 1.3,)
+                ),),
               Text("sold today, nice !",
                 style: GoogleFonts.poppins(
-                    textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 11, height: 0.8 )
+                    textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 13, height: 0.8 )
                 ),),
             ],
           ),
@@ -608,7 +592,7 @@ class OrdersItem extends StatelessWidget {
                   title: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(datetime.toDate().toString(), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700,color: Colors.black54),),
+                      Text(intl.DateFormat('EEEE').format(DateTime.parse(datetime.toDate().toString())) + " " + intl.DateFormat.Hm().format(datetime.toDate()), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700,color: Colors.black54),),
                       Text(mealName , style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400,color: Colors.black54),),
                       Text("Status : $stats", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400,
                           color: status == 0 ? Colors.red:Colors.black54),),

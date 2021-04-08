@@ -140,7 +140,7 @@ class _restaurantMenuState extends State<restaurantMenu> {
                 child:  GestureDetector(
                   onTap: ()=> displayComment(context, mealId: meals[index].mealId, ownerId: meals[index].ownerId, url: meals[index].url),
                   child: ListTile(
-                    minVerticalPadding: 10,
+                    //minVerticalPadding: 10,
                     leading: Container(
                       height: 100,
                       width: 100,

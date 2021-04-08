@@ -8,17 +8,20 @@ import 'package:meally2/widgets/RestaurantPostWidget.dart';
 
 class PaymentPage extends StatefulWidget {
   final List<Post> allMeals;
-  PaymentPage({this.allMeals});
+  final int plan;
+  PaymentPage({this.allMeals, this.plan});
 
 
   @override
-  _PaymentPageState createState() => _PaymentPageState(allMeals: allMeals);
+  _PaymentPageState createState() => _PaymentPageState(allMeals: allMeals, plan : plan);
 }
 
 class _PaymentPageState extends State<PaymentPage> {
   final List<Post> allMeals;
-  _PaymentPageState({this.allMeals});
+  final int plan;
+  _PaymentPageState({this.allMeals, this.plan});
   double total;
+  int fee;
 
 
 
@@ -85,7 +88,7 @@ class _PaymentPageState extends State<PaymentPage> {
                        style: GoogleFonts.poppins(
                            textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 10, color: Colors.black45)
                        ),),
-                     minLeadingWidth: 20,
+                     //minLeadingWidth: 20,
                      trailing: Container(
                        width: 60,
                        child: Row(
@@ -172,7 +175,7 @@ class _PaymentPageState extends State<PaymentPage> {
                     children: [
                       Text("Weekly Program plan fee", style: GoogleFonts.poppins(textStyle:
                       TextStyle(fontSize: 12.0, color: Colors.black45, fontWeight: FontWeight.w600),),),
-                      Text("rm 1", style: GoogleFonts.poppins(textStyle:
+                      Text("rm $fee", style: GoogleFonts.poppins(textStyle:
                       TextStyle(fontSize: 12.0, color: Colors.black45, fontWeight: FontWeight.w600),),),
                     ],
                   ),
@@ -233,6 +236,11 @@ class _PaymentPageState extends State<PaymentPage> {
     }
     print(allMeals[1].price);
     print(total);
+    if(plan==1){
+      fee = 1;
+    }else{
+      fee = 5;
+    }
   }
 
   void _successModal(context){

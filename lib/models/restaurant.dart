@@ -15,6 +15,8 @@ class Restaurant {
   final String PICPosition;
   final String certificate;
   final double earnings;
+  final longitude;
+  final latitude;
 
   Restaurant({
     this.id,
@@ -30,7 +32,9 @@ class Restaurant {
     this.PICNo,
     this.PICPosition,
     this.certificate,
-    this.earnings
+    this.earnings,
+    this.latitude,
+    this.longitude
   });
 
   factory Restaurant.fromDocument(DocumentSnapshot doc) {
@@ -48,7 +52,9 @@ class Restaurant {
         PICNo: doc['PICNo'],
         PICPosition: doc["PICPosition"],
         certificate: doc["certificate"],
-        earnings: doc["earnings"]
+        earnings: doc["earnings"],
+        latitude: doc["latitude"],
+        longitude: doc["longitude"]
     );
   }
 }

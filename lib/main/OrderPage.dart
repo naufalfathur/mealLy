@@ -272,7 +272,7 @@ class OrdersItem extends StatelessWidget {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState){
                 return Container(
-                    height: MediaQuery.of(context).size.height-170,
+                    height: MediaQuery.of(context).size.height-130,
                     alignment: Alignment.center,
                     //padding: EdgeInsets.only(left: 30, right: 30, top: 20),
                     decoration: BoxDecoration(
@@ -283,7 +283,7 @@ class OrdersItem extends StatelessWidget {
                         body:  Stack(
                           children: [
                             Container(
-                              height: 350,
+                              height: 310,
                               width: MediaQuery.of(context).size.width,
                               decoration: BoxDecoration(
                                 //borderRadius: BorderRadius.circular(5.0),
@@ -326,7 +326,7 @@ class OrdersItem extends StatelessWidget {
                             Align(
                               alignment: Alignment.bottomCenter,
                               child: Container(
-                                height: 350,
+                                height: 390,
                                 width: MediaQuery.of(context).size.width,
                                 padding: EdgeInsets.all(20),
                                 decoration: BoxDecoration(
@@ -352,7 +352,7 @@ class OrdersItem extends StatelessWidget {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            Text("Delivery for " + datetime.toDate().toString(), style: GoogleFonts.poppins(textStyle:
+                                            Text("Delivery for " + intl.DateFormat('EEEE').format(DateTime.parse(datetime.toDate().toString())) + " " + intl.DateFormat.Hm().format(datetime.toDate()), style: GoogleFonts.poppins(textStyle:
                                             TextStyle(fontSize: 15.0, color: Colors.white, fontWeight: FontWeight.w600),),),
                                             Text(mealName, style: GoogleFonts.poppins(textStyle:
                                             TextStyle(fontSize: 15.0, color: Colors.white, fontWeight: FontWeight.w700),),),
@@ -374,6 +374,21 @@ class OrdersItem extends StatelessWidget {
                                         ],
                                       ),
                                       SizedBox(height: 15,),
+                                      Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Order Id", style: GoogleFonts.poppins(textStyle:
+                                          TextStyle(fontSize: 14.0, color: Colors.black, fontWeight: FontWeight.w600),),),
+                                          Container(
+                                            height: 40,
+                                            width: MediaQuery.of(context).size.width-150,
+                                            child: Text(orderId, textAlign: TextAlign.right,
+                                              style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 12.0, color: Colors.black45, fontWeight: FontWeight.w500),),),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 5,),
                                       Row(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

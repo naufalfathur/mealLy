@@ -355,6 +355,19 @@ class _restaurantProfileState extends State<restaurantProfile> {
               ],
             ),
           ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("MealLy 1.0", textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                      textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 15, color: Colors.black)
+                  )),
+              Text("by JAT \nNaufal Fathur, Ikhwanul Muslim, Petra Praysia", textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                      textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 8, color: Colors.black)
+                  )),
+            ],
+          ),
         ],
       ),
     );

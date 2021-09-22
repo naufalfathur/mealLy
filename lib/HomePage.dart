@@ -21,7 +21,8 @@ import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 final GoogleSignIn gSignIn = GoogleSignIn();
 final userReference = Firestore.instance.collection("users");
-final StorageReference storageReference= FirebaseStorage.instance.ref().child("WeightTrack");
+final StorageReference storageReference =
+    FirebaseStorage.instance.ref().child("WeightTrack");
 final TrackerReference = Firestore.instance.collection("tracker");
 final followingReference = Firestore.instance.collection("following");
 final followersReference = Firestore.instance.collection("followers");
@@ -45,103 +46,124 @@ class _HomePageState extends State<HomePage> {
   PageController pageController;
   int getPageIndex = 1;
 
-  logInUser(){
+  logInUser() {
     gSignIn.signIn();
   }
-  logOutUser(){
+
+  logOutUser() {
     gSignIn.signOut();
   }
+
   controlSignIn(GoogleSignInAccount signInAccount) async {
-    if(signInAccount != null){
+    if (signInAccount != null) {
       await saveUserInfoFirestore();
       setState(() {
         isSignedIn = true;
       });
-    }else{
+    } else {
       setState(() {
         isSignedIn = false;
       });
     }
   }
+
   saveUserInfoFirestore() async {
     final GoogleSignInAccount gCurrentUser = gSignIn.currentUser;
-    DocumentSnapshot documentSnapshot = await userReference.document(gCurrentUser.id).get();
+    DocumentSnapshot documentSnapshot =
+        await userReference.document(gCurrentUser.id).get();
 
-    if(!documentSnapshot.exists){
-      final input = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccountPage(userProfileId: gCurrentUser)));
+    if (!documentSnapshot.exists) {
+      final input = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  CreateAccountPage(userProfileId: gCurrentUser)));
 
       userReference.document(gCurrentUser.id).setData({
         "id": gCurrentUser.id,
-        "profileName" : gCurrentUser.displayName,
-        "url" : gCurrentUser.photoUrl,
-        "email" : gCurrentUser.email,
+        "profileName": gCurrentUser.displayName,
+        "url": gCurrentUser.photoUrl,
+        "email": gCurrentUser.email,
         "gender": input[0],
         "age": input[1],
         "weight": input[2],
-        "initialWeight" : input[2],
+        "initialWeight": input[2],
         "height": input[3],
         "bodyfat": input[4],
-        "lbm":input[5],
+        "lbm": input[5],
         "tdee": input[6],
-        "timestamp" : timestamp,
+        "timestamp": timestamp,
         "postcode": input[7],
-        "city":input[8],
+        "city": input[8],
         "location": input[9],
         "phoneNo": input[10],
-        "program" : input[11],
-        "longitude" : input[12],
-        "latitude" : input[13],
+        "program": input[11],
+        "longitude": input[12],
+        "latitude": input[13],
       });
       documentSnapshot = await userReference.document(gCurrentUser.id).get();
     }
     currentUser = User.fromDocument(documentSnapshot);
   }
-  void initState(){
+
+  void initState() {
     super.initState();
 
-    pageController =  PageController(initialPage: 1);
+    pageController = PageController(initialPage: 1);
 
     gSignIn.onCurrentUserChanged.listen((gSignInAccount) {
       controlSignIn(gSignInAccount);
-    }, onError: (gError){
+    }, onError: (gError) {
       print("Error Message: " + gError);
     });
 
     gSignIn.signInSilently(suppressErrors: false).then((gSignInAccount) {
       controlSignIn(gSignInAccount);
-    }).catchError((gError){
+    }).catchError((gError) {
       print("Error Message: " + gError.toString());
     });
   }
-  void dispose(){
+
+  void dispose() {
     pageController.dispose();
     super.dispose();
   }
-  onTapChangePage(int pageIndex){
+
+  onTapChangePage(int pageIndex) {
     pageController.jumpToPage(pageIndex);
   }
-  whenPageChanges(int pageIndex){
+
+  whenPageChanges(int pageIndex) {
     setState(() {
       this.getPageIndex = pageIndex;
     });
   }
 
-  Scaffold BuildHomeScreen(){
+  Scaffold BuildHomeScreen() {
     return Scaffold(
       body: PageView(
         children: <Widget>[
           //TimeLinePage(),
           MyPlanPage(gCurrentUser: currentUser, userProfileId: currentUser.id),
-          MainPage(userProfileId: currentUser.id, gCurrentUser: currentUser,),
+          MainPage(
+            userProfileId: currentUser.id,
+            gCurrentUser: currentUser,
+          ),
           //MenuPlanning( userProfileId: currentUser.id),
           //MyOrderPage(gCurrentUser: currentUser, userProfileId: currentUser.id),
           //TrackerPage(gCurrentUser: currentUser,),
           //restaurantList(),
 
-          ProgressPage(userProfileId: currentUser.id, gCurrentUser: currentUser,),
+          ProgressPage(
+            userProfileId: currentUser.id,
+            gCurrentUser: currentUser,
+          ),
           //Container(child: Text("a"),),
           //NotificationPage(),
-          ProfilePage(userProfileId: currentUser.id, gCurrentUser: currentUser,),
+          ProfilePage(
+            userProfileId: currentUser.id,
+            gCurrentUser: currentUser,
+          ),
         ],
         controller: pageController,
         onPageChanged: whenPageChanges,
@@ -158,7 +180,9 @@ class _HomePageState extends State<HomePage> {
             SalomonBottomBarItem(
                 icon: Icon(
                   Icons.list_alt_rounded,
-                  color: getPageIndex == 0 ? HexColor("#FF9900") : HexColor("#3C3C3C"),
+                  color: getPageIndex == 0
+                      ? HexColor("#FF9900")
+                      : HexColor("#3C3C3C"),
                 ),
                 //unselectedColor: HexColor("#3C3C3C"),
                 selectedColor: HexColor("#FF9900"),
@@ -166,21 +190,27 @@ class _HomePageState extends State<HomePage> {
             SalomonBottomBarItem(
                 icon: Icon(
                   Icons.home,
-                  color: getPageIndex == 1 ? HexColor("#FF9900") : HexColor("#3C3C3C"),
+                  color: getPageIndex == 1
+                      ? HexColor("#FF9900")
+                      : HexColor("#3C3C3C"),
                 ),
                 selectedColor: HexColor("#FF9900"),
                 title: Text("Home")),
             SalomonBottomBarItem(
                 icon: Icon(
                   Icons.track_changes_rounded,
-                  color: getPageIndex == 2 ? HexColor("#FF9900") : HexColor("#3C3C3C"),
+                  color: getPageIndex == 2
+                      ? HexColor("#FF9900")
+                      : HexColor("#3C3C3C"),
                 ),
                 selectedColor: HexColor("#FF9900"),
                 title: Text("Tracker")),
             SalomonBottomBarItem(
                 icon: Icon(
                   Icons.account_circle,
-                  color: getPageIndex == 3 ? HexColor("#FF9900") : HexColor("#3C3C3C"),
+                  color: getPageIndex == 3
+                      ? HexColor("#FF9900")
+                      : HexColor("#3C3C3C"),
                 ),
                 selectedColor: HexColor("#FF9900"),
                 title: Text("Profile")),
@@ -189,7 +219,8 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-  Scaffold BuildSignInScreen(){
+
+  Scaffold BuildSignInScreen() {
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
@@ -197,10 +228,15 @@ class _HomePageState extends State<HomePage> {
         color: Colors.white,
         child: Column(
           children: <Widget>[
-            Text("Sign In",textAlign: TextAlign.center,
+            Text(
+              "Sign In",
+              textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
-                  textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 25)
-              ),),
+                  textStyle: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 25)),
+            ),
             Container(
               margin: EdgeInsets.only(top: 10),
               height: 5,
@@ -211,23 +247,35 @@ class _HomePageState extends State<HomePage> {
               margin: EdgeInsets.only(top: 120),
               //height: (MediaQuery.of(context).size.height/2),
               //color: HexColor("#FF9900"),
-              width: (MediaQuery.of(context).size.width/2)+80,
+              width: (MediaQuery.of(context).size.width / 2) + 80,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Text("Welcome to MealLy",textAlign: TextAlign.center,
+                  Text(
+                    "Welcome to MealLy",
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
-                        textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20)
-                    ),),
-                  Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit",textAlign: TextAlign.center,
+                        textStyle: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20)),
+                  ),
+                  Text(
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
-                        textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 12)
-                    ),),
+                        textStyle: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12)),
+                  ),
                 ],
               ),
             ),
-            SizedBox(height: 40,),
+            SizedBox(
+              height: 40,
+            ),
             GestureDetector(
               onTap: logInUser,
               child: Container(
@@ -238,7 +286,7 @@ class _HomePageState extends State<HomePage> {
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black12,
-                      offset: Offset(0.0,3.0),
+                      offset: Offset(0.0, 3.0),
                       blurRadius: 30,
                       spreadRadius: -8,
                     ),
@@ -257,22 +305,26 @@ class _HomePageState extends State<HomePage> {
                         fit: BoxFit.scaleDown,
                       ),
                     ),
-                    Text("Sign in with Google",
+                    Text(
+                      "Sign in with Google",
                       style: GoogleFonts.poppins(
-                          textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 15, color: Colors.black)
-                      ),
+                          textStyle: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                              color: Colors.black)),
                     ),
                   ],
                 ),
               ),
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             GestureDetector(
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => RestaurantHome()),
+                  MaterialPageRoute(builder: (context) => RestaurantHome()),
                 );
               },
               child: Container(
@@ -283,7 +335,7 @@ class _HomePageState extends State<HomePage> {
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black12,
-                      offset: Offset(0.0,3.0),
+                      offset: Offset(0.0, 3.0),
                       blurRadius: 30,
                       spreadRadius: -8,
                     ),
@@ -292,21 +344,29 @@ class _HomePageState extends State<HomePage> {
                 ),
                 //color: Colors.black,
                 child: Container(
-                  alignment: Alignment.center,
-                  child: Text("Sign as Restaurant",
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Sign as Restaurant",
                       style: GoogleFonts.poppins(
-                          textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 15, color: Colors.white)
-                      ),
-                )
-                ),
+                          textStyle: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                              color: Colors.white)),
+                    )),
               ),
             ),
-            SizedBox(height: 100,),
-            Text("m.",textAlign: TextAlign.center,
+            SizedBox(
+              height: 100,
+            ),
+            Text(
+              "m.",
+              textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
-                  textStyle: TextStyle(color: Colors.black54, fontWeight: FontWeight.w700, fontSize: 22)
-              ),),
-
+                  textStyle: TextStyle(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 22)),
+            ),
           ],
         ),
       ),
@@ -315,11 +375,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    if(isSignedIn){
+    if (isSignedIn) {
       return BuildHomeScreen();
-    }else{
-      return BuildSignInScreen();//BuildSignInScreen();
+    } else {
+      return BuildSignInScreen(); //BuildSignInScreen();
     }
   }
-
 }

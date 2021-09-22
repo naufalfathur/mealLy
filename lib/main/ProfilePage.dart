@@ -14,6 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
 class ProfilePage extends StatefulWidget {
   final String userProfileId;
   final User gCurrentUser;
@@ -36,8 +37,8 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: userReference.document(widget.userProfileId).get(),
-      builder: (context, dataSnapshot){
-        if(!dataSnapshot.hasData){
+      builder: (context, dataSnapshot) {
+        if (!dataSnapshot.hasData) {
           return circularProgress(Colors.orangeAccent);
         }
         User user = User.fromDocument(dataSnapshot.data);
@@ -52,10 +53,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   accountDetails(user),
                   menu(user),
                 ],
-              )
-          ),
+              )),
           bottomSheet: Container(
-            height: 150,
+            height: 190,
             width: MediaQuery.of(context).size.width,
             color: Colors.white,
             child: ClipPath(
@@ -71,10 +71,19 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: EdgeInsets.all(20),
                 alignment: Alignment.bottomLeft,
                 width: MediaQuery.of(context).size.width,
-                child: Text("MealLy 1.0", textAlign: TextAlign.center,
-                    style: GoogleFonts.poppins(
-                        textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 15, color: Colors.white)
-                    )),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text("MealLy 1.0",
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.poppins(
+                            textStyle: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                                color: Colors.white))),
+                  ],
+                ),
               ),
             ),
           ),
@@ -83,19 +92,21 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  logo(){
+  logo() {
     return Container(
       height: 100,
       alignment: Alignment.bottomLeft,
-      child: Text("mealLy", textAlign: TextAlign.center,
+      child: Text("mealLy",
+          textAlign: TextAlign.center,
           style: GoogleFonts.poppins(
-              textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 30, color: Colors.black)
-          )),
+              textStyle: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 30,
+                  color: Colors.black))),
     );
   }
 
-
-  accountDetails(User user){
+  accountDetails(User user) {
     return Container(
       height: 120,
       //color: Colors.blue,
@@ -103,26 +114,39 @@ class _ProfilePageState extends State<ProfilePage> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CircleAvatar(backgroundImage: NetworkImage(user.url),radius: 30,),
-          SizedBox(width: 20,),
+          CircleAvatar(
+            backgroundImage: NetworkImage(user.url),
+            radius: 30,
+          ),
+          SizedBox(
+            width: 20,
+          ),
           Container(
-            width: MediaQuery.of(context).size.width/2,
+            width: MediaQuery.of(context).size.width / 2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(user.profileName, overflow: TextOverflow.ellipsis,
+                Text(user.profileName,
+                    overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
-                        textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 15, color: Colors.black)
-                    )),
-                Text(user.phoneNo.toString(), textAlign: TextAlign.center,
+                        textStyle: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            color: Colors.black))),
+                Text(user.phoneNo.toString(),
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
-                        textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12, color: Colors.black)
-                    )),
+                        textStyle: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            color: Colors.black))),
                 Text(user.postcode.toString() + ", " + user.city,
                     style: GoogleFonts.poppins(
-                        textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 12, color: Colors.black)
-                    )),
+                        textStyle: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            color: Colors.black))),
               ],
             ),
           ),
@@ -131,7 +155,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  menu(User user){
+  menu(User user) {
     return Container(
       margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.only(left: 10, right: 10),
@@ -142,7 +166,7 @@ class _ProfilePageState extends State<ProfilePage> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           GestureDetector(
-            onTap: (){
+            onTap: () {
               editProfile(context, user);
             },
             child: Row(
@@ -150,31 +174,44 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 Row(
                   children: [
-                    Icon(Icons.edit, size: 18,),
-                    SizedBox(width: 20,),
+                    Icon(
+                      Icons.edit,
+                      size: 18,
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
                     Text(
                       "Edit Profile",
-                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 15
-                      ),
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15),
                     ),
                   ],
                 ),
-                SizedBox(width: 10,),
-                Icon(Icons.arrow_forward_ios_rounded, size: 10,),
+                SizedBox(
+                  width: 10,
+                ),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 10,
+                ),
               ],
             ),
           ),
           //createList(Icons.edit, "Edit Profile",(){editProfile(context, user);}),
-          createList(Icons.shopping_bag_outlined,"Orders",viewOrder),
-          createList(Icons.system_update_alt_rounded,"Update TDEE",saveUserInfoFirestore),
-          createList(Icons.person,"Update Weight",updateWeight),
-          createList(Icons.logout, "Log Out",logoutUser),
+          createList(Icons.shopping_bag_outlined, "Orders", viewOrder),
+          createList(Icons.system_update_alt_rounded, "Update TDEE",
+              saveUserInfoFirestore),
+          createList(Icons.person, "Update Weight", updateWeight),
+          createList(Icons.logout, "Log Out", logoutUser),
         ],
       ),
     );
   }
 
-  createList(IconData icon, String title, Function function){
+  createList(IconData icon, String title, Function function) {
     return GestureDetector(
       onTap: function,
       child: Row(
@@ -182,51 +219,83 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           Row(
             children: [
-              Icon(icon, size: 18,),
-              SizedBox(width: 20,),
+              Icon(
+                icon,
+                size: 18,
+              ),
+              SizedBox(
+                width: 20,
+              ),
               Text(
                 title,
-                style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 15
-                ),
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15),
               ),
             ],
           ),
-          SizedBox(width: 10,),
-          Icon(Icons.arrow_forward_ios_rounded, size: 10,),
+          SizedBox(
+            width: 10,
+          ),
+          Icon(
+            Icons.arrow_forward_ios_rounded,
+            size: 10,
+          ),
         ],
       ),
     );
   }
 
-  updateWeight(){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => TrackerPage(gCurrentUser: currentUser, currentOnlineUserId: currentOnlineUserId)));
+  updateWeight() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => TrackerPage(
+                gCurrentUser: currentUser,
+                currentOnlineUserId: currentOnlineUserId)));
   }
 
   logoutUser() async {
     await gSignIn.signOut();
-    Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage()));
-  }
-  editUserProfile(){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage(currentOnlineUserId: currentOnlineUserId)));
-  }
-  viewOrder(){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MyOrderPage(gCurrentUser: currentUser, userProfileId: currentUser.id)));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => HomePage()));
   }
 
-  updateProfile(){
+  editUserProfile() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                EditProfilePage(currentOnlineUserId: currentOnlineUserId)));
+  }
+
+  viewOrder() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyOrderPage(
+                gCurrentUser: currentUser, userProfileId: currentUser.id)));
+  }
+
+  updateProfile() {
     userReference.document(widget.userProfileId).updateData({
-      "profileName" : name.text,
-      "phoneNo" : int.tryParse(no.text),
-      "location" : location.text,
-      "city" : city.text,
-      "postcode" : int.tryParse(postcode.text),
+      "profileName": name.text,
+      "phoneNo": int.tryParse(no.text),
+      "location": location.text,
+      "city": city.text,
+      "postcode": int.tryParse(postcode.text),
     });
     Navigator.pop(context);
   }
 
   saveUserInfoFirestore() async {
     final GoogleSignInAccount gCurrentUser = gSignIn.currentUser;
-    final input = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccountPage(userProfileId: gCurrentUser)));
+    final input = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                CreateAccountPage(userProfileId: gCurrentUser)));
 
     userReference.document(widget.userProfileId).updateData({
       "gender": input[0],
@@ -234,22 +303,25 @@ class _ProfilePageState extends State<ProfilePage> {
       "weight": input[2],
       "height": input[3],
       "bodyfat": input[4],
-      "lbm":input[5],
+      "lbm": input[5],
       "tdee": input[6],
-      "timestamp" : timestamp,
+      "timestamp": timestamp,
       "postcode": input[7],
-      "city":input[8],
+      "city": input[8],
       "location": input[9],
       "phoneNo": input[10],
-      "program" : input[11]
+      "program": input[11]
     });
   }
 
-  getLocation() async{
-    Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    List<Placemark> placemark = await Geolocator().placemarkFromCoordinates(position.latitude, position.longitude);
+  getLocation() async {
+    Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    List<Placemark> placemark = await Geolocator()
+        .placemarkFromCoordinates(position.latitude, position.longitude);
     Placemark mPlacemark = placemark[0];
-    String completeAddressInfo = '${mPlacemark.subThoroughfare} ${mPlacemark.thoroughfare}, ${mPlacemark.subLocality} ${mPlacemark.locality}, ${mPlacemark.subAdministrativeArea} ${mPlacemark.administrativeArea}, ${mPlacemark.postalCode} ${mPlacemark.country}, ';
+    String completeAddressInfo =
+        '${mPlacemark.subThoroughfare} ${mPlacemark.thoroughfare}, ${mPlacemark.subLocality} ${mPlacemark.locality}, ${mPlacemark.subAdministrativeArea} ${mPlacemark.administrativeArea}, ${mPlacemark.postalCode} ${mPlacemark.country}, ';
     String cityAddress = '${mPlacemark.locality}';
     String postcodeAddress = '${mPlacemark.postalCode}';
     postcode.text = postcodeAddress;
@@ -257,193 +329,283 @@ class _ProfilePageState extends State<ProfilePage> {
     location.text = completeAddressInfo;
   }
 
-  void editProfile(context, User user){
+  void editProfile(context, User user) {
     showModalBottomSheet(
-        context: context, isScrollControlled:true,
+        context: context,
+        isScrollControlled: true,
         backgroundColor: Colors.white,
         clipBehavior: Clip.antiAliasWithSaveLayer,
-        builder: (BuildContext bc){
+        builder: (BuildContext bc) {
           return StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState){
-                name.text = user.profileName;
-                no.text = user.phoneNo.toString();
-                location.text = user.location;
-                city.text = user.city;
-                postcode.text = user.postcode.toString();
-                return Scaffold(
-                  appBar: AppBar(
-                    elevation: 0,
-                    automaticallyImplyLeading: false,
-                    backgroundColor: Colors.white,
-                    leading: GestureDetector(
-                        onTap: (){Navigator.pop(context);},
-                        child: Icon(Icons.arrow_back_ios_rounded,size: 14, color: Colors.black,)),
-                    title: Text("Edit Profile", style: GoogleFonts.poppins(textStyle:
-                    TextStyle(fontSize: 18.0, color: Colors.black, fontWeight: FontWeight.w600),),),
-                    actions: <Widget>[
-                      IconButton(icon: Icon(Icons.check, color: Colors.black,), onPressed:  ()=> updateProfile(),)
-                    ],
+              builder: (BuildContext context, StateSetter setState) {
+            name.text = user.profileName;
+            no.text = user.phoneNo.toString();
+            location.text = user.location;
+            city.text = user.city;
+            postcode.text = user.postcode.toString();
+            return Scaffold(
+              appBar: AppBar(
+                elevation: 0,
+                automaticallyImplyLeading: false,
+                backgroundColor: Colors.white,
+                leading: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Icon(
+                      Icons.arrow_back_ios_rounded,
+                      size: 14,
+                      color: Colors.black,
+                    )),
+                title: Text(
+                  "Edit Profile",
+                  style: GoogleFonts.poppins(
+                    textStyle: TextStyle(
+                        fontSize: 18.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600),
                   ),
-                  body: Container(
-                      height: MediaQuery.of(context).size.height,
-                      alignment: Alignment.center,
-                      //padding: EdgeInsets.only(left: 30, right: 30, top: 20),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        //borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-                      ),
-                      child: ListView(
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            alignment: Alignment.centerLeft,
-                            padding: EdgeInsets.only(left: 25, right: 25, top: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                ),
+                actions: <Widget>[
+                  IconButton(
+                    icon: Icon(
+                      Icons.check,
+                      color: Colors.black,
+                    ),
+                    onPressed: () => updateProfile(),
+                  )
+                ],
+              ),
+              body: Container(
+                  height: MediaQuery.of(context).size.height,
+                  alignment: Alignment.center,
+                  //padding: EdgeInsets.only(left: 30, right: 30, top: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    //borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                  ),
+                  child: ListView(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.only(left: 25, right: 25, top: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Info",
+                              style: GoogleFonts.poppins(
+                                textStyle: TextStyle(
+                                    fontSize: 15.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Info", style: GoogleFonts.poppins(textStyle:
-                                TextStyle(fontSize: 15.0, color: Colors.black, fontWeight: FontWeight.w700),),),
-                                SizedBox(height: 10,),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("Restaurant Name", style: GoogleFonts.poppins(textStyle:
-                                    TextStyle(fontSize: 15.0, color: Colors.black, fontWeight: FontWeight.w500),),),
-                                    Container(
-                                      //color: Colors.blue,
-                                      width: MediaQuery.of(context).size.width-200,
-                                      child: TextField(
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(color: Colors.black),
-                                        controller: name,
-                                        decoration: InputDecoration(
-                                            border: InputBorder.none
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                Text(
+                                  "Restaurant Name",
+                                  style: GoogleFonts.poppins(
+                                    textStyle: TextStyle(
+                                        fontSize: 15.0,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500),
+                                  ),
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("Phone No", style: GoogleFonts.poppins(textStyle:
-                                    TextStyle(fontSize: 15.0, color: Colors.black, fontWeight: FontWeight.w500),),),
-                                    Container(
-                                      //color: Colors.blue,
-                                      width: MediaQuery.of(context).size.width-150,
-                                      child: TextField(
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(color: Colors.black),
-                                        controller: no,
-                                        decoration: InputDecoration(
-                                            border: InputBorder.none
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Divider(thickness: 1,),
-                                Text("Address", style: GoogleFonts.poppins(textStyle:
-                                TextStyle(fontSize: 15.0, color: Colors.black, fontWeight: FontWeight.w700),),),
-                                SizedBox(height: 10,),
-                                Container(
-                                  //width: 220.0,
-                                  //height: 110.0,
-                                  alignment: Alignment.center,
-                                  child: RaisedButton.icon(
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35.0)),
-                                      color: Colors.green,
-                                      onPressed: getLocation,
-                                      icon: Icon(Icons.location_on, color: Colors.white,),
-                                      label: Text("Get my current Location", style: TextStyle(color: Colors.white),)),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("ZIP Code", style: GoogleFonts.poppins(textStyle:
-                                    TextStyle(fontSize: 15.0, color: Colors.black, fontWeight: FontWeight.w500),),),
-                                    Container(
-                                      //color: Colors.blue,
-                                      width: MediaQuery.of(context).size.width-150,
-                                      child: TextField(
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(color: Colors.black),
-                                        controller: postcode,
-                                        decoration: InputDecoration(
-                                            border: InputBorder.none
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("City", style: GoogleFonts.poppins(textStyle:
-                                    TextStyle(fontSize: 15.0, color: Colors.black, fontWeight: FontWeight.w500),),),
-                                    Container(
-                                      //color: Colors.blue,
-                                      width: MediaQuery.of(context).size.width-150,
-                                      child: TextField(
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(color: Colors.black),
-                                        controller: city,
-                                        decoration: InputDecoration(
-                                            border: InputBorder.none
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Text("Full Address", style: GoogleFonts.poppins(textStyle:
-                                TextStyle(fontSize: 15.0, color: Colors.black, fontWeight: FontWeight.w500),),),
                                 Container(
                                   //color: Colors.blue,
-                                  width: MediaQuery.of(context).size.width-40,
+                                  width:
+                                      MediaQuery.of(context).size.width - 200,
                                   child: TextField(
-                                    keyboardType: TextInputType.multiline,
-                                    textAlign: TextAlign.start,
-                                    minLines: 1,//Normal textInputField will be displayed
-                                    maxLines: null,
+                                    textAlign: TextAlign.end,
                                     style: TextStyle(color: Colors.black),
-                                    controller: location,
+                                    controller: name,
                                     decoration: InputDecoration(
-                                        border: InputBorder.none
-                                    ),
+                                        border: InputBorder.none),
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
-                      )
-                  ),
-                );
-              });
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Phone No",
+                                  style: GoogleFonts.poppins(
+                                    textStyle: TextStyle(
+                                        fontSize: 15.0,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                Container(
+                                  //color: Colors.blue,
+                                  width:
+                                      MediaQuery.of(context).size.width - 150,
+                                  child: TextField(
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(color: Colors.black),
+                                    controller: no,
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Divider(
+                              thickness: 1,
+                            ),
+                            Text(
+                              "Address",
+                              style: GoogleFonts.poppins(
+                                textStyle: TextStyle(
+                                    fontSize: 15.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              //width: 220.0,
+                              //height: 110.0,
+                              alignment: Alignment.center,
+                              child: RaisedButton.icon(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(35.0)),
+                                  color: Colors.green,
+                                  onPressed: getLocation,
+                                  icon: Icon(
+                                    Icons.location_on,
+                                    color: Colors.white,
+                                  ),
+                                  label: Text(
+                                    "Get my current Location",
+                                    style: TextStyle(color: Colors.white),
+                                  )),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "ZIP Code",
+                                  style: GoogleFonts.poppins(
+                                    textStyle: TextStyle(
+                                        fontSize: 15.0,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                Container(
+                                  //color: Colors.blue,
+                                  width:
+                                      MediaQuery.of(context).size.width - 150,
+                                  child: TextField(
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(color: Colors.black),
+                                    controller: postcode,
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "City",
+                                  style: GoogleFonts.poppins(
+                                    textStyle: TextStyle(
+                                        fontSize: 15.0,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                Container(
+                                  //color: Colors.blue,
+                                  width:
+                                      MediaQuery.of(context).size.width - 150,
+                                  child: TextField(
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(color: Colors.black),
+                                    controller: city,
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              "Full Address",
+                              style: GoogleFonts.poppins(
+                                textStyle: TextStyle(
+                                    fontSize: 15.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                            Container(
+                              //color: Colors.blue,
+                              width: MediaQuery.of(context).size.width - 40,
+                              child: TextField(
+                                keyboardType: TextInputType.multiline,
+                                textAlign: TextAlign.start,
+                                minLines:
+                                    1, //Normal textInputField will be displayed
+                                maxLines: null,
+                                style: TextStyle(color: Colors.black),
+                                controller: location,
+                                decoration:
+                                    InputDecoration(border: InputBorder.none),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
+            );
+          });
         });
   }
 
-
-  Column createColumns(String title, String Value  ){
+  Column createColumns(String title, String Value) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text(Value.toString(), style: GoogleFonts.poppins(textStyle:
-        TextStyle(fontSize: 20.0, color: Colors.orangeAccent, fontWeight: FontWeight.bold),),),
+        Text(
+          Value.toString(),
+          style: GoogleFonts.poppins(
+            textStyle: TextStyle(
+                fontSize: 20.0,
+                color: Colors.orangeAccent,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
         Container(
           margin: EdgeInsets.only(top: 5.0),
-          child: Text(
-            title,
-            style: GoogleFonts.poppins(textStyle:
-            TextStyle(fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.w600),)
-          ),
+          child: Text(title,
+              style: GoogleFonts.poppins(
+                textStyle: TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600),
+              )),
         )
       ],
     );
   }
 
-  createButtonTitleAndFunction({String title, Function performFunction}){
+  createButtonTitleAndFunction({String title, Function performFunction}) {
     return Container(
       //padding: EdgeInsets.only(top: 1.0),
       child: FlatButton(
@@ -451,10 +613,18 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Container(
           width: double.infinity,
           height: 50.0,
-          child: Text(title, style: GoogleFonts.poppins(textStyle: TextStyle(color: title == "Update Weight" ? Colors.white : Colors.orangeAccent, fontWeight: FontWeight.w600),)),
+          child: Text(title,
+              style: GoogleFonts.poppins(
+                textStyle: TextStyle(
+                    color: title == "Update Weight"
+                        ? Colors.white
+                        : Colors.orangeAccent,
+                    fontWeight: FontWeight.w600),
+              )),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: title == "Update Weight" ? Colors.orangeAccent : Colors.white,
+            color:
+                title == "Update Weight" ? Colors.orangeAccent : Colors.white,
             border: Border.all(color: Colors.orangeAccent),
             //borderRadius: BorderRadius.circular(6.0),
           ),
@@ -462,8 +632,14 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-  uploadPict(){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => TrackerPage(gCurrentUser: currentUser, currentOnlineUserId: currentOnlineUserId)));
+
+  uploadPict() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => TrackerPage(
+                gCurrentUser: currentUser,
+                currentOnlineUserId: currentOnlineUserId)));
   }
 }
 
@@ -473,7 +649,8 @@ class TopBarClipper extends CustomClipper<Path> {
     var path = Path();
 
     path.moveTo(size.width, 0);
-    path.quadraticBezierTo(size.width-50, size.height+20, 0, size.height-90);
+    path.quadraticBezierTo(
+        size.width - 50, size.height + 20, 0, size.height - 90);
     path.lineTo(0, size.height);
     path.lineTo(size.width, size.height);
     path.lineTo(size.width, 0);

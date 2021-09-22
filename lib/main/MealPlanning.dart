@@ -26,7 +26,8 @@ class MealPlanning extends StatefulWidget {
   MealPlanning({this.userProfileId, this.plan});
 
   @override
-  _MealPlanningState createState() => _MealPlanningState(userProfileId: userProfileId, plan : plan);
+  _MealPlanningState createState() =>
+      _MealPlanningState(userProfileId: userProfileId, plan: plan);
 }
 
 class _MealPlanningState extends State<MealPlanning> {
@@ -38,70 +39,78 @@ class _MealPlanningState extends State<MealPlanning> {
   String name;
   int loop;
   double tdee;
-  double total,randomNum,min,max,a;
+  double total, randomNum, min, max, a;
   Random rnd;
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
   var i;
-  String day ;
+  String day;
   static final now = DateTime.now();
   final dropdownDatePicker = DropdownDatePicker(
-    initialDate: ValidDate(year: now.year, month: now.month+1, day: 2),//2021-1-8
-    firstDate: ValidDate(year: now.year, month: 1, day: 1),//2021-1-1
-    lastDate: ValidDate(year: now.year+2, month: 12, day: 31),//2023-1-8
+    initialDate:
+        ValidDate(year: now.year, month: now.month, day: 10), //2021-1-8
+    firstDate: ValidDate(year: now.year, month: 1, day: 1), //2021-1-1
+    lastDate: ValidDate(year: now.year + 2, month: 12, day: 31), //2023-1-8
     textStyle: TextStyle(fontWeight: FontWeight.bold),
     dropdownColor: Colors.blue[200],
     dateHint: DateHint(year: 'year', month: 'month', day: 'day'),
     ascending: false,
   );
   final dropdownDatePicker2 = DropdownDatePicker(
-    initialDate: ValidDate(year: now.year, month: now.month+1, day: 3),//2021-1-8
+    initialDate:
+        ValidDate(year: now.year, month: now.month, day: 11), //2021-1-8
     firstDate: ValidDate(year: now.year, month: 1, day: 1),
-    lastDate: ValidDate(year: now.year+2, month: 12, day: 31),
+    lastDate: ValidDate(year: now.year + 2, month: 12, day: 31),
     textStyle: TextStyle(fontWeight: FontWeight.bold),
     dropdownColor: Colors.blue[200],
     dateHint: DateHint(year: 'year', month: 'month', day: 'day'),
     ascending: false,
   );
   final dropdownDatePicker3 = DropdownDatePicker(
-    initialDate: ValidDate(year: now.year, month: now.month+1, day: 4),//2021-1-8
-    firstDate: ValidDate(year: now.year-2, month: 1, day: 1),
-    lastDate: ValidDate(year: now.year+2, month: 12, day: 31),
+    initialDate:
+        ValidDate(year: now.year, month: now.month, day: 12), //2021-1-8
+    firstDate: ValidDate(year: now.year - 2, month: 1, day: 1),
+    lastDate: ValidDate(year: now.year + 2, month: 12, day: 31),
     textStyle: TextStyle(fontWeight: FontWeight.bold),
     dropdownColor: Colors.blue[200],
     dateHint: DateHint(year: 'year', month: 'month', day: 'day'),
     ascending: false,
   );
   final dropdownDatePicker4 = DropdownDatePicker(
-    initialDate: ValidDate(year: now.year, month: now.month+1, day: 5),//2021-1-8
-    firstDate: ValidDate(year: now.year-2, month: 1, day: 1),
-    lastDate: ValidDate(year: now.year+2, month: 12, day: 31),
+    initialDate:
+        ValidDate(year: now.year, month: now.month, day: 13), //2021-1-8
+    firstDate: ValidDate(year: now.year - 2, month: 1, day: 1),
+    lastDate: ValidDate(year: now.year + 2, month: 12, day: 31),
     textStyle: TextStyle(fontWeight: FontWeight.bold),
     dropdownColor: Colors.blue[200],
     dateHint: DateHint(year: 'year', month: 'month', day: 'day'),
     ascending: false,
   );
   final dropdownDatePicker5 = DropdownDatePicker(
-    initialDate: ValidDate(year: now.year, month: now.month+1, day: 6),//2021-1-8
-    firstDate: ValidDate(year: now.year-2, month: 1, day: 1),
-    lastDate: ValidDate(year: now.year+2, month: 12, day: 31),
+    initialDate:
+        ValidDate(year: now.year, month: now.month, day: 14), //2021-1-8
+    firstDate: ValidDate(year: now.year - 2, month: 1, day: 1),
+    lastDate: ValidDate(year: now.year + 2, month: 12, day: 31),
     textStyle: TextStyle(fontWeight: FontWeight.bold),
     dropdownColor: Colors.blue[200],
     dateHint: DateHint(year: 'year', month: 'month', day: 'day'),
     ascending: false,
   );
   final dropdownDatePicker6 = DropdownDatePicker(
-    initialDate: ValidDate(year: now.year, month: now.month+1, day: 7),//2021-1-8
-    firstDate: ValidDate(year: now.year-2, month: 1, day: 1),
-    lastDate: ValidDate(year: now.year+2, month: 12, day: 31),
+    initialDate:
+        ValidDate(year: now.year, month: now.month, day: 15), //2021-1-8
+    firstDate: ValidDate(year: now.year - 2, month: 1, day: 1),
+    lastDate: ValidDate(year: now.year + 2, month: 12, day: 31),
     textStyle: TextStyle(fontWeight: FontWeight.bold),
     dropdownColor: Colors.blue[200],
     dateHint: DateHint(year: 'year', month: 'month', day: 'day'),
     ascending: false,
   );
   final dropdownDatePicker7 = DropdownDatePicker(
-    initialDate: ValidDate(year: now.year, month: now.month+1, day: 8),//2021-1-8
-    firstDate: ValidDate(year: now.year-2, month: 1, day: 1),
-    lastDate: ValidDate(year: now.year+2, month: 12, day: 31),
+    initialDate:
+        ValidDate(year: now.year, month: now.month, day: 16), //2021-1-8
+    firstDate: ValidDate(year: now.year - 2, month: 1, day: 1),
+    lastDate: ValidDate(year: now.year + 2, month: 12, day: 31),
     textStyle: TextStyle(fontWeight: FontWeight.bold),
     dropdownColor: Colors.blue[200],
     dateHint: DateHint(year: 'year', month: 'month', day: 'day'),
@@ -162,53 +171,88 @@ class _MealPlanningState extends State<MealPlanning> {
     TimeOfDay(hour: 22, minute: 00),
   ];
   List<DateTime> mealsTime = [
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-25 08:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-25 12:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-25 15:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-25 19:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-25 22:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-24 08:30:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-24 12:30:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-24 15:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-24 19:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-24 22:00:00"),
   ];
   List<DateTime> mealsTime2 = [
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-03 08:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-03 12:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-03 15:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-03 19:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-03 22:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-25 08:30:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-25 12:30:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-25 15:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-25 19:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-25 22:00:00"),
   ];
   List<DateTime> mealsTime3 = [
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-04 08:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-04 12:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-04 15:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-04 19:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-04 22:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-26 08:30:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-26 12:30:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-26 15:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-26 19:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-26 22:00:00"),
   ];
   List<DateTime> mealsTime4 = [
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-05 08:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-05 12:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-05 15:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-05 19:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-05 22:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-27 08:30:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-27 12:30:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-27 15:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-27 19:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-27 22:00:00"),
   ];
   List<DateTime> mealsTime5 = [
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-06 08:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-06 12:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-06 15:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-06 19:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-06 22:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-28 08:30:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-28 12:30:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-28 15:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-28 19:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-28 22:00:00"),
   ];
   List<DateTime> mealsTime6 = [
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-07 08:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-07 12:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-07 15:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-07 19:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-07 22:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-29 08:30:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-29 12:30:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-29 15:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-29 19:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-29 22:00:00"),
   ];
   List<DateTime> mealsTime7 = [
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-08 08:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-08 12:30:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-08 15:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-08 19:00:00"),
-    DateTime.parse(now.year.toString()+"-0"+now.month.toString()+"-08 22:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-30 08:30:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-30 12:30:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-30 15:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-30 19:00:00"),
+    DateTime.parse(
+        now.year.toString() + "-0" + now.month.toString() + "-30 22:00:00"),
   ];
 
   void onTimeChanged(TimeOfDay newTime) {
@@ -216,51 +260,57 @@ class _MealPlanningState extends State<MealPlanning> {
       _time[i] = newTime;
     });
   }
+
   void onTimeChanged2(TimeOfDay newTime) {
     setState(() {
       _time2[i] = newTime;
     });
   }
+
   void onTimeChanged3(TimeOfDay newTime) {
     setState(() {
       _time3[i] = newTime;
     });
   }
+
   void onTimeChanged4(TimeOfDay newTime) {
     setState(() {
       _time4[i] = newTime;
     });
   }
+
   void onTimeChanged5(TimeOfDay newTime) {
     setState(() {
       _time5[i] = newTime;
     });
   }
+
   void onTimeChanged6(TimeOfDay newTime) {
     setState(() {
       _time6[i] = newTime;
     });
   }
+
   void onTimeChanged7(TimeOfDay newTime) {
     setState(() {
       _time7[i] = newTime;
     });
   }
 
-  Future<String> getCustTDEE() async{
-    DocumentReference documentReference =  userReference.document(userProfileId);
+  Future<String> getCustTDEE() async {
+    DocumentReference documentReference = userReference.document(userProfileId);
     await documentReference.get().then((snapshot) {
       tdee = double.tryParse(snapshot.data['tdee'].toString());
       name = snapshot.data['profileName'].toString();
     });
-    print("TDEE = "+tdee.toString());
+    print("TDEE = " + tdee.toString());
     setState(() {
       total = tdee;
     });
-    print("total = "+total.toString());
+    print("total = " + total.toString());
   }
 
-  Future <Null> retrieveTimeLine() async{
+  Future<Null> retrieveTimeLine() async {
     print("plan" + plan.toString());
     await getCustTDEE();
     setState(() {
@@ -272,18 +322,22 @@ class _MealPlanningState extends State<MealPlanning> {
       posts6 = null;
       posts7 = null;
     });
-    QuerySnapshot querySnapshot =  await timelineReference.document(userProfileId)
-        .collection("timelinePosts").getDocuments();
-    List<dynamic> list = querySnapshot.documents.map((DocumentSnapshot doc){return doc['calories'];}).toList();
+    QuerySnapshot querySnapshot = await timelineReference
+        .document(userProfileId)
+        .collection("timelinePosts")
+        .getDocuments();
+    List<dynamic> list = querySnapshot.documents.map((DocumentSnapshot doc) {
+      return doc['calories'];
+    }).toList();
     setState(() {
       this.list = list;
     });
     print(list);
     int p;
-    if (plan==1){
-      p= 1;
-    }else if (plan ==7){
-      p= 7;
+    if (plan == 1) {
+      p = 1;
+    } else if (plan == 7) {
+      p = 7;
     }
     for (int k = 0; k < p; k++) {
       generateRandom(k);
@@ -293,26 +347,26 @@ class _MealPlanningState extends State<MealPlanning> {
     //getMealsFromRandom();
   }
 
-  generateRandom(int k) async{
+  generateRandom(int k) async {
     int trial = 0;
     int amm = 2;
     nums = new List(2);
-    min = total/6;
-    max = total/5;
+    min = total / 6;
+    max = total / 5;
     //print("asas" + min.toString());
     //print("as9s" + max.toString());
-    do{
-      if(trial == 5){
-        amm = amm +1;
+    do {
+      if (trial == 5) {
+        amm = amm + 1;
         nums = new List(amm);
         trial = 0;
         print("212 " + amm.toString());
-        for (int i = 0; i < nums.length-1; i++) {
+        for (int i = 0; i < nums.length - 1; i++) {
           rnd = new Random();
           randomNum = min + rnd.nextInt(max.toInt() - min.toInt());
           do {
             list.shuffle();
-          }while(list[0]<=randomNum);
+          } while (list[0] <= randomNum);
           nums[i] = list[0];
           total -= nums[i];
           print("213 " + nums[i].toString());
@@ -320,20 +374,20 @@ class _MealPlanningState extends State<MealPlanning> {
         total = tdee;
         do {
           list.shuffle();
-        }while(list[0]>total~/3);
-        nums[nums.length-1] = list[0];
-        print("214 " + nums[nums.length-1].toString());
+        } while (list[0] > total ~/ 3);
+        nums[nums.length - 1] = list[0];
+        print("214 " + nums[nums.length - 1].toString());
         sum = nums.reduce((a, b) => a + b);
         print("215 " + sum.toString());
-        trial = trial +1;
+        trial = trial + 1;
         print("trial " + trial.toString());
-      }else {
-        for (int i = 0; i < nums.length-1; i++) {
+      } else {
+        for (int i = 0; i < nums.length - 1; i++) {
           rnd = new Random();
           randomNum = min + rnd.nextInt(max.toInt() - min.toInt());
           do {
             list.shuffle();
-          }while(list[0]<=randomNum);
+          } while (list[0] <= randomNum);
           nums[i] = list[0];
           total -= nums[i];
           print("213 " + nums[i].toString());
@@ -341,15 +395,15 @@ class _MealPlanningState extends State<MealPlanning> {
         total = tdee;
         do {
           list.shuffle();
-        }while(list[0]>total~/3);
-        nums[nums.length-1] = list[0];
-        print("214 " + nums[nums.length-1].toString());
+        } while (list[0] > total ~/ 3);
+        nums[nums.length - 1] = list[0];
+        print("214 " + nums[nums.length - 1].toString());
         sum = nums.reduce((a, b) => a + b);
         print("215 " + sum.toString());
-        trial = trial +1;
+        trial = trial + 1;
         print("trial " + trial.toString());
       }
-    }while(sum>(total+350)||sum<(total-350));
+    } while (sum > (total + 350) || sum < (total - 350));
     print(nums.toString() + "1a $k");
     print(sum.toString() + "1 $k");
     print("amm " + amm.toString());
@@ -362,43 +416,59 @@ class _MealPlanningState extends State<MealPlanning> {
     var newList;
     QuerySnapshot querySnapshot;
     for (int i = 0; i < nums.length; i++) {
-      querySnapshot =  await timelineReference.document(userProfileId)
-          .collection("timelinePosts").where("calories",isEqualTo: nums[i]).limit(1).getDocuments();
-      if(i == 0) {
-        newList = querySnapshot.documents.map((document) => Post.fromDocument(document, false)).toList();
-      }else{
-        newList += querySnapshot.documents.map((document) => Post.fromDocument(document, false)).toList();
+      querySnapshot = await timelineReference
+          .document(userProfileId)
+          .collection("timelinePosts")
+          .where("calories", isEqualTo: nums[i])
+          .limit(1)
+          .getDocuments();
+      if (i == 0) {
+        newList = querySnapshot.documents
+            .map((document) => Post.fromDocument(document, false))
+            .toList();
+      } else {
+        newList += querySnapshot.documents
+            .map((document) => Post.fromDocument(document, false))
+            .toList();
       }
     }
     setState(() {
-      if(k==0){
+      if (k == 0) {
         this.posts = newList;
-      }else if(k==1){
+      } else if (k == 1) {
         this.posts2 = newList;
-      }else if(k==2){
+      } else if (k == 2) {
         this.posts3 = newList;
-      }else if(k==3){
+      } else if (k == 3) {
         this.posts4 = newList;
-      }else if(k==4){
+      } else if (k == 4) {
         this.posts5 = newList;
-      }else if(k==5){
+      } else if (k == 5) {
         this.posts6 = newList;
-      }else if(k==6){
+      } else if (k == 6) {
         this.posts7 = newList;
       }
     });
   }
 
-  getMealsFromRandom() async{
+  getMealsFromRandom() async {
     var newList;
     QuerySnapshot querySnapshot;
     for (int i = 0; i < nums.length; i++) {
-      querySnapshot =  await timelineReference.document(userProfileId)
-          .collection("timelinePosts").where("calories",isEqualTo: nums[i]).limit(1).getDocuments();
-      if(i == 0) {
-        newList = querySnapshot.documents.map((document) => Post.fromDocument(document, false)).toList();
-      }else{
-        newList += querySnapshot.documents.map((document) => Post.fromDocument(document, false)).toList();
+      querySnapshot = await timelineReference
+          .document(userProfileId)
+          .collection("timelinePosts")
+          .where("calories", isEqualTo: nums[i])
+          .limit(1)
+          .getDocuments();
+      if (i == 0) {
+        newList = querySnapshot.documents
+            .map((document) => Post.fromDocument(document, false))
+            .toList();
+      } else {
+        newList += querySnapshot.documents
+            .map((document) => Post.fromDocument(document, false))
+            .toList();
       }
     }
     /*
@@ -441,12 +511,15 @@ class _MealPlanningState extends State<MealPlanning> {
     });
   }
 
-
-  retrieveFollowings() async{
-    QuerySnapshot querySnapshot =  await followingReference.document(currentUser.id)
-        .collection("userFollowing").getDocuments();
+  retrieveFollowings() async {
+    QuerySnapshot querySnapshot = await followingReference
+        .document(currentUser.id)
+        .collection("userFollowing")
+        .getDocuments();
     setState(() {
-      followingsList = querySnapshot.documents.map((document) => document.documentID).toList();
+      followingsList = querySnapshot.documents
+          .map((document) => document.documentID)
+          .toList();
     });
   }
 
@@ -456,140 +529,163 @@ class _MealPlanningState extends State<MealPlanning> {
     super.initState();
     retrieveFollowings();
     retrieveTimeLine();
-
   }
 
-  test(List whichPosts){
+  test(List whichPosts) {
     DropdownDatePicker pickDate;
     List<TimeOfDay> setTime;
     List<DateTime> setMealsTime;
-    if(whichPosts == posts){
+    if (whichPosts == posts) {
       pickDate = dropdownDatePicker;
       setTime = _time;
       setMealsTime = mealsTime;
-    }else if(whichPosts == posts2){
+    } else if (whichPosts == posts2) {
       pickDate = dropdownDatePicker2;
       setTime = _time2;
       setMealsTime = mealsTime2;
-    }else if(whichPosts == posts3){
+    } else if (whichPosts == posts3) {
       pickDate = dropdownDatePicker3;
       setTime = _time3;
       setMealsTime = mealsTime3;
-    }else if(whichPosts == posts4){
+    } else if (whichPosts == posts4) {
       pickDate = dropdownDatePicker4;
       setTime = _time4;
       setMealsTime = mealsTime4;
-    }else if(whichPosts == posts5){
+    } else if (whichPosts == posts5) {
       pickDate = dropdownDatePicker5;
       setTime = _time5;
       setMealsTime = mealsTime5;
-    }else if(whichPosts == posts6){
+    } else if (whichPosts == posts6) {
       pickDate = dropdownDatePicker6;
       setTime = _time6;
       setMealsTime = mealsTime6;
-    }else if(whichPosts == posts7){
+    } else if (whichPosts == posts7) {
       pickDate = dropdownDatePicker7;
       setTime = _time7;
       setMealsTime = mealsTime7;
     }
     return Scaffold(
         body: Stack(
+      children: [
+        ListView(
           children: [
-            ListView(
-              children: [
-                Container(
-                  width:  MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.only(left: 10, right: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(intl.DateFormat('EEEE').format(DateTime.parse(pickDate.getDate())),
-                            style: GoogleFonts.poppins(
-                                textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 20, color: HexColor("#FF9900"))
-                            ),),
-                          pickDate,
-                        ],
+            Container(
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.only(left: 10, right: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.black),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        intl.DateFormat('EEEE')
+                            .format(DateTime.parse(pickDate.getDate())),
+                        style: GoogleFonts.poppins(
+                            textStyle: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 20,
+                                color: HexColor("#FF9900"))),
                       ),
-                      Container(
-                        height: 600,
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                          children: [
-                            //Expanded(child: ListView(children: posts,),),
-                            Expanded(
-                              child: ListView.builder(
-                                itemCount: whichPosts.length,
-                                itemBuilder: (BuildContext context, int index){
-                                  print(whichPosts.length);
-                                  return Card(
-                                    color: Colors.white70,
-                                    child: Column(
-                                      children: [
-                                        whichPosts[index],
-                                        FlatButton(
-                                            color: Colors.orangeAccent,
-                                            onPressed: () {
-                                              i = index;
-                                              Navigator.of(context).push(
-                                                showPicker(
-                                                  context: context,
-                                                  value: setTime[index],
-                                                  onChange:
-                                                  whichPosts == posts ? onTimeChanged :
-                                                  whichPosts == posts2 ? onTimeChanged2 :
-                                                  whichPosts == posts3 ? onTimeChanged3 :
-                                                  whichPosts == posts4 ? onTimeChanged4 :
-                                                  whichPosts == posts5 ? onTimeChanged5 :
-                                                  whichPosts == posts6 ? onTimeChanged6 :
-                                                  onTimeChanged7,
-                                                  minuteInterval: MinuteInterval.FIVE,
-                                                  disableHour: false,
-                                                  disableMinute: false,
-                                                  minMinute: 7,
-                                                  maxMinute: 56,
-                                                  // Optional onChange to receive value as DateTime
-                                                  onChangeDateTime: (DateTime dateTime) {
-                                                    setState(() {
-                                                      DateTime time = DateTime.parse(dropdownDatePicker.getDate() + " " + intl.DateFormat.Hm().format(dateTime)+":00");
-                                                      setMealsTime[index] = time;
-                                                    });
-                                                  },
-                                                ),
-                                              );
-                                            },
-                                            child: Container(
-                                              width: MediaQuery.of(context).size.width,
-                                              child: Text(
-                                                intl.DateFormat.Hm().format(setMealsTime[index]),
-                                                style: TextStyle(color: Colors.black),
-                                              ),
-                                            )
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      pickDate,
                     ],
                   ),
-                )
-              ],
-            ),
+                  Container(
+                    height: 600,
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      children: [
+                        //Expanded(child: ListView(children: posts,),),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: whichPosts.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              print(whichPosts.length);
+                              return Card(
+                                color: Colors.white70,
+                                child: Column(
+                                  children: [
+                                    whichPosts[index],
+                                    FlatButton(
+                                        color: Colors.orangeAccent,
+                                        onPressed: () {
+                                          i = index;
+                                          Navigator.of(context).push(
+                                            showPicker(
+                                              context: context,
+                                              value: setTime[index],
+                                              onChange: whichPosts == posts
+                                                  ? onTimeChanged
+                                                  : whichPosts == posts2
+                                                      ? onTimeChanged2
+                                                      : whichPosts == posts3
+                                                          ? onTimeChanged3
+                                                          : whichPosts == posts4
+                                                              ? onTimeChanged4
+                                                              : whichPosts ==
+                                                                      posts5
+                                                                  ? onTimeChanged5
+                                                                  : whichPosts ==
+                                                                          posts6
+                                                                      ? onTimeChanged6
+                                                                      : onTimeChanged7,
+                                              minuteInterval:
+                                                  MinuteInterval.FIVE,
+                                              disableHour: false,
+                                              disableMinute: false,
+                                              minMinute: 7,
+                                              maxMinute: 56,
+                                              // Optional onChange to receive value as DateTime
+                                              onChangeDateTime:
+                                                  (DateTime dateTime) {
+                                                setState(() {
+                                                  DateTime time = DateTime
+                                                      .parse(dropdownDatePicker
+                                                              .getDate() +
+                                                          " " +
+                                                          intl.DateFormat.Hm()
+                                                              .format(
+                                                                  dateTime) +
+                                                          ":00");
+                                                  setMealsTime[index] = time;
+                                                });
+                                              },
+                                            ),
+                                          );
+                                        },
+                                        child: Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          child: Text(
+                                            intl.DateFormat.Hm()
+                                                .format(setMealsTime[index]),
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ),
+                                        )),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
-        )
-    );
+        ),
+      ],
+    ));
   }
   /*
   test2(){
@@ -778,49 +874,56 @@ class _MealPlanningState extends State<MealPlanning> {
 
    */
 
-
-  makeOrder(List<Post> whichPosts){
+  makeOrder(List<Post> whichPosts) {
     List<DateTime> setMealsTime;
-    if(whichPosts == posts){
+    if (whichPosts == posts) {
       setMealsTime = mealsTime;
-    }else if(whichPosts == posts2){
+    } else if (whichPosts == posts2) {
       setMealsTime = mealsTime2;
-    }else if(whichPosts == posts3){
+    } else if (whichPosts == posts3) {
       setMealsTime = mealsTime3;
-    }else if(whichPosts == posts4){
+    } else if (whichPosts == posts4) {
       setMealsTime = mealsTime4;
-    }else if(whichPosts == posts5){
+    } else if (whichPosts == posts5) {
       setMealsTime = mealsTime5;
-    }else if(whichPosts == posts6){
+    } else if (whichPosts == posts6) {
       setMealsTime = mealsTime6;
-    }else if(whichPosts == posts7){
+    } else if (whichPosts == posts7) {
       setMealsTime = mealsTime7;
     }
-    for (int i = 0; i < loop; i++){
+    for (int i = 0; i < loop; i++) {
       var orderId = Uuid().v4();
-      custOrdersReference.document(currentUser.id).collection("custOrder").document(orderId).setData({
+      custOrdersReference
+          .document(currentUser.id)
+          .collection("custOrder")
+          .document(orderId)
+          .setData({
         "custId": currentUser.id,
-        "restId" : whichPosts[i].ownerId,
-        "orderId" : orderId,
+        "restId": whichPosts[i].ownerId,
+        "orderId": orderId,
         "datetime": setMealsTime[i],
-        "mealName" : whichPosts[i].name,
+        "mealName": whichPosts[i].name,
         "location": currentUser.location,
         "status": 0,
-        "calories" : whichPosts[i].calories,
+        "calories": whichPosts[i].calories,
         "timestamp": DateTime.now(),
         "mealId": whichPosts[i].mealId,
         "userProfileImg": currentUser.url,
         "url": whichPosts[i].url,
         "calories": whichPosts[i].calories,
-        "price":whichPosts[i].price,
+        "price": whichPosts[i].price,
       });
-      ordersReference.document(whichPosts[i].ownerId).collection("order").document(orderId).setData({
-        "CustomerName" : currentUser.profileName,
+      ordersReference
+          .document(whichPosts[i].ownerId)
+          .collection("order")
+          .document(orderId)
+          .setData({
+        "CustomerName": currentUser.profileName,
         "custId": currentUser.id,
-        "restId" : whichPosts[i].ownerId,
+        "restId": whichPosts[i].ownerId,
         "datetime": setMealsTime[i],
-        "mealName" : whichPosts[i].name,
-        "orderId" : orderId,
+        "mealName": whichPosts[i].name,
+        "orderId": orderId,
         "location": currentUser.location,
         "status": 0,
         "timestamp": DateTime.now(),
@@ -828,25 +931,27 @@ class _MealPlanningState extends State<MealPlanning> {
         "userProfileImg": currentUser.url,
         "url": whichPosts[i].url,
         "calories": whichPosts[i].calories,
-        "price":whichPosts[i].price,
+        "price": whichPosts[i].price,
       });
-      activityFeedReference.document(whichPosts[i].ownerId).collection("activityItems").add({
-        "type" : "order",
+      activityFeedReference
+          .document(whichPosts[i].ownerId)
+          .collection("activityItems")
+          .add({
+        "type": "order",
         "custId": currentUser.id,
-        "CustomerName" : currentUser.profileName,
+        "CustomerName": currentUser.profileName,
         "userProfileImg": currentUser.url,
         "url": whichPosts[i].url,
-        "datetime":setMealsTime[i],
-        "mealName" : whichPosts[i].name,
+        "datetime": setMealsTime[i],
+        "mealName": whichPosts[i].name,
         "location": currentUser.location,
         "mealId": whichPosts[i].mealId,
-        "timestamp" : DateTime.now(),
+        "timestamp": DateTime.now(),
       });
-      restReference.document(whichPosts[i].ownerId).updateData({
-        "earnings": FieldValue.increment(whichPosts[i].price)
-      });
+      restReference
+          .document(whichPosts[i].ownerId)
+          .updateData({"earnings": FieldValue.increment(whichPosts[i].price)});
     }
-
   }
   /*
   makeOrder2(){
@@ -944,7 +1049,7 @@ class _MealPlanningState extends State<MealPlanning> {
   }
    */
 
-  back(){
+  back() {
     var nav = Navigator.of(context);
     nav.pop();
     nav.pop();
@@ -953,10 +1058,11 @@ class _MealPlanningState extends State<MealPlanning> {
     //nav.pop();
     print("vack");
   }
+
   @override
   Widget build(BuildContext context) {
-    if(plan==1){
-      if(posts == null){
+    if (plan == 1) {
+      if (posts == null) {
         return Scaffold(
           backgroundColor: Colors.white,
           body: Container(
@@ -977,23 +1083,35 @@ class _MealPlanningState extends State<MealPlanning> {
                       ),
                     ),
                   ),
-                  Text("please wait we are\npreparing your plan 😊 ...",textAlign: TextAlign.center,
+                  Text(
+                    "please wait we are\npreparing your plan 😊 ...",
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
-                        textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 13)
-                    ),),
-                  SizedBox(height: 20,),
+                        textStyle: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13)),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   CircularProgressIndicator()
                 ],
-              )
-          ),
+              )),
         );
-      }else {
+      } else {
         return Scaffold(
           body: CreateAccount(),
         );
       }
-    }else{
-      if(posts == null || posts2 == null || posts3 == null || posts4 == null || posts5 == null || posts6 == null || posts7 == null ){
+    } else {
+      if (posts == null ||
+          posts2 == null ||
+          posts3 == null ||
+          posts4 == null ||
+          posts5 == null ||
+          posts6 == null ||
+          posts7 == null) {
         return Scaffold(
           backgroundColor: Colors.white,
           body: Container(
@@ -1014,25 +1132,31 @@ class _MealPlanningState extends State<MealPlanning> {
                       ),
                     ),
                   ),
-                  Text("please wait we are\npreparing your plan 😊 ...",textAlign: TextAlign.center,
+                  Text(
+                    "please wait we are\npreparing your plan 😊 ...",
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
-                        textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 13)
-                    ),),
-                  SizedBox(height: 20,),
+                        textStyle: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13)),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   CircularProgressIndicator()
                 ],
-              )
-          ),
+              )),
         );
-      }else {
+      } else {
         return Scaffold(
           body: CreateAccount(),
         );
       }
     }
-
   }
-  CreateAccount(){
+
+  CreateAccount() {
     return RefreshIndicator(
       key: _refreshIndicatorKey,
       onRefresh: retrieveTimeLine,
@@ -1044,84 +1168,114 @@ class _MealPlanningState extends State<MealPlanning> {
             color: Colors.white,
             child: Column(
               children: <Widget>[
-                Text("Plan your meals",textAlign: TextAlign.center,
+                Text(
+                  "Plan your meals",
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
-                      textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20)
-                  ),),
+                      textStyle: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20)),
+                ),
                 Container(
                   margin: EdgeInsets.only(left: 90),
                   height: 5,
                   color: HexColor("#FF9900"),
-                  width: MediaQuery.of(context).size.width/4,
+                  width: MediaQuery.of(context).size.width / 4,
                 ),
-                SizedBox(height: 10,),
-                Text("Hi $name",textAlign: TextAlign.center,
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Hi $name",
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
-                      textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20)
-                  ),),
+                      textStyle: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 20)),
+                ),
                 Container(
                   padding: EdgeInsets.only(left: 40, right: 40),
-                  child:  Column(
+                  child: Column(
                     children: [
-                      Text("We just generate the best meal plan for you\n"
-                          "if you think you dont like it you can swipe down to refresh the plan",textAlign: TextAlign.center,
+                      Text(
+                        "We just generate the best meal plan for you\n"
+                        "if you think you dont like it you can swipe down to refresh the plan",
+                        textAlign: TextAlign.center,
                         style: GoogleFonts.poppins(
-                            textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 11)
-                        ),),
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 11)),
+                      ),
                     ],
                   ),
                 ),
                 Container(
                   padding: EdgeInsets.only(left: 10, right: 10),
-                  height: (MediaQuery.of(context).size.height/3)+250,
+                  height: (MediaQuery.of(context).size.height / 3) + 250,
                   width: MediaQuery.of(context).size.width,
                   alignment: Alignment.topCenter,
                   color: Colors.white,
                   child: Swiper(
                     itemCount: plan,
-                    itemBuilder: (BuildContext context, int index){
-
-                      if(index == 0){
+                    itemBuilder: (BuildContext context, int index) {
+                      if (index == 0) {
                         return test(posts);
-                      }else if(index == 1){
+                      } else if (index == 1) {
                         return test(posts2);
-                      }else if(index == 2){
+                      } else if (index == 2) {
                         return test(posts3);
-                      }else if(index == 3){
+                      } else if (index == 3) {
                         return test(posts4);
-                      }else if(index == 4){
+                      } else if (index == 4) {
                         return test(posts5);
-                      }else if(index == 5){
+                      } else if (index == 5) {
                         return test(posts6);
-                      }else if(index == 6){
+                      } else if (index == 6) {
                         return test(posts7);
-                      }else{
-                        return Container(color: Colors.red,child: Text("Error, Please try again"));
+                      } else {
+                        return Container(
+                            color: Colors.red,
+                            child: Text("Error, Please try again"));
                       }
                     },
                     layout: SwiperLayout.TINDER,
-                    itemHeight: (MediaQuery.of(context).size.height/3)+300,
+                    itemHeight: (MediaQuery.of(context).size.height / 3) + 300,
                     //loop: false,
                     itemWidth: 500,
                     control: SwiperControl(),
                     pagination: SwiperPagination(),
                   ),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 GestureDetector(
                   onTap: () async {
                     var allMeals;
-                    if(plan == 1){
+                    if (plan == 1) {
                       allMeals = posts;
-                    }else{
-                      allMeals = posts + posts2 + posts3 + posts4 + posts5 + posts6 + posts7;
+                    } else {
+                      allMeals = posts +
+                          posts2 +
+                          posts3 +
+                          posts4 +
+                          posts5 +
+                          posts6 +
+                          posts7;
                     }
 
-                    final paySuccess = await Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage(allMeals : allMeals, plan : plan)));
-                    if(paySuccess[0]) {
-                      if(plan == 1){
+                    final paySuccess = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                PaymentPage(allMeals: allMeals, plan: plan)));
+                    if (paySuccess[0]) {
+                      if (plan == 1) {
                         makeOrder(posts);
-                      }else{
+                      } else {
                         makeOrder(posts);
                         makeOrder(posts2);
                         makeOrder(posts3);
@@ -1130,7 +1284,8 @@ class _MealPlanningState extends State<MealPlanning> {
                         makeOrder(posts6);
                         makeOrder(posts7);
                       }
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => HomePage()));
                     }
                   },
                   child: Container(
@@ -1140,19 +1295,27 @@ class _MealPlanningState extends State<MealPlanning> {
                         image: AssetImage("assets/images/bg.png"),
                         fit: BoxFit.cover,
                       ),
-
                     ),
-                    width: MediaQuery.of(context).size.width-100,
+                    width: MediaQuery.of(context).size.width - 100,
                     height: 40.0,
-                    child: Text("Submit",textAlign: TextAlign.center,
+                    child: Text(
+                      "Submit",
+                      textAlign: TextAlign.center,
                       style: GoogleFonts.poppins(
-                          textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13)
-                      ),),
+                          textStyle: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13)),
+                    ),
                     alignment: Alignment.center,
                   ),
                 ),
-                SizedBox(height: 5,),
-                SizedBox(height: 5,),
+                SizedBox(
+                  height: 5,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
               ],
             ),
           ),
